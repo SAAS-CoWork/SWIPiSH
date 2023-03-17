@@ -127,9 +127,27 @@ function ProductVariants({ product }) {
   const { cartItems, setCartItems } = useContext(CartContext);
 
   function getStock(colorCode, size) {
-    return product.variants.find(
+    const stock = product.variants.find(
       (variant) => variant.color_code === colorCode && variant.size === size
     ).stock;
+    return stock;
+  }
+
+  function getCartItemNum(colorCode, size) {
+    const cartQty = cartItems.find(
+      (item) => item.color.code === colorCode && item.size === size
+    );
+
+    if (cartQty) {
+      return cartQty.qty;
+    }
+    return 0;
+  }
+
+  function getPurchaseNumLimit(colorCode, size) {
+    const purchaseNumLimit =
+      getStock(colorCode, size) - getCartItemNum(colorCode, size);
+    return purchaseNumLimit;
   }
 
   function addToCart() {
@@ -179,7 +197,7 @@ function ProductVariants({ product }) {
             <Size
               key={size}
               $isSelected={size === selectedSize}
-              $isDisabled={stock === 0}
+              $isDisabled={stock === 0 || !selectedColorCode}
               onClick={() => {
                 const stock = getStock(selectedColorCode, size);
                 if (stock === 0) return;
@@ -204,9 +222,13 @@ function ProductVariants({ product }) {
           <Quantity>{quantity}</Quantity>
           <IncrementButton
             onClick={() => {
-              const stock = getStock(selectedColorCode, selectedSize);
+              const stock = getPurchaseNumLimit(
+                selectedColorCode,
+                selectedSize
+              );
               if (!selectedSize || quantity === stock) return;
               setQuantity(quantity + 1);
+              getCartItemNum(selectedColorCode, selectedSize);
             }}
           />
         </QuantitySelector>
