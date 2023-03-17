@@ -138,7 +138,7 @@ const FormControl = styled.input`
   width: 574px;
   height: 30px;
   border-radius: 8px;
-  border: solid 1px ${({ invalid }) => invalid ? '#CB4042' : '#979797'};
+  border: solid 1px ${({ invalid }) => (invalid ? '#CB4042' : '#979797')};
 
   @media screen and (max-width: 1279px) {
     margin-top: 10px;
@@ -306,7 +306,7 @@ function Checkout() {
         cardExpirationDateRef.current,
         cardCCVRef.current
       );
-    }
+    };
     setupTappay();
   }, []);
 
@@ -315,11 +315,11 @@ function Checkout() {
     0
   );
 
-  const freight = 30;
+  const freight = cartItems.length === 0 ? 0 : 30;
 
   async function checkout() {
     try {
-      setLoading(true);      
+      setLoading(true);
 
       const token = isLogin ? jwtToken : await login();
 
@@ -332,28 +332,30 @@ function Checkout() {
         window.alert('尚未選購商品');
         return;
       }
-  
+
       if (Object.values(recipient).some((value) => !value)) {
         window.alert('請填寫完整訂購資料');
-        setInvalidFields(Object.keys(recipient).filter(key => !recipient[key]))
+        setInvalidFields(
+          Object.keys(recipient).filter((key) => !recipient[key])
+        );
         formRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
+          behavior: 'smooth',
+          block: 'center',
         });
         return;
       }
-  
+
       if (!tappay.canGetPrime()) {
         window.alert('付款資料輸入有誤');
         return;
       }
-  
+
       const result = await tappay.getPrime();
       if (result.status !== 0) {
         window.alert('付款資料輸入有誤');
         return;
       }
-  
+
       const { data } = await api.checkout(
         {
           prime: result.card.prime,
@@ -418,7 +420,7 @@ function Checkout() {
             {timeOptions.map((option) => (
               <FormCheck key={option.value}>
                 <FormCheckInput
-                  type="radio"
+                  type='radio'
                   checked={recipient.time === option.value}
                   onChange={(e) => {
                     if (e.target.checked)
@@ -434,15 +436,15 @@ function Checkout() {
           <FormLegend>付款資料</FormLegend>
           <FormGroup>
             <FormLabel>信用卡號碼</FormLabel>
-            <FormControl as="div" ref={cardNumberRef} />
+            <FormControl as='div' ref={cardNumberRef} />
           </FormGroup>
           <FormGroup>
             <FormLabel>有效期限</FormLabel>
-            <FormControl as="div" ref={cardExpirationDateRef} />
+            <FormControl as='div' ref={cardExpirationDateRef} />
           </FormGroup>
           <FormGroup>
             <FormLabel>安全碼</FormLabel>
-            <FormControl as="div" ref={cardCCVRef} />
+            <FormControl as='div' ref={cardCCVRef} />
           </FormGroup>
         </FormFieldSet>
       </form>
@@ -461,7 +463,9 @@ function Checkout() {
         <Currency>NT.</Currency>
         <PriceValue>{subtotal + freight}</PriceValue>
       </TotalPrice>
-      <Button loading={loading} onClick={checkout}>確認付款</Button>
+      <Button loading={loading} onClick={checkout}>
+        確認付款
+      </Button>
     </Wrapper>
   );
 }
