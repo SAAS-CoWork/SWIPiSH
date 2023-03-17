@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="jquery-3.5.1.min.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stylish Campaign Management</title>
+    <style>
+      body {
+        font-size: 16px;
+        font-family: 'Noto Sans TC', '微軟正黑體', '新細明體', arial, sans-serif;
+        color: #3f3a3a;
+        line-height: 2.5em;
+      }
+      textarea {
+        width: 400px;
+        height: 100px;
+        padding: 5px;
+      }
+      input {
+        width: 300px;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h3>Create a New Campaign</h3>
+    <form method="post" action="/api/1.0/admin/campaign" enctype="multipart/form-data">
+      Product ID <input type="text" name="product_id" /><br />
+      Story <br /><textarea name="story"></textarea><br />
+      Picture <input type="file" name="main_image" /><br />
+      <br />
+      <input type="submit" value="Create" />
+    </form>
+  </body>
+
+  <script src="../src/utils/fb.js"></script>
+  <script src="../src/utils/api.js"></script>
+  <script src="init.js"></script>
+  <script>
+    const localStorage = window.localStorage;
+    console.log(localStorage.jwtToken);
+    $(document).on('submit', 'form', async function (event) {
+      event.preventDefault();
+      if (!localStorage.jwtToken) {
+        window.fb.login();
+        return;
+      }
+      try {
+        let response = await fetch($(this).attr('action'), {
+          body: new FormData(this),
+          method: $(this).attr('method'),
+          headers: {
+            Authorization: 'Bearer ' + localStorage.jwtToken,
+          },
+        });
+        let result = await response.json();
+        console.log(result);
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  </script>
+</html>
