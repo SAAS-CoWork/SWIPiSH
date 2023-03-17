@@ -123,7 +123,7 @@ function ProductVariants({ product }) {
     product.colors[0].code
   );
   const [selectedSize, setSelectedSize] = useState();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const { cartItems, setCartItems } = useContext(CartContext);
 
   function getStock(colorCode, size) {
@@ -144,7 +144,7 @@ function ProductVariants({ product }) {
     return 0;
   }
 
-  function getPurchaseNumLimit(colorCode, size) {
+  function getPurchaseQtyLimit(colorCode, size) {
     const purchaseNumLimit =
       getStock(colorCode, size) - getCartItemNum(colorCode, size);
     return purchaseNumLimit;
@@ -184,7 +184,7 @@ function ProductVariants({ product }) {
             onClick={() => {
               setSelectedColorCode(color.code);
               setSelectedSize();
-              setQuantity(1);
+              setQuantity(0);
             }}
           />
         ))}
@@ -202,7 +202,7 @@ function ProductVariants({ product }) {
                 const stock = getStock(selectedColorCode, size);
                 if (stock === 0) return;
                 setSelectedSize(size);
-                if (stock < quantity) setQuantity(1);
+                if (stock < quantity) setQuantity(0);
               }}
             >
               {size}
@@ -222,7 +222,7 @@ function ProductVariants({ product }) {
           <Quantity>{quantity}</Quantity>
           <IncrementButton
             onClick={() => {
-              const stock = getPurchaseNumLimit(
+              const stock = getPurchaseQtyLimit(
                 selectedColorCode,
                 selectedSize
               );
