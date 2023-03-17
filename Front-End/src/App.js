@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  
 
   body {
     font-family: 'Noto Sans TC', sans-serif;
