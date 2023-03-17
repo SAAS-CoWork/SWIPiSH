@@ -2,7 +2,7 @@ import { createContext, useState } from 'react';
 
 export const CartContext = createContext({
   cartItems: [],
-  setCartItems: () => {}
+  setCartItems: () => {},
 });
 
 const STORAGE_KEY = 'cartItems';
@@ -15,11 +15,17 @@ export const CartContextProvider = ({ children }) => {
     _setCartItems(newItems);
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
   };
+
+  const cartItemsTotalNum = cartItems.reduce(
+    (acc, cur) => acc + Number(cur.qty),
+    0
+  );
+
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, cartCount: cartItems.length }}
+      value={{ cartItems, setCartItems, cartCount: cartItemsTotalNum }}
     >
       {children}
     </CartContext.Provider>
-  )
-}
+  );
+};
