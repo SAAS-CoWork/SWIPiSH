@@ -211,7 +211,12 @@ function ProductVariants({ product }) {
           />
         </QuantitySelector>
       </Option>
-      <AddToCart onClick={addToCart}>
+      <AddToCart
+        onClick={() => {
+          addToCart();
+          setQuantity(0);
+        }}
+      >
         {selectedSize ? '加入購物車' : '請選擇尺寸'}
       </AddToCart>
     </>
