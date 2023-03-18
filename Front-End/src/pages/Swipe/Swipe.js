@@ -14,6 +14,17 @@ const Wrapper = styled.div`
   gap: 99px;
 `;
 
+const productInfo = {
+  title: '前開衩扭結洋裝',
+  price: 799,
+  colors: ['FFFFF', 'DDFFBB', 'D3D3D3'],
+  img: product,
+};
+
+const collections = Array.from({ length: 6 }, () => ({ ...productInfo }));
+
+const displayedProduct = { title: '前開衩扭結洋裝', price: 799 };
+
 const Collection = styled.div`
   width: 651px;
   display: flex;
@@ -22,32 +33,29 @@ const Collection = styled.div`
 `;
 
 const SwipeZone = styled.div`
-  width: 726px;
+  width: 660px;
   display: flex;
   flex-direction: column;
-  gap: 46px;
+  gap: 48px;
   align-items: center;
 `;
 
 const ContentContainer = styled.div`
-  width: 726px;
+  box-sizing: border-box;
+  width: 660px;
+  height: 796px;
   border: 1px solid black;
   border-radius: 25px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 41px 0;
-`;
-
-const SwipeImgContainer = styled.div`
-  width: 100%;
-  display: flex;
+  padding: 38px 0 73px;
+  gap: 24px;
 `;
 
 const SwipeImg = styled.div`
-  width: 518px;
-  height: 690px;
-  margin-bottom: 26px;
+  width: 427px;
+  height: 569px;
   background-image: url(${product});
   background-size: cover;
   background-repeat: no-repeat;
@@ -57,7 +65,6 @@ const SwipeTitle = styled.h2`
   font-size: 32px;
   letter-spacing: 4px;
   font-weight: 700;
-  margin-bottom: 10px;
 `;
 
 const SwipePrice = styled.h3`
@@ -124,7 +131,7 @@ const ProductInfoContainer = styled.div`
 const ProductImg = styled.div`
   width: 203px;
   height: 269px;
-  background-image: url(${product});
+  background-image: url(${(props) => props.imgUrl});
   margin-bottom: 8px;
 `;
 
@@ -144,7 +151,7 @@ const Color = styled.div`
   width: 12px;
   height: 12px;
   border: 1px solid #d3d3d3;
-  background-color: #ddffbb;
+  background-color: ${(props) => props.backgroundColor};
 `;
 
 const InfoText = styled.p`
@@ -169,73 +176,30 @@ export default function Swipe() {
         </Title>
         <SplitLine />
         <Products>
-          <ProductContainer>
-            <ProductImg />
-            <ProductInfoContainer>
-              <ProductInfo>
-                <ColorContainer>
-                  <Color></Color>
-                  <Color></Color>
-                  <Color></Color>
-                </ColorContainer>
-                <InfoText>前開衩扭結洋裝</InfoText>
-                <InfoText>TWD. 799</InfoText>
-              </ProductInfo>
-              <RemoveIcon></RemoveIcon>
-            </ProductInfoContainer>
-          </ProductContainer>
-          <ProductContainer>
-            <ProductImg />
-            <ProductInfoContainer>
-              <ProductInfo>
-                <ColorContainer>
-                  <Color></Color>
-                  <Color></Color>
-                  <Color></Color>
-                </ColorContainer>
-                <InfoText>前開衩扭結洋裝</InfoText>
-                <InfoText>TWD. 799</InfoText>
-              </ProductInfo>
-              <RemoveIcon></RemoveIcon>
-            </ProductInfoContainer>
-          </ProductContainer>
-          <ProductContainer>
-            <ProductImg />
-            <ProductInfoContainer>
-              <ProductInfo>
-                <ColorContainer>
-                  <Color></Color>
-                  <Color></Color>
-                  <Color></Color>
-                </ColorContainer>
-                <InfoText>前開衩扭結洋裝</InfoText>
-                <InfoText>TWD. 799</InfoText>
-              </ProductInfo>
-              <RemoveIcon></RemoveIcon>
-            </ProductInfoContainer>
-          </ProductContainer>
-          <ProductContainer>
-            <ProductImg />
-            <ProductInfoContainer>
-              <ProductInfo>
-                <ColorContainer>
-                  <Color></Color>
-                  <Color></Color>
-                  <Color></Color>
-                </ColorContainer>
-                <InfoText>前開衩扭結洋裝</InfoText>
-                <InfoText>TWD. 799</InfoText>
-              </ProductInfo>
-              <RemoveIcon></RemoveIcon>
-            </ProductInfoContainer>
-          </ProductContainer>
+          {collections.map((product, index) => (
+            <ProductContainer key={index}>
+              <ProductImg imgUrl={product.img} />
+              <ProductInfoContainer>
+                <ProductInfo>
+                  <ColorContainer>
+                    {product.colors.map((color) => (
+                      <Color backgroundColor={`#${color}`}></Color>
+                    ))}
+                  </ColorContainer>
+                  <InfoText>{product.title}</InfoText>
+                  <InfoText>TWD. {product.price}</InfoText>
+                </ProductInfo>
+                <RemoveIcon></RemoveIcon>
+              </ProductInfoContainer>
+            </ProductContainer>
+          ))}
         </Products>
       </Collection>
       <SwipeZone>
         <ContentContainer>
           <SwipeImg />
-          <SwipeTitle>前開衩扭結洋裝</SwipeTitle>
-          <SwipePrice>TWD.799</SwipePrice>
+          <SwipeTitle>{displayedProduct.title}</SwipeTitle>
+          <SwipePrice>TWD.{displayedProduct.price}</SwipePrice>
         </ContentContainer>
         <LikeBtnContainer>
           <LikeBtn imgUrl={notLike} />
