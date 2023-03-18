@@ -21,11 +21,63 @@ const Collection = styled.div`
   align-items: center;
 `;
 
+const SwipeZone = styled.div`
+  width: 726px;
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+  align-items: center;
+`;
+
 const ContentContainer = styled.div`
   width: 726px;
-  height: 876px;
   border: 1px solid black;
   border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 41px 0;
+`;
+
+const SwipeImgContainer = styled.div`
+  width: 100%;
+  display: flex;
+`;
+
+const SwipeImg = styled.div`
+  width: 518px;
+  height: 690px;
+  margin-bottom: 26px;
+  background-image: url(${product});
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
+
+const SwipeTitle = styled.h2`
+  font-size: 32px;
+  letter-spacing: 4px;
+  font-weight: 700;
+  margin-bottom: 10px;
+`;
+
+const SwipePrice = styled.h3`
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: 4px;
+`;
+
+const LikeBtnContainer = styled.div`
+  width: 461px;
+  display: flex;
+  gap: 82px;
+`;
+
+const LikeBtn = styled.button`
+  width: 99px;
+  height: 99px;
+  background-image: url(${(props) => props.imgUrl});
+  border: 0;
+  background-color: white;
 `;
 
 const Title = styled.div`
@@ -179,7 +231,18 @@ export default function Swipe() {
           </ProductContainer>
         </Products>
       </Collection>
-      <ContentContainer></ContentContainer>
+      <SwipeZone>
+        <ContentContainer>
+          <SwipeImg />
+          <SwipeTitle>前開衩扭結洋裝</SwipeTitle>
+          <SwipePrice>TWD.799</SwipePrice>
+        </ContentContainer>
+        <LikeBtnContainer>
+          <LikeBtn imgUrl={notLike} />
+          <LikeBtn imgUrl={superLike} />
+          <LikeBtn imgUrl={like} />
+        </LikeBtnContainer>
+      </SwipeZone>
     </Wrapper>
   );
 }
