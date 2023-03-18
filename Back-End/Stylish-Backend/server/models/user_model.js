@@ -192,6 +192,18 @@ const getFacebookProfile = async function (accessToken) {
   }
 };
 
+const insertQuizAnswer = async function (userId, answer) {
+  try {
+    const result = await pool.query('INSERT INTO `quiz`(user_id, q1, q2, q3, q4, q5) VALUES (?, ?)',
+      [userId, answer]
+    )
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 module.exports = {
   USER_ROLE,
   signUp,
@@ -199,4 +211,5 @@ module.exports = {
   facebookSignIn,
   getUserDetail,
   getFacebookProfile,
+  insertQuizAnswer
 };

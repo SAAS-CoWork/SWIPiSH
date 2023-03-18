@@ -134,8 +134,23 @@ const getUserProfile = async (req, res) => {
   return;
 };
 
+const createQuizAnswer = async (req, res) => {
+  console.log(req.user)
+  const { answer } = req.body
+  const { id } = req.user
+  const isInserted = await User.insertQuizAnswer(id, answer)
+
+  if (!isInserted) {
+    res.status(400).json({ error: 'Duplicated user_id' });
+    return;
+  };
+
+  res.status(200).json({ message: "updated" });
+}
+
 module.exports = {
   signUp,
   signIn,
   getUserProfile,
+  createQuizAnswer
 };
