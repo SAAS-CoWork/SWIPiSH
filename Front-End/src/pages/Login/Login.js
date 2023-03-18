@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
   width: 1331px;
   height: 529px;
-  margin: 193px auto 1562px;
+  margin: 100px auto 50px;
   border: 1px solid black;
   border-radius: 25px;
   color: #3f3a3a;
