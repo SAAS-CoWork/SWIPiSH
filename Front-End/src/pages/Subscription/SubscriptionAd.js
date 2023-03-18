@@ -129,7 +129,7 @@ const LearnMoreBtn = styled.button`
   border: 0;
 `;
 
-export const SubscriptionAd = () => {
+export default function SubscriptionAd() {
   return (
     <Wrapper>
       <Title>Revolutionize Your Shopping Experience!</Title>
@@ -174,4 +174,4 @@ export const SubscriptionAd = () => {
       <LearnMoreBtn>LEARN MORE</LearnMoreBtn>
     </Wrapper>
   );
-};
+}
