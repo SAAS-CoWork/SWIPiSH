@@ -150,27 +150,53 @@ function ProductVariants({ product }) {
     return purchaseNumLimit;
   }
 
+  const existingItem = cartItems.find(
+    (item) =>
+      item.id === product.id &&
+      item.color.code === selectedColorCode &&
+      item.size === selectedSize
+  );
+
   function addToCart() {
     if (!selectedSize) {
       window.alert('請選擇尺寸');
       return;
     }
 
-    const newCartItems = [
-      ...cartItems,
-      {
-        color: product.colors.find((color) => color.code === selectedColorCode),
-        id: product.id,
-        image: product.main_image,
-        name: product.title,
-        price: product.price,
-        qty: quantity,
-        size: selectedSize,
-        stock: getStock(selectedColorCode, selectedSize),
-      },
-    ];
-    setCartItems(newCartItems);
-    window.alert('已加入商品');
+    if (existingItem) {
+      const updatedCartItems = cartItems.map((item) => {
+        if (item === existingItem) {
+          return {
+            ...item,
+            qty: item.qty + quantity,
+          };
+        } else {
+          return item;
+        }
+      });
+      setCartItems(updatedCartItems);
+    } else {
+      const newCartItems = [
+        ...cartItems,
+        {
+          color: product.colors.find(
+            (color) => color.code === selectedColorCode
+          ),
+          id: product.id,
+          image: product.main_image,
+          name: product.title,
+          price: product.price,
+          qty: quantity,
+          size: selectedSize,
+          stock: getStock(selectedColorCode, selectedSize),
+        },
+      ];
+      setCartItems(newCartItems);
+      window.alert('已加入商品');
+    }
+    setSelectedColorCode(product.colors[0].code);
+    setSelectedSize();
+    setQuantity(0);
   }
   return (
     <>
