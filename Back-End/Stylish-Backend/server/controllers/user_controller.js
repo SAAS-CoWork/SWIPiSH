@@ -7,12 +7,17 @@ const signUp = async (req, res) => {
   const { email, password } = req.body;
 
   if (!name || !email || !password) {
-    res.status(400).send({ error: 'Request Error: name, email and password are required.' });
+    res.status(400).json({ error: 'Request Error: name, email and password are required.' });
     return;
   }
 
   if (!validator.isEmail(email)) {
-    res.status(400).send({ error: 'Request Error: Invalid email format' });
+    res.status(400).json({ error: 'Request Error: Invalid email format' });
+    return;
+  }
+
+  if (password.length < 8 || password.length > 20) {
+    res.status(400).json({ error: 'Request Error: Invalid password' });
     return;
   }
 
@@ -20,27 +25,24 @@ const signUp = async (req, res) => {
 
   const result = await User.signUp(name, User.USER_ROLE.USER, email, password);
   if (result.error) {
-    res.status(403).send({ error: result.error });
+    res.status(403).json({ error: result.error });
     return;
   }
 
   const user = result.user;
   if (!user) {
-    res.status(500).send({ error: 'Database Query Error' });
+    res.status(500).json({ error: 'Database Query Error' });
     return;
   }
 
-  res.status(200).send({
+  res.status(200).json({
     data: {
       access_token: user.access_token,
       access_expired: user.access_expired,
-      login_at: user.login_at,
       user: {
         id: user.id,
-        provider: user.provider,
         name: user.name,
         email: user.email,
-        picture: user.picture,
       },
     },
   });
