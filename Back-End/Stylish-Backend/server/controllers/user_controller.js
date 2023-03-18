@@ -48,7 +48,7 @@ const signUp = async (req, res) => {
 
 const nativeSignIn = async (email, password) => {
   if (!email || !password) {
-    return { error: 'Request Error: email and password are required.', status: 400 };
+    return { error: 'Request Error: email and password are required.', status: 401 };
   }
 
   try {
@@ -95,28 +95,26 @@ const signIn = async (req, res) => {
   }
 
   if (result.error) {
-    const status_code = result.status ? result.status : 403;
-    res.status(status_code).send({ error: result.error });
+    const status_code = result.status ? result.status : 401;
+    res.status(status_code).json({ error: result.error });
     return;
   }
 
   const user = result.user;
   if (!user) {
-    res.status(500).send({ error: 'Database Query Error' });
+    res.status(500).json({ error: 'Database Query Error' });
     return;
   }
 
-  res.status(200).send({
+  res.status(200).json({
     data: {
       access_token: user.access_token,
       access_expired: user.access_expired,
-      login_at: user.login_at,
       user: {
         id: user.id,
-        provider: user.provider,
+        provider: "native",
         name: user.name,
-        email: user.email,
-        picture: user.picture,
+        email: user.email
       },
     },
   });
