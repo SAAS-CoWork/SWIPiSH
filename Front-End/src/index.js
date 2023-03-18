@@ -7,8 +7,10 @@ import Home from './pages/Home/Home';
 import ThankYou from './pages/ThankYou/ThankYou';
 import Product from './pages/Product/Product';
 import Profile from './pages/Profile/Profile';
+import FavProducts from './pages/FavProducts/FavProducts';
+import OrderStatus from './pages/OrderStatus/OrderStatus';
 import Login from './pages/Login/Login';
-import { SubscriptionAd } from './pages/SubscriptionAd/SubscriptionAd';
+import SubscriptionAd from './pages/SubscriptionAd/SubscriptionAd';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -21,6 +23,8 @@ root.render(
         <Route path='checkout' element={<Checkout />} />
         <Route path='thankyou' element={<ThankYou />} />
         <Route path='profile' element={<Profile />} />
+        <Route path='favproducts' element={<FavProducts />} />
+        <Route path='orderStatus' element={<OrderStatus />} />
         <Route path='login' element={<Login />} />
         <Route path='subscription/ad' element={<SubscriptionAd />} />
         <Route path='*' element={<Navigate to='/' replace />} />
@@ -28,3 +32,5 @@ root.render(
     </Routes>
   </BrowserRouter>
 );
+
+

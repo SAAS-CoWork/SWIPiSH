@@ -108,6 +108,7 @@ const PlanDescriptionText = styled.p`
   line-height: 38px;
   letter-spacing: 6.4px;
   font-weight: ${(props) => props.fontWeight};
+  font-type: bold;
 `;
 
 const MedalImg = styled.div`
@@ -129,7 +130,7 @@ const LearnMoreBtn = styled.button`
   border: 0;
 `;
 
-export const SubscriptionAd = () => {
+export default function SubscriptionAd () {
   return (
     <Wrapper>
       <Title>Revolutionize Your Shopping Experience!</Title>
