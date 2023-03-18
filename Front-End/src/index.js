@@ -8,7 +8,8 @@ import ThankYou from './pages/ThankYou/ThankYou';
 import Product from './pages/Product/Product';
 import Profile from './pages/Profile/Profile';
 import Login from './pages/Login/Login';
-import SubscriptionAd from './pages/SubscriptionAd/SubscriptionAd';
+import SubscriptionAd from './pages/Subscription/SubscriptionAd';
+import Subscription from './pages/Subscription/Subscription';
 import Quiz from './pages/Quiz/Quiz';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -24,6 +25,7 @@ root.render(
         <Route path='profile' element={<Profile />} />
         <Route path='login' element={<Login />} />
         <Route path='subscription/ad' element={<SubscriptionAd />} />
+        <Route path='subscription' element={<Subscription />} />
         <Route path='quiz' element={<Quiz />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>
