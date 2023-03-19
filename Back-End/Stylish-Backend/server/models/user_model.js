@@ -10,6 +10,7 @@ const USER_ROLE = {
   ALL: -1,
   ADMIN: 1,
   USER: 2,
+  VIPUSER: 3
 };
 
 const signUp = async (name, roleId, email, password) => {
