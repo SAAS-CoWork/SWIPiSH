@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const questions = [
@@ -132,10 +132,25 @@ const SubmitBtn = styled.button`
 `;
 
 export default function Quiz() {
+  const [userInput, setUserInput] = useState({});
+  function handleSubmit(e) {
+    e.preventDefault();
+    setUserInput(e.target.value);
+  }
+
+  function handleInput(e, item) {
+    const newAnswer = { ...userInput, [`q${item}`]: e.target.value };
+    setUserInput(newAnswer);
+  }
+
+  useEffect(() => {
+    console.log(userInput);
+  }, [userInput]);
+
   return (
     <Wrapper>
       <Title>HAVE FUN !</Title>
-      <ContentContainer>
+      <ContentContainer onSubmit={(e) => handleSubmit(e)}>
         <Content>
           {questions.map((question) => {
             return (
@@ -149,10 +164,21 @@ export default function Quiz() {
                   <QuestionContent>
                     <QuestionTitle>{question.title}</QuestionTitle>
                     <OptionContainer>
-                      {question.options.map((option) => {
+                      {question.options.map((option, index) => {
                         return (
-                          <Options>
-                            <CheckInput type='radio'></CheckInput>
+                          <Options key={`${question.number}-${index}`}>
+                            <CheckInput
+                              type='radio'
+                              name={`question-${question.number}`}
+                              value={index.toString()}
+                              checked={
+                                userInput[`q${question.number}`] ===
+                                index.toString()
+                              }
+                              onChange={(e) => {
+                                handleInput(e, question.number);
+                              }}
+                            ></CheckInput>
                             <CheckLabel>{option}</CheckLabel>
                           </Options>
                         );
@@ -165,7 +191,7 @@ export default function Quiz() {
           })}
         </Content>
       </ContentContainer>
-      <SubmitBtn>READY TO SWIPE!</SubmitBtn>
+      <SubmitBtn type='submit'>READY TO SWIPE!</SubmitBtn>
     </Wrapper>
   );
 }
