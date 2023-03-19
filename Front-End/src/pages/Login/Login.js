@@ -121,7 +121,6 @@ export default function Login() {
       .then((data) => {
         const token = data.data.access_token;
         localStorage.setItem('loginToken', token);
-        alert('Login Successful!');
         window.location.href = '/';
       })
       .catch((err) => console.log(err));

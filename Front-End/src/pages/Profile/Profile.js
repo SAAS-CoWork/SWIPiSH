@@ -324,7 +324,6 @@ export default function Profile() {
         if (res.status === 200) {
           return res.json();
         } else {
-          alert('You are already a member. Please log in');
           window.location.href = './login';
         }
       })
