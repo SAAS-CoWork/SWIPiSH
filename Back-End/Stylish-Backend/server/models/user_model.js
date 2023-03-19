@@ -36,12 +36,31 @@ const signUp = async (name, roleId, email, password) => {
       TOKEN_SECRET
     );
     user.access_token = accessToken;
-
+    console.log('AccessToken', accessToken)
     const queryStr = 'INSERT INTO user SET ?';
     const [result] = await conn.query(queryStr, user);
+    // await conn.query(queryStr, [accessToken, TOKEN_EXPIRE, loginAt, user.id]);
     user.id = result.insertId;
+
+    const newAccessToken = jwt.sign(
+      {
+        provider: user.provider,
+        name: user.name,
+        email: user.email,
+        picture: user.picture,
+        id: user.id
+      },
+      TOKEN_SECRET
+    );
+    console.log('newAccessToken', newAccessToken)
+    const updateJwt =
+      'UPDATE user SET access_token = ? WHERE id = ?';
+    await conn.query(updateJwt, [newAccessToken, user.id]);
+    user.access_token = newAccessToken;
+
     return { user };
   } catch (error) {
+    console.log("user", error)
     return {
       error: 'Email Already Exists',
       status: 403,
@@ -70,6 +89,7 @@ const nativeSignIn = async (email, password) => {
         name: user.name,
         email: user.email,
         picture: user.picture,
+        id: user.id
       },
       TOKEN_SECRET
     );
@@ -175,6 +195,18 @@ const getFacebookProfile = async function (accessToken) {
   }
 };
 
+const insertQuizAnswer = async function (userId, answer) {
+  try {
+    const result = await pool.query('INSERT INTO `quiz`(user_id, q1, q2, q3, q4, q5) VALUES (?, ?)',
+      [userId, answer]
+    )
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
 module.exports = {
   USER_ROLE,
   signUp,
@@ -182,4 +214,5 @@ module.exports = {
   facebookSignIn,
   getUserDetail,
   getFacebookProfile,
+  insertQuizAnswer
 };
