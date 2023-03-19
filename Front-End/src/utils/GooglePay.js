@@ -34,13 +34,19 @@ export default function GooglePayBtn() {
         transactionInfo: {
           totalPriceStatus: 'FINAL',
           totalPriceLabel: 'Total',
-          totalPrice: '100.00',
+          totalPrice: '1',
           currencyCode: 'USD',
           countryCode: 'US',
         },
+        shippingAddressRequired: false,
+        callbackIntents: ['PAYMENT_AUTHORIZATION'],
       }}
-      onLoadPaymentData={(paymentRequest) => {
-        console.log('load payment data', paymentRequest);
+      // onLoadPaymentData={(paymentRequest) => {
+      //   console.log('Success', paymentRequest);
+      // }}
+      onPaymentAuthorized={(paymentData) => {
+        console.log('Payment Authorised Success', paymentData);
+        return { transactionState: 'SUCCESS' };
       }}
     />
   );
