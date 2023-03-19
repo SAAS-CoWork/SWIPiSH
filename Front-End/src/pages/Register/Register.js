@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import profile from './profile.png';
 
@@ -103,13 +103,18 @@ export default function Register() {
   }
 
   function SendUserData() {
-    fetch('https://virtserver.swaggerhub.com/CSFANGYOLK/signup/1.0.0', {
-      method: 'Post',
-      body: {
-        name: userData.name,
-        email: userData.email,
-        password: userData.password,
+    const data = {
+      name: userData.name,
+      email: userData.email,
+      password: userData.password,
+    };
+
+    fetch('http://54.64.47.158:3001/api/1.0/user/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data),
     })
       .then((res) =>
         res.status === 200 ? console.log('Success!') : console.log('Error!')
@@ -122,9 +127,6 @@ export default function Register() {
     SendUserData();
   }
 
-  // useEffect(() => {
-  //   console.log(userData);
-  // }, [userData]);
   return (
     <Wrapper>
       <ContentContainer onSubmit={(e) => handleSubmit(e)}>
