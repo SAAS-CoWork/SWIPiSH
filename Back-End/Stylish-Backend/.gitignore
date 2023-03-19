@@ -39,6 +39,10 @@ build/Release
 node_modules/
 jspm_packages/
 
+# crawler data
+caco_datas*
+
+
 # TypeScript v1 declaration files
 typings/
 
@@ -84,3 +88,4 @@ midterm*
 
 # Mac
 .DS_Store
+.idea/
