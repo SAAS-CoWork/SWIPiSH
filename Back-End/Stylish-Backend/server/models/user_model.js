@@ -19,7 +19,7 @@ const signUp = async (name, roleId, email, password) => {
     const loginAt = new Date();
     const user = {
       provider: 'native',
-      role_id: roeId,
+      role_id: roleId,
       email: email,
       password: bcrypt.hashSync(password, salt),
       name: name,
@@ -208,6 +208,32 @@ const insertQuizAnswer = async function (userId, answer) {
   }
 };
 
+// get roleId
+const getRoleId = async function (userId) {
+  try {
+    const [result] = await pool.query('SELECT role_id FROM user WHERE id = ?',
+      [userId]
+    )
+    return result;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+// get liked_product
+const getLiked = async function (userId) {
+  try {
+    const stat = 'SELECT product_id FROM liked_product WHERE user_id = ?'
+    const [result] = await pool.query(stat, [userId]);
+    console.log('愛', result);
+    return result;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
 module.exports = {
   USER_ROLE,
   signUp,
@@ -215,5 +241,7 @@ module.exports = {
   facebookSignIn,
   getUserDetail,
   getFacebookProfile,
-  insertQuizAnswer
+  insertQuizAnswer,
+  getRoleId,
+  getLiked
 };
