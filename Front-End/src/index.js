@@ -7,6 +7,8 @@ import Home from './pages/Home/Home';
 import ThankYou from './pages/ThankYou/ThankYou';
 import Product from './pages/Product/Product';
 import Profile from './pages/Profile/Profile';
+import FavProducts from './pages/FavProducts/FavProducts';
+import OrderStatus from './pages/OrderStatus/OrderStatus';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import SubscriptionAd from './pages/Subscription/SubscriptionAd';
@@ -25,6 +27,8 @@ root.render(
         <Route path='checkout' element={<Checkout />} />
         <Route path='thankyou' element={<ThankYou />} />
         <Route path='profile' element={<Profile />} />
+        <Route path='favproducts' element={<FavProducts />} />
+        <Route path='orderStatus' element={<OrderStatus />} />
         <Route path='register' element={<Register />} />
         <Route path='login' element={<Login />} />
         <Route path='subscription/ad' element={<SubscriptionAd />} />
@@ -36,3 +40,5 @@ root.render(
     </Routes>
   </BrowserRouter>
 );
+
+
