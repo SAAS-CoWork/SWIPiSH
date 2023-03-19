@@ -126,6 +126,7 @@ export default function Register() {
       .then((data) => {
         const token = data.data.access_token;
         localStorage.setItem('loginToken', token);
+        window.location.href = './quiz';
       })
       .catch((err) => console.log(err));
   }

@@ -43,7 +43,7 @@ const Title = styled.h1`
   font-weight: 700;
 `;
 
-const ContentContainer = styled.form`
+const ContentContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   padding: 113px 99px;
@@ -140,6 +140,7 @@ const SubmitBtn = styled.button`
 
 export default function Quiz() {
   const [userInput, setUserInput] = useState({});
+  const loginToken = localStorage.getItem('loginToken');
 
   function handleInput(e, item) {
     const newAnswer = { ...userInput, [`q${item}`]: e.target.value };
@@ -154,15 +155,19 @@ export default function Quiz() {
     fetch('https://www.gotolive.online/api/1.0/user/quiz', {
       method: 'POST',
       headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6Im5hdGl2ZSIsIm5hbWUiOiJTYW0xMjMiLCJlbWFpbCI6InNhbWNoYW4xMjQ1QGdtYWlsLmNvbSIsInBpY3R1cmUiOm51bGwsImlkIjoxMDI5MywiaWF0IjoxNjc5MjEwODcxfQ.PO4gxjBLVlcDq7_vz3InLBqkhX4ve3pf4vTBa55CVjw',
+        Authorization: `Bearer ${loginToken}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ answer: data }),
     })
-      .then((res) =>
-        res.status === 200 ? console.log('Success!') : console.log('Error!')
-      )
+      .then((res) => {
+        if (res.status === 200) {
+          alert('Registration Successful!');
+          window.location.href = '/';
+        } else {
+          console.log('Error! Please refresh the browser and try again');
+        }
+      })
       .catch((err) => console.log(err));
   }
 
@@ -177,9 +182,10 @@ export default function Quiz() {
       <MainContent onSubmit={(e) => handleSubmit(e)}>
         <ContentContainer>
           <Content>
-            {questions.map((question) => {
+            {questions.map((question, index) => {
               return (
                 <ContentRow
+                  key={index}
                   borderBottom={question.noBorder ? 0 : '1px solid black'}
                 >
                   <QuestionContainer>
