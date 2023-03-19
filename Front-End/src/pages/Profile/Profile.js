@@ -294,7 +294,7 @@ const Submit = styled.button`
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState();
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -304,7 +304,7 @@ export default function Profile() {
 
   const loginToken = localStorage.getItem('loginToken');
 
-  useEffect(() => {
+  function getUserData() {
     fetch('http://54.64.47.158:3001/api/1.0/user/profile', {
       method: 'GET',
       headers: {
@@ -312,15 +312,46 @@ export default function Profile() {
         'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((data) => setUserData(data.data))
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          alert('You are already a member. Please log in');
+          window.location.href = './login';
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setUserData(data.data);
+        } else {
+          // alert('Token Expired!');
+          // window.location.href = './login';
+        }
+      })
       .catch((err) => console.log(err));
-  }, [loginToken]);
+  }
+
+  // function getSubscriptionData() {
+  //   fetch('http://54.64.47.158:3001/api/1.0/user/subscription', {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${loginToken}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => console.log(data.data))
+  //     .catch((err) => console.log(err));
+  // }
 
   useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+    getUserData();
+    // getSubscriptionData();
+  }, []);
 
+  if (!userData) {
+    return;
+  }
   return (
     <Wrapper>
       <MemberNav>
