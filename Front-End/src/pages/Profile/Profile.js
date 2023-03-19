@@ -356,7 +356,11 @@ export default function Profile() {
   // }
 
   useEffect(() => {
-    getUserData();
+    if (loginToken) {
+      getUserData();
+    } else {
+      window.location.href = './login';
+    }
     // getSubscriptionData();
   }, []);
 
