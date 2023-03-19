@@ -5,6 +5,8 @@ const {
   checkout,
   getUserPayments,
   getUserPaymentsGroupByDB,
+  getSubscription,
+  subscriptionPayment
 } = require('../controllers/order_controller');
 
 const { USER_ROLE } = require('../models/user_model');
@@ -15,5 +17,10 @@ router.route('/order/checkout').post(authentication(USER_ROLE.ALL), wrapAsync(ch
 router.route('/order/payments').get(wrapAsync(getUserPayments));
 
 router.route('/order/payments2').get(wrapAsync(getUserPaymentsGroupByDB));
+
+// subscription
+router.route('/order/subscription').get(authentication(USER_ROLE.ALL), wrapAsync(getSubscription));
+
+router.route('/order/subscription').post(authentication(USER_ROLE.ALL), wrapAsync(subscriptionPayment));
 
 module.exports = router;

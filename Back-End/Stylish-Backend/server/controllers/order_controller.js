@@ -75,8 +75,26 @@ const getUserPaymentsGroupByDB = async (req, res) => {
   res.status(200).send({ data: orders });
 };
 
+const getSubscription = async (req, res) => {
+  return res.status(200).json('ok');
+};
+
+const subscriptionPayment = async (req, res) => {
+  const { data } = req.body;
+  if (!data || !data.prime || !data.plan || !data.price || !data.subscription_time) {
+    res.status(400).send({ error: 'Subscription Error: Wrong Data Format' });
+    return;
+  }
+  return res.status(200).json({
+    plan: "premium",
+    expire: "2023-03-19"
+  });
+};
+
 module.exports = {
   checkout,
   getUserPayments,
   getUserPaymentsGroupByDB,
+  getSubscription,
+  subscriptionPayment
 };
