@@ -130,7 +130,11 @@ const LearnMoreBtn = styled.button`
   border: 0;
 `;
 
+<<<<<<< HEAD:Front-End/src/pages/SubscriptionAd/SubscriptionAd.js
 export default function SubscriptionAd () {
+=======
+export default function SubscriptionAd() {
+>>>>>>> f74fc374164313395d0e1185eb3893735ebe39b7:Front-End/src/pages/Subscription/SubscriptionAd.js
   return (
     <Wrapper>
       <Title>Revolutionize Your Shopping Experience!</Title>
@@ -175,4 +179,4 @@ export default function SubscriptionAd () {
       <LearnMoreBtn>LEARN MORE</LearnMoreBtn>
     </Wrapper>
   );
-};
+}
