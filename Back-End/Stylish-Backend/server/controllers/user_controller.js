@@ -123,12 +123,17 @@ const signIn = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
+  // ALL: -1, 401
+  // USER: 2, 200
+  // VIPUSER: 3 200 => 抓 subcription t/f & sub expire time
+  //                => 抓 liked-product
+
+
   res.status(200).send({
     data: {
-      provider: req.user.provider,
       name: req.user.name,
       email: req.user.email,
-      picture: req.user.picture,
+      //subscription
     },
   });
   return;

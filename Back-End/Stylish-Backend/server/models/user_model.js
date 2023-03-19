@@ -19,7 +19,7 @@ const signUp = async (name, roleId, email, password) => {
     const loginAt = new Date();
     const user = {
       provider: 'native',
-      role_id: roleId,
+      role_id: roeId,
       email: email,
       password: bcrypt.hashSync(password, salt),
       name: name,
