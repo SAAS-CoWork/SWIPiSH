@@ -15,6 +15,7 @@ import SubscriptionAd from './pages/Subscription/SubscriptionAd';
 import Subscription from './pages/Subscription/Subscription';
 import Swipe from './pages/Swipe/Swipe';
 import Quiz from './pages/Quiz/Quiz';
+import Swipttest from './pages/Swipe/Swipttest';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -35,6 +36,7 @@ root.render(
         <Route path='subscription' element={<Subscription />} />
         <Route path='swipe' element={<Swipe />} />
         <Route path='quiz' element={<Quiz />} />
+        <Route path='swipttest' element={<Swipttest />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Route>
     </Routes>

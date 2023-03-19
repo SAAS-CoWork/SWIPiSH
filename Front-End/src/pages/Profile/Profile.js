@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import edit from "./edit.png";
 import profile from "./profile.png";
-import { useState } from 'react';
+import React, { useState, useEffect } from "react";
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -294,12 +294,23 @@ const Submit = styled.button`
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  // const [userProfile, setUserProfile] = useState({});
+
   const handleEditClick = () => {
     setIsEditing(true); 
   };
   const handleSaveClick = () => {
     setIsEditing(false); 
   };
+
+  useEffect(() => {
+    fetch('https://www.gotolive.online/api/1.0/user/profile')
+      .then((response) => {console.log(response)})
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <MemberNav>

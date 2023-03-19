@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import profile from './profile.png';
+import React, { useState } from "react";
+import styled from "styled-components";
+import profile from "./profile.png";
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -82,9 +82,45 @@ const LoginBtn = styled.button`
   font-size: 20px;
   line-height: 30px;
   text-align: center;
+  cursor: pointer;
 `;
 
 export default function Login() {
+  const [userData, setUserData] = useState({});
+
+  function saveUserInput(e) {
+    const key = e.target.name;
+    const userInput = e.target.value;
+    const newUserData = { ...userData, [key]: userInput };
+    setUserData(newUserData);
+  }
+
+  function SendUserData() {
+    const data = {
+      email: userData.email,
+      password: userData.password,
+    };
+    console.log(data);
+
+    fetch("https://www.gotolive.online/api/1.0/user/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6Im5hdGl2ZSIsIm5hbWUiOiJTYW0xMjMiLCJlbWFpbCI6InNhbWNoYW4xMjQ1QGdtYWlsLmNvbSIsInBpY3R1cmUiOm51bGwsImlkIjoxMDI5MywiaWF0IjoxNjc5MjEwODcxfQ.PO4gxjBLVlcDq7_vz3InLBqkhX4ve3pf4vTBa55CVjw",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) =>
+        res.status === 200 ? console.log("Success!") : console.log("Error!")
+      )
+      .catch((err) => console.log(err));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    SendUserData();
+  }
+
   return (
     <Wrapper>
       <ContentContainer>
@@ -96,14 +132,24 @@ export default function Login() {
         <LoginInfoContainer>
           <LoginRow>
             <LoginInfoTitle>帳號</LoginInfoTitle>
-            <LoginInput></LoginInput>
+            <LoginInput
+              name="email"
+              value={userData.email}
+              onChange={(e) => saveUserInput(e)}
+            />
           </LoginRow>
           <LoginRow>
             <LoginInfoTitle>密碼</LoginInfoTitle>
-            <LoginInput></LoginInput>
+            <LoginInput
+              name="password"
+              value={userData.password}
+              onChange={(e) => saveUserInput(e)}
+            />
           </LoginRow>
         </LoginInfoContainer>
-        <LoginBtn>登入</LoginBtn>
+        <form onSubmit={(e) => handleSubmit(e)}>
+          <LoginBtn type="submit">登入</LoginBtn>
+        </form>
       </ContentContainer>
     </Wrapper>
   );
