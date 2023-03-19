@@ -277,6 +277,14 @@ const PwInput = styled.p`
   color: #3f3a3a;
 `;
 
+const SubmitContainer = styled.div`
+  width: 60%;
+  display: flex;
+  margin: 0 auto;
+  gap: 50px;
+  justify-content: center;
+`;
+
 const Submit = styled.button`
   width: 240px;
   height: 64px;
@@ -329,6 +337,11 @@ export default function Profile() {
         }
       })
       .catch((err) => console.log(err));
+  }
+
+  function logOut() {
+    localStorage.removeItem('loginToken');
+    window.location.href = '/';
   }
 
   // function getSubscriptionData() {
@@ -413,7 +426,10 @@ export default function Profile() {
           )}
         </PwWrapper>
       </ProfileWrapper>
-      <Submit onClick={handleSaveClick}>確認送出</Submit>
+      <SubmitContainer>
+        <Submit onClick={handleSaveClick}>確認送出</Submit>
+        <Submit onClick={logOut}>登出</Submit>
+      </SubmitContainer>
     </Wrapper>
   );
 }
