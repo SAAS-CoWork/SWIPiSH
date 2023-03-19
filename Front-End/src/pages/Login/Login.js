@@ -78,6 +78,14 @@ const LoginInput = styled.input`
   border-radius: 8px;
 `;
 
+const BtnContainer = styled.div`
+  width: 941px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+`;
+
 const LoginBtn = styled.button`
   width: 240px;
   height: 64px;
@@ -131,6 +139,10 @@ export default function Login() {
     getJWT(userInput);
   }
 
+  function signUp() {
+    window.location.href = './register';
+  }
+
   return (
     <Wrapper>
       <ContentContainer onSubmit={(e) => handleSubmit(e)}>
@@ -140,8 +152,8 @@ export default function Login() {
         </LoginInfoTitleContainer>
         <SplitLine></SplitLine>
         <LoginInfoContainer>
-          {questions.map((question) => (
-            <LoginRow>
+          {questions.map((question, index) => (
+            <LoginRow key={index}>
               <LoginInfoTitle>{question.label}</LoginInfoTitle>
               <LoginInput
                 onChange={(e) => {
@@ -151,7 +163,12 @@ export default function Login() {
             </LoginRow>
           ))}
         </LoginInfoContainer>
-        <LoginBtn>登入</LoginBtn>
+        <BtnContainer>
+          <LoginBtn type='submit'>登入</LoginBtn>
+          <LoginBtn type='button' onClick={signUp}>
+            成為會員
+          </LoginBtn>
+        </BtnContainer>
       </ContentContainer>
     </Wrapper>
   );

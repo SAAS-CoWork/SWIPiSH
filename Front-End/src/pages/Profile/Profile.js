@@ -344,15 +344,14 @@ export default function Profile() {
   }
 
   // function getSubscriptionData() {
-  //   fetch('http://54.64.47.158:3001/api/1.0/user/subscription', {
+  //   fetch('https://www.gotolive.online/api/1.0/order/subscription', {
   //     method: 'GET',
   //     headers: {
   //       Authorization: `Bearer ${loginToken}`,
   //       'Content-Type': 'application/json',
   //     },
   //   })
-  //     .then((res) => res.json())
-  //     .then((data) => console.log(data.data))
+  //     .then((res) => console.log(res))
   //     .catch((err) => console.log(err));
   // }
 
@@ -400,7 +399,7 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue='Sam Alison Amber' />
+              <textarea type='text' defaultValue={userData.name} />
             </EditBox>
           )}
         </NameWrapper>
@@ -410,11 +409,11 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue='swipishmanager@saas.com' />
+              <textarea type='text' defaultValue={userData.email} />
             </EditBox>
           )}
         </EmailWrapper>
-        <PwWrapper>
+        {/* <PwWrapper>
           <PwTitle>密碼</PwTitle>
           <PwInput>{userData.password}</PwInput>
           <Edit onClick={handleEditClick}></Edit>
@@ -423,7 +422,7 @@ export default function Profile() {
               <textarea type='text' defaultValue='******' />
             </EditBox>
           )}
-        </PwWrapper>
+        </PwWrapper> */}
       </ProfileWrapper>
       <SubmitContainer>
         <Submit onClick={handleSaveClick}>確認送出</Submit>
