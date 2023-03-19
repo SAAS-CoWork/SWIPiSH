@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import profile from './profile.png';
+
+const questions = [
+  { value: 'email', label: '信箱' },
+  { value: 'password', label: '密碼' },
+];
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -12,7 +17,7 @@ const Wrapper = styled.div`
   color: #3f3a3a;
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -43,7 +48,7 @@ const LoginInfoContainer = styled.div`
   margin-bottom: 69px;
 `;
 
-const LoginRow = styled.form`
+const LoginRow = styled.div`
   width: 696px;
   display: flex;
 `;
@@ -82,26 +87,70 @@ const LoginBtn = styled.button`
   font-size: 20px;
   line-height: 30px;
   text-align: center;
+  cursor: pointer;
 `;
 
 export default function Login() {
+  const [userInput, setUserInput] = useState({});
+
+  function handleInput(e, data) {
+    const inputData = { ...userInput, [data.value]: e.target.value };
+    setUserInput(inputData);
+  }
+
+  function getJWT(data) {
+    const jsonData = JSON.stringify({
+      provider: 'native',
+      email: data.email,
+      password: data.password,
+    });
+    fetch('http://54.64.47.158:3001/api/1.0/user/signin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonData,
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          alert('Incorrect email or password. Please try again.');
+        }
+      })
+      .then((data) => {
+        const token = data.data.access_token;
+        localStorage.setItem('loginToken', token);
+        alert('Login Successful!');
+        window.location.href = '/';
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    getJWT(userInput);
+  }
+
   return (
     <Wrapper>
-      <ContentContainer>
+      <ContentContainer onSubmit={(e) => handleSubmit(e)}>
         <LoginInfoTitleContainer>
           <Title>會員登入</Title>
           <LoginIcon></LoginIcon>
         </LoginInfoTitleContainer>
         <SplitLine></SplitLine>
         <LoginInfoContainer>
-          <LoginRow>
-            <LoginInfoTitle>帳號</LoginInfoTitle>
-            <LoginInput></LoginInput>
-          </LoginRow>
-          <LoginRow>
-            <LoginInfoTitle>密碼</LoginInfoTitle>
-            <LoginInput></LoginInput>
-          </LoginRow>
+          {questions.map((question) => (
+            <LoginRow>
+              <LoginInfoTitle>{question.label}</LoginInfoTitle>
+              <LoginInput
+                onChange={(e) => {
+                  handleInput(e, question);
+                }}
+              ></LoginInput>
+            </LoginRow>
+          ))}
         </LoginInfoContainer>
         <LoginBtn>登入</LoginBtn>
       </ContentContainer>

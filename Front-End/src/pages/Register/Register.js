@@ -6,9 +6,7 @@ const questions = [
   { value: 'name', label: '姓名' },
   { value: 'phone', label: '手機' },
   { value: 'email', label: '信箱' },
-  { value: 'userName', label: '帳號' },
   { value: 'password', label: '密碼' },
-  { value: 'password_confirm', label: '密碼確認' },
 ];
 
 const Wrapper = styled.div`
