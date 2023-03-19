@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import profile from './profile.png';
 
-const questions = ['姓名', '手機', '信箱', '帳號', '密碼', '密碼確認'];
+const questions = [
+  { value: 'name', label: '姓名' },
+  { value: 'phone', label: '手機' },
+  { value: 'email', label: '信箱' },
+  { value: 'userName', label: '帳號' },
+  { value: 'password', label: '密碼' },
+  { value: 'password_confirm', label: '密碼確認' },
+];
 
 const Wrapper = styled.div`
   width: 1331px;
@@ -82,26 +89,59 @@ const SubmitBtn = styled.button`
   margin-bottom: 79px;
   letter-spacing: 4px;
   border: 0;
+  cursor: pointer;
 `;
 
 export default function Register() {
+  const [userData, setUserData] = useState({});
+
+  function saveUserInput(e, obj) {
+    const key = obj.value;
+    const userInput = e.target.value;
+    const newUserData = { ...userData, [key]: userInput };
+    setUserData(newUserData);
+  }
+
+  function SendUserData() {
+    fetch('https://virtserver.swaggerhub.com/CSFANGYOLK/signup/1.0.0', {
+      method: 'Post',
+      body: {
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+      },
+    })
+      .then((res) =>
+        res.status === 200 ? console.log('Success!') : console.log('Error!')
+      )
+      .catch((err) => console.log(err));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    SendUserData();
+  }
+
+  // useEffect(() => {
+  //   console.log(userData);
+  // }, [userData]);
   return (
     <Wrapper>
-      <ContentContainer>
+      <ContentContainer onSubmit={(e) => handleSubmit(e)}>
         <Title>
           <TitleText>會員註冊</TitleText>
           <ProfileIcon />
         </Title>
         <SplitLine />
         <InfoContainer>
-          {questions.map((question) => (
-            <InfoRow>
-              <QuestionTitle>{question}</QuestionTitle>
-              <QuestionInput />
+          {questions.map((question, index) => (
+            <InfoRow key={index}>
+              <QuestionTitle>{question.label}</QuestionTitle>
+              <QuestionInput onChange={(e) => saveUserInput(e, question)} />
             </InfoRow>
           ))}
         </InfoContainer>
-        <SubmitBtn>玩個小遊戲！</SubmitBtn>
+        <SubmitBtn type='submit'>玩個小遊戲！</SubmitBtn>
       </ContentContainer>
     </Wrapper>
   );
