@@ -8,6 +8,7 @@ import cart from './cart.png';
 import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
+import upgrade from './upgrade.png';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
 
@@ -104,7 +105,7 @@ const SearchInput = styled.input`
   width: 214px;
   border: none;
   outline: none;
-  margin-left: auto;
+  margin-left: 20px;
   border-radius: 20px;
   padding: 6px 45px 6px 20px;
   border: solid 1px #979797;
@@ -226,6 +227,16 @@ const PageLinkText = styled.div`
   }
 `;
 
+const UpgradeIcon = styled(Link)`
+  width: 150px;
+  height: 50px;
+  background-image: url(${upgrade});
+  background-size: cover;
+  margin-left: auto;
+  border: 0;
+  cursor: pointer;
+`;
+
 const categories = [
   {
     name: 'women',
@@ -243,7 +254,7 @@ const categories = [
 
 function Header() {
   const [inputValue, setInputValue] = useState('');
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   const { cartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -255,7 +266,7 @@ function Header() {
 
   return (
     <Wrapper>
-      <Logo to="/" />
+      <Logo to='/' />
       <CategoryLinks>
         {categories.map(({ name, displayText }, index) => (
           <CategoryLink
@@ -273,6 +284,7 @@ function Header() {
           </CategoryLink>
         ))}
       </CategoryLinks>
+      <UpgradeIcon to='/subscription' />
       <SearchInput
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
@@ -283,13 +295,13 @@ function Header() {
         value={inputValue}
       />
       <PageLinks>
-        <PageLink to="/checkout">
+        <PageLink to='/checkout'>
           <PageLinkCartIcon icon={cart}>
             <PageLinkIconNumber>{cartCount}</PageLinkIconNumber>
           </PageLinkCartIcon>
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
-        <PageLink to="/profile">
+        <PageLink to='/profile'>
           <PageLinkProfileIcon icon={profile} url={user?.picture} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>

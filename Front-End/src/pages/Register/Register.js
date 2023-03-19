@@ -6,9 +6,7 @@ const questions = [
   { value: 'name', label: '姓名' },
   { value: 'phone', label: '手機' },
   { value: 'email', label: '信箱' },
-  { value: 'userName', label: '帳號' },
   { value: 'password', label: '密碼' },
-  { value: 'password_confirm', label: '密碼確認' },
 ];
 
 const Wrapper = styled.div`
@@ -109,7 +107,7 @@ export default function Register() {
       password: userData.password,
     };
 
-    fetch('http://54.64.47.158:3001/api/1.0/user/signup', {
+    fetch('https://www.gotolive.online/api/1.0/user/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,8 +115,17 @@ export default function Register() {
       body: JSON.stringify(data),
     })
       .then((res) =>
-        res.status === 200 ? console.log('Success!') : console.log('Error!')
+        res.status === 200
+          ? res.json()
+          : res.status === 403
+          ? alert('The email address has already been registered')
+          : console.log('error!')
       )
+      .then((data) => {
+        const token = data.data.access_token;
+        localStorage.setItem('loginToken', token);
+        window.location.href = './quiz';
+      })
       .catch((err) => console.log(err));
   }
 

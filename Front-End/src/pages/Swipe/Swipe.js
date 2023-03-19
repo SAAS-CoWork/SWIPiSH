@@ -5,6 +5,7 @@ import heart from "./heart.png";
 import like from "./like.png";
 import notLike from "./notLike.png";
 import superLike from "./superLike.png";
+import goback from "./goback.png";
 import trash from "./trash.png";
 // import product from "./product.png";
 
@@ -65,34 +66,45 @@ const SwipeZone = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
+  align-items: flex-end;
+`;
+
+const SwipeBottomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -545px;
+  left: 100px;
+  z-index: 100;
 `;
 
 const ContentContainer = styled.div`
   box-sizing: border-box;
   width: 660px;
-  height: 796px;
-  ${'' /* border: 1px solid black;
-  border-radius: 25px; */}
+  height: 600px;
   display: flex;
+  justify-content: flex-end;
   flex-direction: column;
   align-items: center;
   gap: 24px;
 `;
-
 
 const SwipeImg = styled.div`
   width: 427px;
   height: 569px;
   background-size: fill;
   background-repeat: no-repeat;
+  position: relative;
 `;
 
 const SwipeTitle = styled.h2`
-  font-size: 32px;
+  font-size: 24px;
   letter-spacing: 4px;
   font-weight: 700;
-  align-self: center;
+  color:#ffffff;
+  text-shadow: black 0.05em 0.05em 0.3em;
 `;
 
 const Card = styled.div`
@@ -103,15 +115,15 @@ const Card = styled.div`
 `;
 
 const SwipePrice = styled.h3`
-  font-size: 24px;
+  font-size: 16px;
   line-height: 24px;
   letter-spacing: 4px;
-  align-self: center;
-  z-index:1;
+  color:#ffffff;
+  text-shadow: black 0.05em 0.05em 0.3em;
 `;
 
 const LikeBtnContainer = styled.div`
-  width: 461px;
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -292,18 +304,25 @@ function Swipe() {
                 key={character.name}
                 onSwipe={(dir) => swiped(dir, character.name, index)}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
-              >
-              <Card
                 style={{
-                  backgroundImage: "url(" + character.url + ")",
-                  boxShadow: "0px 0px 60px 0px rgba(0,0,0,0.20)",
-                  borderRadius: "20px",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  display: "flex",
+                  justifycontent: "center",
+                  position: "absolute",
                 }}
-              ></Card>
-                <SwipeTitle>{character.name}</SwipeTitle>
-                <SwipePrice>TWD.{character.price}</SwipePrice>
+              >
+                <SwipeBottomContainer>
+                  <SwipeTitle>{character.name}</SwipeTitle>
+                  <SwipePrice>TWD.{character.price}</SwipePrice>
+                </SwipeBottomContainer>
+                <Card
+                  style={{
+                    backgroundImage: "url(" + character.url + ")",
+                    boxShadow: "0px 0px 30px 0px rgba(0,0,0,0.10)",
+                    borderRadius: "20px",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></Card>
               </TinderCard>
             ))}
           </SwipeImg>
@@ -311,19 +330,25 @@ function Swipe() {
         <LikeBtnContainer>
           <div className="buttons" style={{ display: "flex" }}>
             <LikeBtn
-              imgUrl={notLike}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
-              onClick={() => swipe("left")}
-            ></LikeBtn>
-            <LikeBtn
-              imgUrl={superLike}
-              style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
+              imgUrl={goback}
+              style={{ backgroundColor: !canGoBack && "#c3c4d3", marginLeft:"25px" }}
               onClick={() => goBack()}
             ></LikeBtn>
             <LikeBtn
+              imgUrl={notLike}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px"}}
+              onClick={() => swipe("left")}
+            ></LikeBtn>
+            <LikeBtn
               imgUrl={like}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3" }}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px" }}
               onClick={() => swipe("right")}
+            ></LikeBtn>
+            <LikeBtn
+              imgUrl={superLike}
+              style={{marginLeft:"25px" }}
+              // style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
+              // onClick={() => goBack()}
             ></LikeBtn>
           </div>
           {/* {lastDirection ? (
