@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const questions = [
@@ -150,14 +150,25 @@ export default function Quiz() {
     return Object.values(obj);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(getUserInputArray(userInput));
+  function sendUserData(data) {
+    fetch('http://54.64.47.158:3001/api/1.0/user/quiz', {
+      method: 'POST',
+      headers: {
+        Authorization:
+          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJmcmVzaCI6joiYXJ0aHVIjoxNjEzNTY3MzA0fQ.6EPCOfBGynidAfpVqlvbHGWHCJ5LZLtKvPaQ',
+      },
+      body: JSON.stringify({ answer: data }),
+    })
+      .then((res) =>
+        res.status === 200 ? console.log('Success!') : console.log('Error!')
+      )
+      .catch((err) => console.log(err));
   }
 
-  useEffect(() => {
-    console.log(getUserInputArray(userInput));
-  }, [userInput]);
+  function handleSubmit(e) {
+    e.preventDefault();
+    sendUserData(getUserInputArray(userInput));
+  }
 
   return (
     <Wrapper>
