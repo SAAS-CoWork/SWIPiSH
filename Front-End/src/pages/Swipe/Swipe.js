@@ -1,11 +1,41 @@
-import React from 'react';
-import styled from 'styled-components';
-import heart from './heart.png';
-import like from './like.png';
-import notLike from './notLike.png';
-import superLike from './superLike.png';
-import trash from './trash.png';
-import product from './product.png';
+import React, { useState, useMemo, useRef } from "react";
+import TinderCard from "react-tinder-card";
+import styled from "styled-components";
+import heart from "./heart.png";
+import like from "./like.png";
+import notLike from "./notLike.png";
+import superLike from "./superLike.png";
+import goback from "./goback.png";
+import trash from "./trash.png";
+// import product from "./product.png";
+
+const db = [
+  {
+    name: "前開衩扭結洋裝",
+    url: "https://api.appworks-school.tw/assets/201902191210/main.jpg",
+    price: "799",
+  },
+  {
+    name: "透肌澎澎防曬襯衫",
+    url: "https://api.appworks-school.tw/assets/201807202140/main.jpg",
+    price: "599",
+  },
+  {
+    name: "小扇紋細織上衣",
+    url: "https://api.appworks-school.tw/assets/201807202150/main.jpg",
+    price: "599",
+  },
+  {
+    name: "活力花紋長筒牛仔褲",
+    url: "https://api.appworks-school.tw/assets/201807202157/main.jpg",
+    price: "1299",
+  },
+  {
+    name: "純色輕薄百搭襯衫",
+    url: "https://api.appworks-school.tw/assets/201807242211/main.jpg",
+    price: "799",
+  },
+];
 
 const Wrapper = styled.div`
   width: 1476px;
@@ -14,16 +44,15 @@ const Wrapper = styled.div`
   gap: 99px;
 `;
 
-const productInfo = {
-  title: '前開衩扭結洋裝',
-  price: 799,
-  colors: ['FFFFF', 'DDFFBB', 'D3D3D3'],
-  img: product,
-};
+// const productInfo = {
+//   title: "前開衩扭結洋裝",
+//   price: 799,
+//   colors: ["FFFFF", "DDFFBB", "D3D3D3"],
+//   img: product,
+// };
 
-const collections = Array.from({ length: 6 }, () => ({ ...productInfo }));
-
-const displayedProduct = { title: '前開衩扭結洋裝', price: 799 };
+// const collections = Array.from({ length: 6 }, () => ({ ...db }));
+// const displayedProduct = { title: "前開衩扭結洋裝", price: 799 };
 
 const Collection = styled.div`
   width: 651px;
@@ -37,46 +66,67 @@ const SwipeZone = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
+  align-items: flex-end;
+`;
+
+const SwipeBottomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -545px;
+  left: 100px;
+  z-index: 100;
 `;
 
 const ContentContainer = styled.div`
   box-sizing: border-box;
   width: 660px;
-  height: 796px;
-  border: 1px solid black;
-  border-radius: 25px;
+  height: 600px;
   display: flex;
+  justify-content: flex-end;
   flex-direction: column;
   align-items: center;
-  padding: 38px 0 73px;
   gap: 24px;
 `;
 
 const SwipeImg = styled.div`
   width: 427px;
   height: 569px;
-  background-image: url(${product});
-  background-size: cover;
+  background-size: fill;
   background-repeat: no-repeat;
+  position: relative;
 `;
 
 const SwipeTitle = styled.h2`
-  font-size: 32px;
+  font-size: 24px;
   letter-spacing: 4px;
   font-weight: 700;
+  color:#ffffff;
+  text-shadow: black 0.05em 0.05em 0.3em;
+`;
+
+const Card = styled.div`
+  height: 569px;
+  width: 427px;
+  position: absolute;
+  background-size: fill;
 `;
 
 const SwipePrice = styled.h3`
-  font-size: 24px;
+  font-size: 16px;
   line-height: 24px;
   letter-spacing: 4px;
+  color:#ffffff;
+  text-shadow: black 0.05em 0.05em 0.3em;
 `;
 
 const LikeBtnContainer = styled.div`
-  width: 461px;
+  width: 100%;
   display: flex;
-  gap: 82px;
+  justify-content: center;
+  gap: 30px;
 `;
 
 const LikeBtn = styled.button`
@@ -94,7 +144,7 @@ const Title = styled.div`
 `;
 
 const TitleText = styled.h1`
-  font-size: 24px;
+  font-size: 16px;
   line-height: 38px;
   letter-spacing: 6.4px;
   font-weight: 700;
@@ -166,7 +216,58 @@ const RemoveIcon = styled.div`
   background-image: url(${trash});
 `;
 
-export default function Swipe() {
+function Swipe() {
+  const [currentIndex, setCurrentIndex] = useState(db.length - 1);
+  const [lastDirection, setLastDirection] = useState();
+  // used for outOfFrame closure
+  const currentIndexRef = useRef(currentIndex);
+
+  const childRefs = useMemo(
+    () =>
+      Array(db.length)
+        .fill(0)
+        .map((i) => React.createRef()),
+    []
+  );
+
+  const updateCurrentIndex = (val) => {
+    setCurrentIndex(val);
+    currentIndexRef.current = val;
+  };
+
+  const canGoBack = currentIndex < db.length - 1;
+
+  const canSwipe = currentIndex >= 0;
+
+  // set last direction and decrease current index
+  const swiped = (direction, nameToDelete, index) => {
+    setLastDirection(direction);
+    updateCurrentIndex(index - 1);
+  };
+
+  const outOfFrame = (name, idx) => {
+    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+    // handle the case in which go back is pressed before card goes outOfFrame
+    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
+    // TODO: when quickly swipe and restore multiple times the same card,
+    // it happens multiple outOfFrame events are queued and the card disappear
+    // during latest swipes. Only the last outOfFrame event should be considered valid
+  };
+
+  const swipe = async (dir) => {
+    if (canSwipe && currentIndex < db.length) {
+      await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
+    }
+  };
+
+  // increase current index and show card
+  const goBack = async () => {
+    if (!canGoBack) return;
+    const newIndex = currentIndex + 1;
+    updateCurrentIndex(newIndex);
+    await childRefs[newIndex].current.restoreCard();
+  };
+
   return (
     <Wrapper>
       <Collection>
@@ -176,9 +277,8 @@ export default function Swipe() {
         </Title>
         <SplitLine />
         <Products>
-          {collections.map((product, index) => (
-            <ProductContainer key={index}>
-              <ProductImg imgUrl={product.img} />
+          <ProductContainer>
+            {/* <ProductImg imgUrl={product.img} />
               <ProductInfoContainer>
                 <ProductInfo>
                   <ColorContainer>
@@ -190,23 +290,78 @@ export default function Swipe() {
                   <InfoText>TWD. {product.price}</InfoText>
                 </ProductInfo>
                 <RemoveIcon></RemoveIcon>
-              </ProductInfoContainer>
-            </ProductContainer>
-          ))}
+              </ProductInfoContainer> */}
+          </ProductContainer>
         </Products>
       </Collection>
       <SwipeZone>
         <ContentContainer>
-          <SwipeImg />
-          <SwipeTitle>{displayedProduct.title}</SwipeTitle>
-          <SwipePrice>TWD.{displayedProduct.price}</SwipePrice>
+          <SwipeImg>
+            {db.map((character, index) => (
+              <TinderCard
+                ref={childRefs[index]}
+                className="swipe"
+                key={character.name}
+                onSwipe={(dir) => swiped(dir, character.name, index)}
+                onCardLeftScreen={() => outOfFrame(character.name, index)}
+                style={{
+                  display: "flex",
+                  justifycontent: "center",
+                  position: "absolute",
+                }}
+              >
+                <SwipeBottomContainer>
+                  <SwipeTitle>{character.name}</SwipeTitle>
+                  <SwipePrice>TWD.{character.price}</SwipePrice>
+                </SwipeBottomContainer>
+                <Card
+                  style={{
+                    backgroundImage: "url(" + character.url + ")",
+                    boxShadow: "0px 0px 30px 0px rgba(0,0,0,0.10)",
+                    borderRadius: "20px",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></Card>
+              </TinderCard>
+            ))}
+          </SwipeImg>
         </ContentContainer>
         <LikeBtnContainer>
-          <LikeBtn imgUrl={notLike} />
-          <LikeBtn imgUrl={superLike} />
-          <LikeBtn imgUrl={like} />
+          <div className="buttons" style={{ display: "flex" }}>
+            <LikeBtn
+              imgUrl={goback}
+              style={{ backgroundColor: !canGoBack && "#c3c4d3", marginLeft:"25px" }}
+              onClick={() => goBack()}
+            ></LikeBtn>
+            <LikeBtn
+              imgUrl={notLike}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px"}}
+              onClick={() => swipe("left")}
+            ></LikeBtn>
+            <LikeBtn
+              imgUrl={like}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px" }}
+              onClick={() => swipe("right")}
+            ></LikeBtn>
+            <LikeBtn
+              imgUrl={superLike}
+              style={{marginLeft:"25px" }}
+              // style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
+              // onClick={() => goBack()}
+            ></LikeBtn>
+          </div>
+          {/* {lastDirection ? (
+            <h2 key={lastDirection} className="infoText">
+              {lastDirection}
+            </h2>
+          ) : (
+            <h2 className="infoText"></h2>
+          )} */}
         </LikeBtnContainer>
       </SwipeZone>
     </Wrapper>
   );
 }
+
+export default Swipe;
