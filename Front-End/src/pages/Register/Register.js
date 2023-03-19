@@ -109,7 +109,7 @@ export default function Register() {
       password: userData.password,
     };
 
-    fetch('http://54.64.47.158:3001/api/1.0/user/signup', {
+    fetch('https://www.gotolive.online/api/1.0/user/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
