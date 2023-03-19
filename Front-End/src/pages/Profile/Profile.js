@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import edit from "./edit.png";
-import profile from "./profile.png";
-import { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import edit from './edit.png';
+import profile from './profile.png';
+import { useState, useEffect } from 'react';
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 160px 180px;
   @media screen and (max-width: 1279px) {
-    ${"" /* 手機還沒切 */}
+    ${'' /* 手機還沒切 */}
   }
 `;
 
@@ -201,18 +201,18 @@ const EditBox = styled.div`
   border-radius: 8px;
   color: #3f3f3a;
   position: absolute;
-  margin-left:118px;
+  margin-left: 118px;
   textarea {
     width: 576px;
     outline: none;
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: 'Noto Sans TC';    
+    font-family: 'Noto Sans TC';
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
-    resize:none;
+    resize: none;
     white-space: nowrap;
   }
 `;
@@ -277,6 +277,14 @@ const PwInput = styled.p`
   color: #3f3a3a;
 `;
 
+const SubmitContainer = styled.div`
+  width: 60%;
+  display: flex;
+  margin: 0 auto;
+  gap: 50px;
+  justify-content: center;
+`;
+
 const Submit = styled.button`
   width: 240px;
   height: 64px;
@@ -294,23 +302,78 @@ const Submit = styled.button`
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState();
   const handleEditClick = () => {
-    setIsEditing(true); 
+    setIsEditing(true);
   };
   const handleSaveClick = () => {
-    setIsEditing(false); 
+    setIsEditing(false);
   };
+
+  const loginToken = localStorage.getItem('loginToken');
+
+  function getUserData() {
+    fetch('http://54.64.47.158:3001/api/1.0/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          window.location.href = './login';
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setUserData(data.data);
+        } else {
+          // alert('Token Expired!');
+          // window.location.href = './login';
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function logOut() {
+    localStorage.removeItem('loginToken');
+    window.location.href = '/';
+  }
+
+  // function getSubscriptionData() {
+  //   fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${loginToken}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // }
+
+  useEffect(() => {
+    getUserData();
+    // getSubscriptionData();
+  }, []);
+
+  if (!userData) {
+    return;
+  }
   return (
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
       <Title>
@@ -321,7 +384,7 @@ export default function Profile() {
       <ProfileWrapper>
         <AccountWrapper>
           <AccountTitle>帳號</AccountTitle>
-          <Account>swipishmanager</Account>
+          <Account>{userData.email}</Account>
         </AccountWrapper>
         <SubWrapper>
           <SubTitle>方案</SubTitle>
@@ -332,36 +395,39 @@ export default function Profile() {
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type="text">Sam Alison Amber</NameInput>
+          <NameInput type='text'>{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="Sam Alison Amber" />
-        </EditBox>
-      )}
+            <EditBox>
+              <textarea type='text' defaultValue={userData.name} />
+            </EditBox>
+          )}
         </NameWrapper>
         <EmailWrapper>
           <EmailTitle>信箱</EmailTitle>
-          <EmailInput>swipishmanager@saas.com</EmailInput>
+          <EmailInput>{userData.email}</EmailInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="swipishmanager@saas.com" />
-        </EditBox>
-      )}
+            <EditBox>
+              <textarea type='text' defaultValue={userData.email} />
+            </EditBox>
+          )}
         </EmailWrapper>
-        <PwWrapper>
+        {/* <PwWrapper>
           <PwTitle>密碼</PwTitle>
-          <PwInput>******</PwInput>
+          <PwInput>{userData.password}</PwInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="******" />
-        </EditBox>
-      )}
-        </PwWrapper>
+            <EditBox>
+              <textarea type='text' defaultValue='******' />
+            </EditBox>
+          )}
+        </PwWrapper> */}
       </ProfileWrapper>
-      <Submit onClick={handleSaveClick}>確認送出</Submit>
+      <SubmitContainer>
+        <Submit onClick={handleSaveClick}>確認送出</Submit>
+        <Submit onClick={logOut}>登出</Submit>
+      </SubmitContainer>
     </Wrapper>
   );
 }
