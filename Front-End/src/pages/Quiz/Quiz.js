@@ -27,6 +27,13 @@ const Wrapper = styled.div`
   color: #3f3a3a;
 `;
 
+const MainContent = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const Title = styled.h1`
   text-align: center;
   font-size: 24px;
@@ -133,65 +140,72 @@ const SubmitBtn = styled.button`
 
 export default function Quiz() {
   const [userInput, setUserInput] = useState({});
-  function handleSubmit(e) {
-    e.preventDefault();
-    setUserInput(e.target.value);
-  }
 
   function handleInput(e, item) {
     const newAnswer = { ...userInput, [`q${item}`]: e.target.value };
     setUserInput(newAnswer);
   }
 
+  function getUserInputArray(obj) {
+    return Object.values(obj);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(getUserInputArray(userInput));
+  }
+
   useEffect(() => {
-    console.log(userInput);
+    console.log(getUserInputArray(userInput));
   }, [userInput]);
 
   return (
     <Wrapper>
       <Title>HAVE FUN !</Title>
-      <ContentContainer onSubmit={(e) => handleSubmit(e)}>
-        <Content>
-          {questions.map((question) => {
-            return (
-              <ContentRow
-                borderBottom={question.noBorder ? 0 : '1px solid black'}
-              >
-                <QuestionContainer>
-                  <NumberIcon>
-                    <NumberText>{question.number}</NumberText>
-                  </NumberIcon>
-                  <QuestionContent>
-                    <QuestionTitle>{question.title}</QuestionTitle>
-                    <OptionContainer>
-                      {question.options.map((option, index) => {
-                        return (
-                          <Options key={`${question.number}-${index}`}>
-                            <CheckInput
-                              type='radio'
-                              name={`question-${question.number}`}
-                              value={index.toString()}
-                              checked={
-                                userInput[`q${question.number}`] ===
-                                index.toString()
-                              }
-                              onChange={(e) => {
-                                handleInput(e, question.number);
-                              }}
-                            ></CheckInput>
-                            <CheckLabel>{option}</CheckLabel>
-                          </Options>
-                        );
-                      })}
-                    </OptionContainer>
-                  </QuestionContent>
-                </QuestionContainer>
-              </ContentRow>
-            );
-          })}
-        </Content>
-      </ContentContainer>
-      <SubmitBtn type='submit'>READY TO SWIPE!</SubmitBtn>
+      <MainContent onSubmit={(e) => handleSubmit(e)}>
+        <ContentContainer>
+          <Content>
+            {questions.map((question) => {
+              return (
+                <ContentRow
+                  borderBottom={question.noBorder ? 0 : '1px solid black'}
+                >
+                  <QuestionContainer>
+                    <NumberIcon>
+                      <NumberText>{question.number}</NumberText>
+                    </NumberIcon>
+                    <QuestionContent>
+                      <QuestionTitle>{question.title}</QuestionTitle>
+                      <OptionContainer>
+                        {question.options.map((option, index) => {
+                          return (
+                            <Options key={`${question.number}-${index}`}>
+                              <CheckInput
+                                type='radio'
+                                name={`question-${question.number}`}
+                                value={index.toString()}
+                                checked={
+                                  userInput[`q${question.number}`] ===
+                                  index.toString()
+                                }
+                                onChange={(e) => {
+                                  handleInput(e, question.number);
+                                }}
+                              ></CheckInput>
+                              <CheckLabel>{option}</CheckLabel>
+                            </Options>
+                          );
+                        })}
+                      </OptionContainer>
+                    </QuestionContent>
+                  </QuestionContainer>
+                </ContentRow>
+              );
+            })}
+          </Content>
+        </ContentContainer>
+        <SubmitBtn type='submit'>READY TO SWIPE!</SubmitBtn>
+      </MainContent>
     </Wrapper>
   );
 }
