@@ -146,7 +146,7 @@ const ChartTitle = styled.p`
   width: 116px;
   height: 38px;
   font-weight: 400;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #ffffff;
@@ -170,17 +170,18 @@ const OrderStatusWrapper = styled.div`
 const OrderNum = styled.p`
   width: 116px;
   height: 38px;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
+  font-weight:700;
 `;
 
 const ShipStatus = styled.p`
   width: 116px;
   height: 38px;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #3f3a3a;
@@ -190,7 +191,7 @@ const ShipStatus = styled.p`
 const OrderPrize = styled.p`
   width: 116px;
   height: 38px;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #3f3a3a;
@@ -200,7 +201,7 @@ const OrderPrize = styled.p`
 const OrderRequest = styled.p`
   width: 116px;
   height: 38px;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #3f3a3a;
@@ -212,8 +213,8 @@ const CustomerService = styled.div`
   background-color: #ffffff; 
   width:32px;
   height:31px;
-  margin-right:13px;
-  margin-left:60px;
+  margin-right:24px;
+  margin-left:28px;
   cursor:pointer;
 `;
 

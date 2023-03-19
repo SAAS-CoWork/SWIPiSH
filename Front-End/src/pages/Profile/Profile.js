@@ -193,7 +193,7 @@ const Edit = styled.div`
 `;
 
 const EditBox = styled.div`
-  width: 576px;
+  width: 30%;
   height: 32px;
   background-color: #ffffff;
   z-index: 1;
@@ -201,7 +201,7 @@ const EditBox = styled.div`
   border-radius: 8px;
   color: #3f3f3a;
   position: absolute;
-  left: 536px;
+  margin-left:118px;
   textarea {
     width: 576px;
     outline: none;
