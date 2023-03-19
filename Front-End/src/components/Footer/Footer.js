@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-
+import styled from 'styled-components/macro';
 import line from './line.png';
 import facebook from './facebook.png';
 import twitter from './twitter.png';

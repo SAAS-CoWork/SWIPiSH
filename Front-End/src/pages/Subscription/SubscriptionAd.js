@@ -1,12 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import medal from './medal.png';
 
 const planDescription = ['懶人購物首選', '客製專屬推薦', '會員優惠價格'];
 
 const Wrapper = styled.div`
-  width: 1031px;
-  margin: 50px auto 30px;
+  margin: 50px auto 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,24 +17,38 @@ const Title = styled.h1`
   text-align: center;
   font-size: 24px;
   line-height: 38px;
-  font-weight: 700;
+  font-weight: 400;
   letter-spacing: 6.4px;
+  @media screen and (max-width: 1279px) {
+  display:none;
+  }
 `;
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: 506px;
   display: flex;
-  justify-content: space-between;
-  gap: 121px;
+  gap: 30px;
   margin-bottom: 50px;
+  justify-content: center;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 `;
 
 const PlanContainer = styled.div`
   box-sizing: border-box;
   width: 455px;
   height: 506px;
-  border: 2px solid black;
+  border: 1px solid black;
+  ${'' /* border-radius: 25px; */}
+  @media screen and (max-width: 1279px) {
+    width: 85%;
+    height: 30%;
+  }
 `;
 
 const PlanContent = styled.div`
@@ -44,6 +57,10 @@ const PlanContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 1279px) {
+    width: 65%;
+    margin: 30px auto 30px;
+  }
 `;
 
 const PlanTitle = styled.h2`
@@ -52,17 +69,25 @@ const PlanTitle = styled.h2`
   font-weight: 700;
   letter-spacing: 6.4px;
   margin-bottom: 19px;
+  @media screen and (max-width: 1279px) {
+    font-size: 20px;
+  }
 `;
 
 const SplitLine = styled.hr`
   width: 83px;
   border: 1px solid #3f3a3a;
   margin-bottom: 49px;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const PriceContainer = styled.div`
-  width: 100%;
   margin-bottom: 49px;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 15px;
+  }
 `;
 
 const Price = styled.h3`
@@ -71,6 +96,10 @@ const Price = styled.h3`
   font-weight: 700;
   letter-spacing: 6.4px;
   margin-bottom: 5px;
+  @media screen and (max-width: 1279px) {
+    font-size: 24px;
+    font-weight: 700;
+  }
 `;
 
 const PriceDescription = styled.div`
@@ -81,6 +110,10 @@ const PriceDescription = styled.div`
   color: #979797;
   letter-spacing: 2.9px;
   text-align: center;
+  @media screen and (max-width: 1279px) {
+    font-size: 16px;
+    font-weight: 700;
+  }
 `;
 
 const PlanDescriptionContainer = styled.div`
@@ -101,6 +134,9 @@ const PointIcon = styled.div`
   width: 25.42px;
   height: 25.42px;
   font-size: 25.42px;
+  @media screen and (max-width: 1279px) {
+    font-size: 18px;
+  }
 `;
 
 const PlanDescriptionText = styled.p`
@@ -109,6 +145,9 @@ const PlanDescriptionText = styled.p`
   letter-spacing: 6.4px;
   font-weight: ${(props) => props.fontWeight};
   font-type: bold;
+  @media screen and (max-width: 1279px) {
+    font-size: 16px;
+  }
 `;
 
 const MedalImg = styled.div`
@@ -122,12 +161,15 @@ const LearnMoreBtn = styled.button`
   width: 240px;
   height: 64px;
   background-color: black;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
   letter-spacing: 4px;
   color: white;
   text-align: center;
   border: 0;
+  @media screen and (max-width: 1279px) {
+    height: 44px;
+  }
 `;
 
 
@@ -165,7 +207,7 @@ export default function SubscriptionAd() {
               <PriceDescription>Per Year</PriceDescription>
             </PriceContainer>
             <PlanDescriptionContainer>
-              <PlanDescriptionText fontWeight={700}>
+              <PlanDescriptionText>
                 更尊榮的體驗
               </PlanDescriptionText>
               <MedalImg></MedalImg>

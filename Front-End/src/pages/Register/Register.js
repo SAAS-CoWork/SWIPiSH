@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import profile from './profile.png';
 
 const questions = [
@@ -10,12 +10,16 @@ const questions = [
 ];
 
 const Wrapper = styled.div`
-  width: 1331px;
+  width: 60%;
   border: 1px solid black;
   border-radius: 25px;
-  margin: 100px auto 50px;
-  padding: 63px 0 79px;
+  margin: 50px auto 50px;
+  padding: 63px 0 10px;
   color: #3f3a3a;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+    padding-top: 20px
+  }
 `;
 
 const ContentContainer = styled.form`
@@ -28,6 +32,13 @@ const Title = styled.div`
   display: flex;
   gap: 17px;
   margin-bottom: 34px;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column-reverse;
+    margin-bottom: 15px;
+    gap:0px;
+    justify-content:center;
+    align-items:center;
+  }
 `;
 
 const TitleText = styled.h1`
@@ -44,32 +55,42 @@ const ProfileIcon = styled.div`
 `;
 
 const SplitLine = styled.hr`
-  width: 941px;
-  margin-bottom: 91px;
+  width: 80%;
+  margin-bottom: 40px;
 `;
 
 const InfoContainer = styled.div`
-  width: 696px;
-  margin-bottom: 97px;
+  width: 80%;
+  margin-bottom: 63px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 30px;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
 `;
 
 const InfoRow = styled.div`
-  width: 100%;
+  width: 80%;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap:5px;
+  }
 `;
 
 const QuestionTitle = styled.label`
   width: 120px;
   line-height: 19px;
+  margin-right:5px;
 `;
 
 const QuestionInput = styled.input`
   box-sizing: border-box;
-  width: 576px;
+  width: 100%;
   height: 32px;
   padding-left: 8px;
   border-radius: 8px;
@@ -82,12 +103,15 @@ const SubmitBtn = styled.button`
   background-color: black;
   color: white;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
-  margin-bottom: 79px;
+  margin-bottom: 30px;
   letter-spacing: 4px;
   border: 0;
   cursor: pointer;
+  @media screen and (max-width: 1279px) {
+    height: 44px;
+  }
 `;
 
 export default function Register() {

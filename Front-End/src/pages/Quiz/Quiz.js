@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 const questions = [
   { number: 1, title: '你的感情狀態', options: ['單身', '有伴', '不好說'] },

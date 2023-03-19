@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import api from '../../utils/api';
 import tappay from '../../utils/tappay';

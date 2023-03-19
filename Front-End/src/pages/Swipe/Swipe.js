@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef } from "react";
 import TinderCard from "react-tinder-card";
-import styled from "styled-components";
+import styled from 'styled-components/macro';
 import heart from "./heart.png";
 import like from "./like.png";
 import notLike from "./notLike.png";
@@ -42,6 +42,7 @@ const Wrapper = styled.div`
   margin: 100px auto 50px;
   display: flex;
   gap: 99px;
+  overflow: hidden;
 `;
 
 // const productInfo = {
@@ -246,7 +247,7 @@ function Swipe() {
   };
 
   const outOfFrame = (name, idx) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
+    // console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current);
     // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard();
     // TODO: when quickly swipe and restore multiple times the same card,
@@ -331,22 +332,22 @@ function Swipe() {
           <div className="buttons" style={{ display: "flex" }}>
             <LikeBtn
               imgUrl={goback}
-              style={{ backgroundColor: !canGoBack && "#c3c4d3", marginLeft:"25px" }}
+              style={{ backgroundColor: !canGoBack && "#c3c4d3", marginLeft:"25px", cursor:"pointer" }}
               onClick={() => goBack()}
             ></LikeBtn>
             <LikeBtn
               imgUrl={notLike}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px"}}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px", cursor:"pointer" }}
               onClick={() => swipe("left")}
             ></LikeBtn>
             <LikeBtn
               imgUrl={like}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px" }}
+              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px" , cursor:"pointer" }}
               onClick={() => swipe("right")}
             ></LikeBtn>
             <LikeBtn
               imgUrl={superLike}
-              style={{marginLeft:"25px" }}
+              style={{marginLeft:"25px", cursor:"pointer" }}
               // style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
               // onClick={() => goBack()}
             ></LikeBtn>

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import trash from './trash.png';
 import { CartContext } from '../../context/cartContext';

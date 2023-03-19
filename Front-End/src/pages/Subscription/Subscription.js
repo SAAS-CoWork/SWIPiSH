@@ -1,25 +1,39 @@
-import React from 'react';
-import styled from 'styled-components';
-import profile from './profile.png';
+import React from "react";
+import styled from "styled-components/macro";
+import profile from "./profile.png";
 
 const paymentInfo = [
-  { title: '信用卡號碼', description: '**** **** **** ****' },
-  { title: '有效期限碼', description: 'MM /YY' },
-  { title: '安全碼', description: '後三碼' },
+  { title: "信用卡號", description: "**** **** **** ****" },
+  { title: "有效期限", description: "MM /YY" },
+  { title: "安全碼", description: "後三碼" },
 ];
 
 const plans = [
-  { title: 'Premium', price: '$4.99USD / Month' },
-  { title: 'Platinum', price: '$49.99USD / Year' },
+  { title: "Premium", price: "$4.99USD / Month" },
+  { title: "Platinum", price: "$49.99USD / Year" },
 ];
 
 const Wrapper = styled.div`
-  width: 1331px;
+  width: 60%;
   border: 1px solid black;
   border-radius: 25px;
   margin: 100px auto 50px;
   padding: 63px 0 79px;
   color: #3f3a3a;
+  margin-top: 50px;
+  padding-top: 63px;
+  padding-bottom: 10px;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+    border: 1px solid black;
+    border-radius: 25px;
+    margin: 100px auto 50px;
+    padding: 63px 0 79px;
+    color: #3f3a3a;
+    margin-top: 50px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
 `;
 
 const ContentContainer = styled.form`
@@ -30,8 +44,16 @@ const ContentContainer = styled.form`
 
 const Title = styled.div`
   display: flex;
-  gap: 17px;
+  justigy-content: center;
+  flex-direction: row;
+  align-items: center;
   margin-bottom: 34px;
+  gap:15px;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column-reverse;
+    margin-bottom: 15px;
+    gap:0px;
+  }
 `;
 
 const TitleText = styled.h1`
@@ -39,6 +61,9 @@ const TitleText = styled.h1`
   line-height: 38px;
   letter-spacing: 6.4px;
   font-weight: 700;
+  @media screen and (max-width: 1279px) {
+    font-size: 24px;
+  }
 `;
 
 const ProfileIcon = styled.div`
@@ -48,16 +73,26 @@ const ProfileIcon = styled.div`
 `;
 
 const SplitLine = styled.hr`
-  width: 941px;
+  width: 80%;
   margin-bottom: 91px;
+
+  margin-bottom: 40px;
+  margin-top: 0px;
 `;
 
 const InfoContainer = styled.div`
-  width: 696px;
-  margin-bottom: 97px;
+  width: 65%;
+  margin-bottom: 45px;
   display: flex;
   flex-direction: column;
   gap: 30px;
+  @media screen and (max-width: 1279px) {
+    width: 85%;
+    margin-bottom: 45px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
 `;
 
 const InfoRow = styled.div`
@@ -74,12 +109,23 @@ const QuestionTitle = styled.label`
 const Plans = styled.div`
   display: flex;
   gap: 21px;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
 `;
 
 const PlanContainer = styled.div`
   display: flex;
-  gap: 11px;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
 `;
 
 const PlanSelect = styled.input`
@@ -99,9 +145,9 @@ const PlanPrice = styled.p`
 
 const QuestionInput = styled.input`
   box-sizing: border-box;
-  width: 576px;
+  width: 100%;
   height: 32px;
-  padding-left: 8px;
+  margin-left: 8px;
   border-radius: 8px;
   border: 1px solid #979797;
   &::placeholder {
@@ -115,11 +161,14 @@ const SubmitBtn = styled.button`
   background-color: black;
   color: white;
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
-  margin-bottom: 79px;
+  margin-bottom: 30px;
   letter-spacing: 4px;
   border: 0;
+  @media screen and (max-width: 1279px) {
+    height: 44px;
+  }
 `;
 
 export default function Subscription() {
@@ -137,7 +186,7 @@ export default function Subscription() {
             <Plans>
               {plans.map((plan) => (
                 <PlanContainer>
-                  <PlanSelect type='radio' />
+                  <PlanSelect type="radio" />
                   <PlanTitle>{plan.title}</PlanTitle>
                   <PlanPrice>{plan.price}</PlanPrice>
                 </PlanContainer>

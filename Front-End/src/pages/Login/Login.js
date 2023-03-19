@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import profile from './profile.png';
 
 const questions = [
@@ -9,12 +9,14 @@ const questions = [
 
 const Wrapper = styled.div`
   box-sizing: border-box;
-  width: 1331px;
-  height: 529px;
-  margin: 100px auto 50px;
+  width: 60%;
+  margin: 50px auto 50px;
   border: 1px solid black;
   border-radius: 25px;
   color: #3f3a3a;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+  }
 `;
 
 const ContentContainer = styled.form`
@@ -22,9 +24,10 @@ const ContentContainer = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 941px;
-  height: 364px;
-  margin: 72px auto 93px;
+  margin: 63px auto 50px;
+  @media screen and (max-width: 1279px) {
+    margin-top:20px;
+  }
 `;
 
 const Title = styled.h1`
@@ -35,8 +38,8 @@ const Title = styled.h1`
 `;
 
 const SplitLine = styled.hr`
-  width: 100%;
-  margin: 0 0 66px;
+  width:80%;
+  margin: 0 0 40px;
 `;
 
 const LoginInfoContainer = styled.div`
@@ -44,19 +47,34 @@ const LoginInfoContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
-  width: 100%;
-  margin-bottom: 69px;
+  width: 80%;
+  margin-bottom: 45px;
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
 `;
 
 const LoginRow = styled.div`
-  width: 696px;
+  width: 80%;
   display: flex;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap:5px;
+  }
 `;
 
 const LoginInfoTitleContainer = styled.div`
   display: flex;
   gap: 15px;
-  margin-bottom: 26px;
+  margin-bottom: 34px;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column-reverse;
+    margin-bottom: 15px;
+    gap:0px;
+    justify-content:center;
+    align-items:center;
+  }
 `;
 
 const LoginInfoTitle = styled.h2`
@@ -72,18 +90,18 @@ const LoginIcon = styled.div`
 
 const LoginInput = styled.input`
   box-sizing: border-box;
-  width: 576px;
+  width: 100%;
   height: 32px;
   border: 1px solid #979797;
   border-radius: 8px;
 `;
 
 const BtnContainer = styled.div`
-  width: 941px;
+  width: 80%;
   margin: 0 auto;
   display: flex;
   justify-content: center;
-  gap: 50px;
+  gap: 20px;
 `;
 
 const LoginBtn = styled.button`
@@ -92,10 +110,13 @@ const LoginBtn = styled.button`
   background-color: black;
   border: 0;
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   line-height: 30px;
   text-align: center;
   cursor: pointer;
+  @media screen and (max-width: 1279px) {
+    height: 44px;
+  }
 `;
 
 export default function Login() {
@@ -166,7 +187,7 @@ export default function Login() {
         <BtnContainer>
           <LoginBtn type='submit'>登入</LoginBtn>
           <LoginBtn type='button' onClick={signUp}>
-            成為會員
+            註冊
           </LoginBtn>
         </BtnContainer>
       </ContentContainer>
