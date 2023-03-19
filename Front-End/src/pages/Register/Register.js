@@ -117,8 +117,16 @@ export default function Register() {
       body: JSON.stringify(data),
     })
       .then((res) =>
-        res.status === 200 ? console.log('Success!') : console.log('Error!')
+        res.status === 200
+          ? res.json()
+          : res.status === 403
+          ? alert('The email address has already been registered')
+          : console.log('error!')
       )
+      .then((data) => {
+        const token = data.data.access_token;
+        localStorage.setItem('loginToken', token);
+      })
       .catch((err) => console.log(err));
   }
 
