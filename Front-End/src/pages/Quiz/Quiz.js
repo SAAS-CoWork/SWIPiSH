@@ -156,6 +156,7 @@ export default function Quiz() {
       headers: {
         Authorization:
           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm92aWRlciI6Im5hdGl2ZSIsIm5hbWUiOiJTYW0xMjMiLCJlbWFpbCI6InNhbWNoYW4xMjQ1QGdtYWlsLmNvbSIsInBpY3R1cmUiOm51bGwsImlkIjoxMDI5MywiaWF0IjoxNjc5MjEwODcxfQ.PO4gxjBLVlcDq7_vz3InLBqkhX4ve3pf4vTBa55CVjw',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ answer: data }),
     })
