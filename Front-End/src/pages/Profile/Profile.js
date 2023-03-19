@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import edit from "./edit.png";
-import profile from "./profile.png";
-import { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import edit from './edit.png';
+import profile from './profile.png';
+import { useState, useEffect } from 'react';
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 160px 180px;
   @media screen and (max-width: 1279px) {
-    ${"" /* 手機還沒切 */}
+    ${'' /* 手機還沒切 */}
   }
 `;
 
@@ -201,18 +201,18 @@ const EditBox = styled.div`
   border-radius: 8px;
   color: #3f3f3a;
   position: absolute;
-  margin-left:118px;
+  margin-left: 118px;
   textarea {
     width: 576px;
     outline: none;
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: 'Noto Sans TC';    
+    font-family: 'Noto Sans TC';
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
-    resize:none;
+    resize: none;
     white-space: nowrap;
   }
 `;
@@ -294,23 +294,44 @@ const Submit = styled.button`
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState({});
   const handleEditClick = () => {
-    setIsEditing(true); 
+    setIsEditing(true);
   };
   const handleSaveClick = () => {
-    setIsEditing(false); 
+    setIsEditing(false);
   };
+
+  const loginToken = localStorage.getItem('loginToken');
+
+  useEffect(() => {
+    fetch('http://54.64.47.158:3001/api/1.0/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setUserData(data.data))
+      .catch((err) => console.log(err));
+  }, [loginToken]);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
+
   return (
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
       <Title>
@@ -321,7 +342,7 @@ export default function Profile() {
       <ProfileWrapper>
         <AccountWrapper>
           <AccountTitle>帳號</AccountTitle>
-          <Account>swipishmanager</Account>
+          <Account>{userData.email}</Account>
         </AccountWrapper>
         <SubWrapper>
           <SubTitle>方案</SubTitle>
@@ -332,33 +353,33 @@ export default function Profile() {
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type="text">Sam Alison Amber</NameInput>
+          <NameInput type='text'>{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="Sam Alison Amber" />
-        </EditBox>
-      )}
+            <EditBox>
+              <textarea type='text' defaultValue='Sam Alison Amber' />
+            </EditBox>
+          )}
         </NameWrapper>
         <EmailWrapper>
           <EmailTitle>信箱</EmailTitle>
-          <EmailInput>swipishmanager@saas.com</EmailInput>
+          <EmailInput>{userData.email}</EmailInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="swipishmanager@saas.com" />
-        </EditBox>
-      )}
+            <EditBox>
+              <textarea type='text' defaultValue='swipishmanager@saas.com' />
+            </EditBox>
+          )}
         </EmailWrapper>
         <PwWrapper>
           <PwTitle>密碼</PwTitle>
-          <PwInput>******</PwInput>
+          <PwInput>{userData.password}</PwInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
-        <EditBox>
-          <textarea type="text" defaultValue="******" />
-        </EditBox>
-      )}
+            <EditBox>
+              <textarea type='text' defaultValue='******' />
+            </EditBox>
+          )}
         </PwWrapper>
       </ProfileWrapper>
       <Submit onClick={handleSaveClick}>確認送出</Submit>
