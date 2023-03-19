@@ -108,6 +108,7 @@ const PlanDescriptionText = styled.p`
   line-height: 38px;
   letter-spacing: 6.4px;
   font-weight: ${(props) => props.fontWeight};
+  font-type: bold;
 `;
 
 const MedalImg = styled.div`
@@ -128,6 +129,7 @@ const LearnMoreBtn = styled.button`
   text-align: center;
   border: 0;
 `;
+
 
 export default function SubscriptionAd() {
   return (
