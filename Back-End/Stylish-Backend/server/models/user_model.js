@@ -211,10 +211,10 @@ const insertQuizAnswer = async function (userId, answer) {
 // get roleId
 const getRoleId = async function (userId) {
   try {
-    const [result] = await pool.query('SELECT role_id FROM user WHERE id = ?',
+    const [[result]] = await pool.query('SELECT role_id FROM user WHERE id = ?',
       [userId]
     )
-    return result;
+    return result.role_id;
   } catch (e) {
     console.log(e);
     return false;
@@ -226,8 +226,9 @@ const getLiked = async function (userId) {
   try {
     const stat = 'SELECT product_id FROM liked_product WHERE user_id = ?'
     const [result] = await pool.query(stat, [userId]);
-    console.log('愛', result);
-    return result;
+    productIds = result.map(item => item.product_id)
+    // console.log('map', productIds);
+    return productIds;
   } catch (e) {
     console.log(e);
     return false;

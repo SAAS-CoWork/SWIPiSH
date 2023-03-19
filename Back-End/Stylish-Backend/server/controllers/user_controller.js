@@ -123,24 +123,35 @@ const signIn = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  // ALL: -1, 401
-  // USER: 2, 200
-  // VIPUSER: 3 200 => 抓 subcription t/f & sub expire time
-  //                => 抓 liked-product
 
+  const { id } = req.user
+  let roleId = await User.getRoleId(id)
 
-  res.status(200).send({
-    data: {
-      name: req.user.name,
-      email: req.user.email,
-      //subscription
-    },
-  });
-  return;
+  if (roleId == User.USER_ROLE.USER) {
+    return res.status(200).json({
+      data: {
+        name: req.user.name,
+        email: req.user.email,
+        subscription: false,
+      },
+    })
+  };
+
+  if (roleId == User.USER_ROLE.VIPUSER) {
+    const liked = await User.getLiked(id)
+    return res.status(200).json({
+      data: {
+        name: req.user.name,
+        email: req.user.email,
+        subscription: true,
+        liked_product: liked
+      },
+    })
+  };
+  return res.stauts(500).json({ error: "internal server error" });
 };
 
 const createQuizAnswer = async (req, res) => {
-  console.log(req.user)
   const { answer } = req.body
   const { id } = req.user
   const isInserted = await User.insertQuizAnswer(id, answer)

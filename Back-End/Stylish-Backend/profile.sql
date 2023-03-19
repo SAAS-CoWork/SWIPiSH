@@ -18,5 +18,5 @@ CREATE TABLE `subscription`(
 )
 -- when subscribed, calculated expire date and save into table
 
-INSERT INTO subscription (user_id, plan, price) VALUES (1, "premium", 4.99)
+INSERT INTO subscription (user_id, plan, price) VALUES (10254, "premium", 4.99)
 
