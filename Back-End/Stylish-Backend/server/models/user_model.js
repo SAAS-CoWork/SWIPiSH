@@ -36,9 +36,10 @@ const signUp = async (name, roleId, email, password) => {
       TOKEN_SECRET
     );
     user.access_token = accessToken;
+    console.log('AccessToken', accessToken)
     const queryStr = 'INSERT INTO user SET ?';
     const [result] = await conn.query(queryStr, user);
-    await conn.query(queryStr, [accessToken, TOKEN_EXPIRE, loginAt, user.id]);
+    // await conn.query(queryStr, [accessToken, TOKEN_EXPIRE, loginAt, user.id]);
     user.id = result.insertId;
 
     const newAccessToken = jwt.sign(
@@ -51,13 +52,15 @@ const signUp = async (name, roleId, email, password) => {
       },
       TOKEN_SECRET
     );
+    console.log('newAccessToken', newAccessToken)
     const updateJwt =
-      'UPDATE user SET access_token = ?, access_expired = ? WHERE id = ?';
-    await conn.query(queryStr, [newAccessToken, TOKEN_EXPIRE, user.id]);
+      'UPDATE user SET access_token = ? WHERE id = ?';
+    await conn.query(updateJwt, [newAccessToken, user.id]);
     user.access_token = newAccessToken;
 
     return { user };
   } catch (error) {
+    console.log("user", error)
     return {
       error: 'Email Already Exists',
       status: 403,
