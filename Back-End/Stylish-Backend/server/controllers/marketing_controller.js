@@ -56,12 +56,12 @@ const getCampaigns = async (req, res) => {
 
   console.log('Get campaign from database');
   const campaigns = await Marketing.getCampaigns();
-  campaigns.map((campaign) => {
-    const assetsPath = util.getAssetsPath(req.protocol, req.hostname);
-    campaign.picture = assetsPath + campaign.picture;
-    return campaign;
-  });
-
+  // get image from caco link directly
+  // campaigns.map((campaign) => {
+  //   const assetsPath = util.getAssetsPath(req.protocol, req.hostname);
+  //   campaign.picture = assetsPath + campaign.picture;
+  //   return campaign;
+  // });
   try {
     if (Cache.ready) {
       await Cache.set(CACHE_CAMPAIGN_KEY, JSON.stringify(campaigns));
