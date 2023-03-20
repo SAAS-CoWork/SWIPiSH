@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
 import styled from 'styled-components/macro';
 import heart from './heart.png';
@@ -9,56 +10,74 @@ import goback from './goback.png';
 import trash from './trash.png';
 // import product from "./product.png";
 
+// fetch('https://www.gotolive.online/api/1.0/user/profile', {
+//   method: 'GET',
+//   headers: {
+//     Authorization: `Bearer ${loginToken}`,
+//     'Content-Type': 'application/json',
+//   },
+// })
+
 const db = [
   {
     name: '前開衩扭結洋裝',
-    url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
     price: '799',
+    id: '201902191248',
   },
   {
-    name: '透肌澎澎防曬襯衫',
-    url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
-    price: '599',
+    name: 'S曲線翹臀心機修修褲',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
+    price: '790',
+    id: '201902191335',
   },
   {
-    name: '小扇紋細織上衣',
-    url: 'https://api.appworks-school.tw/assets/201807202150/main.jpg',
-    price: '599',
+    name: '傑利鼠手提袋',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
+    price: '790',
+    id: '201902191449',
   },
   {
-    name: '活力花紋長筒牛仔褲',
-    url: 'https://api.appworks-school.tw/assets/201807202157/main.jpg',
-    price: '1299',
+    name: '三眼怪防潑水短褲',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
+    price: '790',
+    id: '201902191255',
   },
   {
-    name: '純色輕薄百搭襯衫',
-    url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
+    name: '傑利鼠撞色襯衫',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
     price: '799',
+    id: '201902191298',
   },
   {
     name: '前開衩扭結洋裝',
-    url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
     price: '799',
+    id: '201902191248',
   },
   {
-    name: '透肌澎澎防曬襯衫',
-    url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
-    price: '599',
+    name: 'S曲線翹臀心機修修褲',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
+    price: '790',
+    id: '201902191335',
   },
   {
-    name: '小扇紋細織上衣',
-    url: 'https://api.appworks-school.tw/assets/201807202150/main.jpg',
-    price: '599',
+    name: '傑利鼠手提袋',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
+    price: '790',
+    id: '201902191449',
   },
   {
-    name: '活力花紋長筒牛仔褲',
-    url: 'https://api.appworks-school.tw/assets/201807202157/main.jpg',
-    price: '1299',
+    name: '三眼怪防潑水短褲',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
+    price: '790',
+    id: '201902191255',
   },
   {
-    name: '純色輕薄百搭襯衫',
-    url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
+    name: '傑利鼠撞色襯衫',
+    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
     price: '799',
+    id: '201902191298',
   },
 ];
 
@@ -270,10 +289,10 @@ const RemoveIcon = styled.div`
 function Swipe() {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
+  const [collection, setCollection] = useState([]);
+  const navigate = useNavigate();
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
-
-  useEffect(() => console.log(db[currentIndex]), [currentIndex]);
 
   const childRefs = useMemo(
     () =>
@@ -321,7 +340,38 @@ function Swipe() {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  function addToCollection() {}
+  function addToCollection() {
+    const ids = collection.map((item) => item.id);
+    if (ids.indexOf(db[currentIndex].id) === -1) {
+      const newCollection = [...collection, db[currentIndex]];
+      setCollection(newCollection);
+    }
+    return;
+  }
+
+  function handleSuperLike() {
+    navigate(`../products/${db[currentIndex].id}`);
+  }
+
+  function handleLike() {
+    swipe('right');
+    addToCollection();
+  }
+
+  useEffect(() => {
+    const savedItems = JSON.parse(localStorage.getItem('collection'));
+    if (savedItems) {
+      setCollection(savedItems);
+    } else {
+      setCollection([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (collection !== null) {
+      localStorage.setItem('collection', JSON.stringify(collection));
+    }
+  }, [collection]);
 
   return (
     <Wrapper>
@@ -331,20 +381,28 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
-        <Products>
-          {db.map((item, index) => (
-            <ProductContainer key={index}>
-              <ProductImg imgUrl={item.url} />
-              <ProductInfoContainer>
-                <ProductInfo>
-                  <InfoText>{item.name}</InfoText>
-                  <InfoText>TWD. {item.price}</InfoText>
-                </ProductInfo>
-                <RemoveIcon />
-              </ProductInfoContainer>
-            </ProductContainer>
-          ))}
-        </Products>
+        {!collection || collection.length === 0 ? null : (
+          <Products>
+            {collection.map((item, index) => (
+              <ProductContainer key={index}>
+                <ProductImg imgUrl={item.url} />
+                <ProductInfoContainer>
+                  <ProductInfo>
+                    <InfoText>{item.name}</InfoText>
+                    <InfoText>TWD. {item.price}</InfoText>
+                  </ProductInfo>
+                  <RemoveIcon
+                    onClick={() => {
+                      const newCollection = [...collection];
+                      newCollection.splice(index, 1);
+                      setCollection(newCollection);
+                    }}
+                  />
+                </ProductInfoContainer>
+              </ProductContainer>
+            ))}
+          </Products>
+        )}
       </Collection>
       <SwipeZone>
         <ContentContainer>
@@ -353,8 +411,13 @@ function Swipe() {
               <TinderCard
                 ref={childRefs[index]}
                 className='swipe'
-                key={character.name}
-                onSwipe={(dir) => swiped(dir, character.name, index)}
+                key={index}
+                onSwipe={(dir) => {
+                  swiped(dir, character.name, index);
+                  if (dir === 'right') {
+                    addToCollection();
+                  }
+                }}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                 style={{
                   display: 'flex',
@@ -383,8 +446,18 @@ function Swipe() {
           <Buttons>
             <LikeBtn imgUrl={goback} onClick={() => goBack()}></LikeBtn>
             <LikeBtn imgUrl={notLike} onClick={() => swipe('left')}></LikeBtn>
-            <LikeBtn imgUrl={like} onClick={() => swipe('right')}></LikeBtn>
-            <LikeBtn imgUrl={superLike}></LikeBtn>
+            <LikeBtn
+              imgUrl={like}
+              onClick={() => {
+                handleLike();
+              }}
+            ></LikeBtn>
+            <LikeBtn
+              imgUrl={superLike}
+              onClick={() => {
+                handleSuperLike();
+              }}
+            ></LikeBtn>
           </Buttons>
           {/* {lastDirection ? (
             <h2 key={lastDirection} className="infoText">
