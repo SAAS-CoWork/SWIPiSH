@@ -50,18 +50,19 @@ const getRecommendation = async function (req, res) {
         }
 
         // get recommendation from redis
-        const recommendations = [];
-        for ( let i = 0; i < 10; i++ ) {
-            const reco = await Cache.lPop(user.id);
-            recommendations.push(JSON.parse(reco));
-        }
-        
+
         const remained = await Cache.lLen(user.id);
         console.log('Cache remained', remained);
         if ( remained < 20 ) {
             await generateRecommendations(user.id, false);
         }
 
+        const recommendations = [];
+        for ( let i = 0; i < 10; i++ ) {
+            const reco = await Cache.lPop(user.id);
+            recommendations.push(JSON.parse(reco));
+        }
+        
         const responseObj = {
             data: recommendations
         }
