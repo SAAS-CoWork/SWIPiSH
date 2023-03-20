@@ -309,9 +309,6 @@ export default function Profile() {
       .then((data) => {
         if (data) {
           setUserData(data.data);
-        } else {
-          // alert('Token Expired!');
-          // window.location.href = './login';
         }
       })
       .catch((err) => console.log(err));

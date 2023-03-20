@@ -1,39 +1,39 @@
-import React, { useState, useMemo, useRef } from "react";
-import TinderCard from "react-tinder-card";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import TinderCard from 'react-tinder-card';
 import styled from 'styled-components/macro';
-import heart from "./heart.png";
-import like from "./like.png";
-import notLike from "./notLike.png";
-import superLike from "./superLike.png";
-import goback from "./goback.png";
-import trash from "./trash.png";
+import heart from './heart.png';
+import like from './like.png';
+import notLike from './notLike.png';
+import superLike from './superLike.png';
+import goback from './goback.png';
+import trash from './trash.png';
 // import product from "./product.png";
 
 const db = [
   {
-    name: "前開衩扭結洋裝",
-    url: "https://api.appworks-school.tw/assets/201902191210/main.jpg",
-    price: "799",
+    name: '前開衩扭結洋裝',
+    url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
+    price: '799',
   },
   {
-    name: "透肌澎澎防曬襯衫",
-    url: "https://api.appworks-school.tw/assets/201807202140/main.jpg",
-    price: "599",
+    name: '透肌澎澎防曬襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
+    price: '599',
   },
   {
-    name: "小扇紋細織上衣",
-    url: "https://api.appworks-school.tw/assets/201807202150/main.jpg",
-    price: "599",
+    name: '小扇紋細織上衣',
+    url: 'https://api.appworks-school.tw/assets/201807202150/main.jpg',
+    price: '599',
   },
   {
-    name: "活力花紋長筒牛仔褲",
-    url: "https://api.appworks-school.tw/assets/201807202157/main.jpg",
-    price: "1299",
+    name: '活力花紋長筒牛仔褲',
+    url: 'https://api.appworks-school.tw/assets/201807202157/main.jpg',
+    price: '1299',
   },
   {
-    name: "純色輕薄百搭襯衫",
-    url: "https://api.appworks-school.tw/assets/201807242211/main.jpg",
-    price: "799",
+    name: '純色輕薄百搭襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
+    price: '799',
   },
 ];
 
@@ -107,7 +107,7 @@ const SwipeTitle = styled.h2`
   font-size: 24px;
   letter-spacing: 4px;
   font-weight: 700;
-  color:#ffffff;
+  color: #ffffff;
   text-shadow: black 0.05em 0.05em 0.3em;
 `;
 
@@ -122,7 +122,7 @@ const SwipePrice = styled.h3`
   font-size: 16px;
   line-height: 24px;
   letter-spacing: 4px;
-  color:#ffffff;
+  color: #ffffff;
   text-shadow: black 0.05em 0.05em 0.3em;
 `;
 
@@ -226,6 +226,8 @@ function Swipe() {
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
+  useEffect(() => console.log(db[currentIndex]), [currentIndex]);
+
   const childRefs = useMemo(
     () =>
       Array(db.length)
@@ -272,6 +274,8 @@ function Swipe() {
     await childRefs[newIndex].current.restoreCard();
   };
 
+  function addToCollection() {}
+
   return (
     <Wrapper>
       <Collection>
@@ -304,14 +308,14 @@ function Swipe() {
             {db.map((character, index) => (
               <TinderCard
                 ref={childRefs[index]}
-                className="swipe"
+                className='swipe'
                 key={character.name}
                 onSwipe={(dir) => swiped(dir, character.name, index)}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                 style={{
-                  display: "flex",
-                  justifycontent: "center",
-                  position: "absolute",
+                  display: 'flex',
+                  justifycontent: 'center',
+                  position: 'absolute',
                 }}
               >
                 <SwipeBottomContainer>
@@ -320,11 +324,11 @@ function Swipe() {
                 </SwipeBottomContainer>
                 <Card
                   style={{
-                    backgroundImage: "url(" + character.url + ")",
-                    boxShadow: "0px 0px 30px 0px rgba(0,0,0,0.10)",
-                    borderRadius: "20px",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundImage: 'url(' + character.url + ')',
+                    boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
+                    borderRadius: '20px',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                   }}
                 ></Card>
               </TinderCard>
@@ -332,25 +336,43 @@ function Swipe() {
           </SwipeImg>
         </ContentContainer>
         <LikeBtnContainer>
-          <div className="buttons" style={{ display: "flex" }}>
+          <div className='buttons' style={{ display: 'flex' }}>
             <LikeBtn
               imgUrl={goback}
-              style={{ backgroundColor: !canGoBack && "#c3c4d3", marginLeft:"25px", cursor:"pointer" }}
-              onClick={() => goBack()}
+              style={{
+                backgroundColor: !canGoBack && '#c3c4d3',
+                marginLeft: '25px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                goBack();
+              }}
             ></LikeBtn>
             <LikeBtn
               imgUrl={notLike}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px", cursor:"pointer" }}
-              onClick={() => swipe("left")}
+              style={{
+                backgroundColor: !canSwipe && '#c3c4d3',
+                marginLeft: '25px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                swipe('left');
+              }}
             ></LikeBtn>
             <LikeBtn
               imgUrl={like}
-              style={{ backgroundColor: !canSwipe && "#c3c4d3", marginLeft:"25px" , cursor:"pointer" }}
-              onClick={() => swipe("right")}
+              style={{
+                backgroundColor: !canSwipe && '#c3c4d3',
+                marginLeft: '25px',
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                swipe('right');
+              }}
             ></LikeBtn>
             <LikeBtn
               imgUrl={superLike}
-              style={{marginLeft:"25px", cursor:"pointer" }}
+              style={{ marginLeft: '25px', cursor: 'pointer' }}
               // style={{ backgroundColor: !canGoBack && "#c3c4d3" }}
               // onClick={() => goBack()}
             ></LikeBtn>
