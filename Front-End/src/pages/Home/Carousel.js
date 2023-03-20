@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from "styled-components/macro";
+import carousel1 from './carousel1.gif';
+import carousel2 from './carousel2.png';
+import carousel3 from './carousel3.png';
 
-import api from '../../utils/api';
+
+// import api from '../../utils/api';
 
 const Wrapper = styled.div`
   height: 500px;
@@ -95,23 +99,52 @@ const Dot = styled.div`
   }
 `;
 
+const db = [
+  {
+    picture: carousel1,
+    product_id:201902191252,    
+  },
+  {
+    picture: carousel2,
+    product_id:201902191494,    
+  },
+  {
+    picture: carousel3,
+    product_id:201902191479,    
+  }
+];
+
 function Carousel() {
   const [campaigns, setCampaigns] = useState([]);
   const [activeCampaignIndex, setActiveCampaignIndex] = useState(0);
   const intervalRef = useRef();
 
+  // useEffect(() => {
+  //   async function getCampaigns() {
+  //     const { data } = await api.getCampaigns();
+  //     console.log(data);
+  //     setCampaigns(data);
+  //     intervalRef.current = window.setInterval(() => {
+  //       setActiveCampaignIndex((prev) =>
+  //         prev === data.length - 1 ? 0 : prev + 1
+  //       );
+  //     }, 5000);
+  //   }
+  //   getCampaigns();
+  // }, []);
+
   useEffect(() => {
-    async function getCampaigns() {
-      const { data } = await api.getCampaigns();
-      setCampaigns(data);
+    function getCampaigns() {
+      setCampaigns(db);
       intervalRef.current = window.setInterval(() => {
         setActiveCampaignIndex((prev) =>
-          prev === data.length - 1 ? 0 : prev + 1
+          prev === db.length - 1 ? 0 : prev + 1
         );
       }, 5000);
     }
     getCampaigns();
   }, []);
+  
 
   return (
     <Wrapper>

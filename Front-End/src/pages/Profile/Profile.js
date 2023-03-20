@@ -373,6 +373,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
