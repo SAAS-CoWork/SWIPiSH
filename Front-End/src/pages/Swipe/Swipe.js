@@ -264,6 +264,7 @@ const RemoveIcon = styled.div`
 function Swipe() {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
+  const [collection, setCollection] = useState([]);
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
@@ -315,7 +316,12 @@ function Swipe() {
     await childRefs[newIndex].current.restoreCard();
   };
 
-  function addToCollection() {}
+  function addToCollection() {
+    const newCollection = [...collection, db[currentIndex]];
+    setCollection(newCollection);
+  }
+
+  useEffect(() => console.log(collection), [collection]);
 
   return (
     <Wrapper>
@@ -377,7 +383,13 @@ function Swipe() {
           <Buttons>
             <LikeBtn imgUrl={goback} onClick={() => goBack()}></LikeBtn>
             <LikeBtn imgUrl={notLike} onClick={() => swipe('left')}></LikeBtn>
-            <LikeBtn imgUrl={like} onClick={() => swipe('right')}></LikeBtn>
+            <LikeBtn
+              imgUrl={like}
+              onClick={() => {
+                swipe('right');
+                addToCollection();
+              }}
+            ></LikeBtn>
             <LikeBtn imgUrl={superLike}></LikeBtn>
           </Buttons>
           {/* {lastDirection ? (
