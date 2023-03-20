@@ -321,7 +321,8 @@ function Checkout() {
     try {
       setLoading(true);
 
-      const token = isLogin ? jwtToken : await login();
+      // const token = isLogin ? jwtToken : await login();
+      const token = '1234556';
 
       if (!token) {
         window.alert('請登入會員');

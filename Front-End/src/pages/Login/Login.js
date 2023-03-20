@@ -26,7 +26,7 @@ const ContentContainer = styled.form`
   align-items: center;
   margin: 63px auto 50px;
   @media screen and (max-width: 1279px) {
-    margin-top:20px;
+    margin-top: 20px;
   }
 `;
 
@@ -38,7 +38,7 @@ const Title = styled.h1`
 `;
 
 const SplitLine = styled.hr`
-  width:80%;
+  width: 80%;
   margin: 0 0 40px;
 `;
 
@@ -60,7 +60,7 @@ const LoginRow = styled.div`
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     align-items: flex-start;
-    gap:5px;
+    gap: 5px;
   }
 `;
 
@@ -71,9 +71,9 @@ const LoginInfoTitleContainer = styled.div`
   @media screen and (max-width: 1279px) {
     flex-direction: column-reverse;
     margin-bottom: 15px;
-    gap:0px;
-    justify-content:center;
-    align-items:center;
+    gap: 0px;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -133,7 +133,7 @@ export default function Login() {
       email: data.email,
       password: data.password,
     });
-    fetch('http://54.64.47.158:3001/api/1.0/user/signin', {
+    fetch('https://www.gotolive.online/api/1.0/user/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
