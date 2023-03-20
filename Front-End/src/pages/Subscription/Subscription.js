@@ -1,8 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 import GooglePayBtn from '../../utils/GooglePay';
 import { CartContext } from '../../context/cartContext';
+import tappay from '../../utils/tappay';
+import api from '../../utils/api';
+import Button from '../../components/Button';
 
 const paymentInfo = [
   { title: '信用卡號', description: '**** **** **** ****' },
@@ -157,8 +160,77 @@ const QuestionInput = styled.input`
   }
 `;
 
+const FormFieldSet = styled.fieldset`
+  margin-top: 50px;
+
+  @media screen and (max-width: 1279px) {
+    margin-top: 20px;
+  }
+`;
+
+const FormLegend = styled.legend`
+  line-height: 19px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #3f3a3a;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #3f3a3a;
+  width: 100%;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  width: 684px;
+
+  ${FormLegend} + & {
+    margin-top: 25px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    line-height: 17px;
+    font-size: 14px;
+    margin-top: 20px;
+    width: 100%;
+
+    ${FormLegend} + & {
+      margin-top: 20px;
+    }
+  }
+`;
+
+const FormLabel = styled.label`
+  width: 110px;
+  line-height: 19px;
+  font-size: 16px;
+  color: #3f3a3a;
+  display: block;
+
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
+`;
+
+const FormControl = styled.input`
+  width: 574px;
+  height: 30px;
+  border-radius: 8px;
+  border: solid 1px ${({ invalid }) => (invalid ? '#CB4042' : '#979797')};
+
+  @media screen and (max-width: 1279px) {
+    margin-top: 10px;
+    width: 100%;
+  }
+`;
+
 export default function Subscription() {
   const { pricingPlan, setPricingPlan } = useContext(CartContext);
+  const [loading, setLoading] = useState(false);
+  const cardNumberRef = useRef();
+  const cardExpirationDateRef = useRef();
+  const cardCCVRef = useRef();
 
   function handleInput(e, data) {
     const input = e.target.value;
@@ -166,14 +238,83 @@ export default function Subscription() {
   }
 
   useEffect(() => {
-    if (pricingPlan) {
-      console.log(pricingPlan);
+    const setupTappay = async () => {
+      await tappay.setupSDK();
+      tappay.setupCard(
+        cardNumberRef.current,
+        cardExpirationDateRef.current,
+        cardCCVRef.current
+      );
+    };
+    setupTappay();
+  }, []);
+
+  // useEffect(() => {
+  //   if (pricingPlan) {
+  //     console.log(pricingPlan);
+  //   }
+  // }, [pricingPlan]);
+
+  async function checkout(e) {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem('loginToken');
+
+      if (!token) {
+        window.alert('請登入會員');
+        return;
+      }
+
+      // if (pricingPlan === '') {
+      //   window.alert('請選擇方案');
+      //   return;
+      // }
+
+      if (!tappay.canGetPrime()) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+
+      const result = await tappay.getPrime();
+      if (result.status !== 0) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+
+      const { data } = await api.checkout(
+        {
+          prime: result.card.prime,
+          order: {
+            shipping: 'delivery',
+            payment: 'credit_card',
+            // subtotal,
+            // freight,
+            // total: subtotal + freight,
+            // recipient,
+            // list: cartItems,
+          },
+        },
+        token
+      );
+      // window.alert('付款成功');
+      // setCartItems([]);
+      // navigate('/thankyou', { state: { orderNumber: data.number } });
+      e.preventDefault();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-  }, [pricingPlan]);
+  }
 
   return (
     <Wrapper>
-      <ContentContainer>
+      <ContentContainer
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <Title>
           <TitleText>成為尊榮會員</TitleText>
           <ProfileIcon />
@@ -200,8 +341,31 @@ export default function Subscription() {
               ))}
             </Plans>
           </InfoRow>
-          <GooglePayBtn />
+          {/* <GooglePayBtn /> */}
+          <FormFieldSet>
+            <FormLegend>付款資料</FormLegend>
+            <FormGroup>
+              <FormLabel>信用卡號碼</FormLabel>
+              <FormControl as='div' ref={cardNumberRef} />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>有效期限</FormLabel>
+              <FormControl as='div' ref={cardExpirationDateRef} />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>安全碼</FormLabel>
+              <FormControl as='div' ref={cardCCVRef} />
+            </FormGroup>
+          </FormFieldSet>
         </InfoContainer>
+        <Button
+          loading={loading}
+          onClick={() => {
+            checkout();
+          }}
+        >
+          確認付款
+        </Button>
       </ContentContainer>
     </Wrapper>
   );
