@@ -101,7 +101,7 @@ const subscriptionPayment = async (req, res) => {
   let roleId = await User.getRoleId(userId)
 
   // role_id = 3 redirect to index
-  if (roleId == 4) {
+  if (roleId == 3) {
     return res.status(307).json({ message: 'Already paid, redirect to index' })
   }
 
