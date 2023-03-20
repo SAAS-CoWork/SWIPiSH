@@ -6,7 +6,7 @@ import api from '../../utils/api';
 import ProductVariants from './ProductVariants';
 
 const Wrapper = styled.div`
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 65px 0 49px;
   display: flex;

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import styled from "styled-components/macro";
+import styled from 'styled-components/macro';
 import carousel1 from './carousel1.gif';
 import carousel2 from './carousel2.png';
 import carousel3 from './carousel3.png';
-
 
 // import api from '../../utils/api';
 
@@ -102,16 +101,16 @@ const Dot = styled.div`
 const db = [
   {
     picture: carousel1,
-    product_id:201902191252,    
+    product_id: 201902191252,
   },
   {
     picture: carousel2,
-    product_id:201902191494,    
+    product_id: 201902191494,
   },
   {
     picture: carousel3,
-    product_id:201902191479,    
-  }
+    product_id: 201902191479,
+  },
 ];
 
 function Carousel() {
@@ -144,7 +143,6 @@ function Carousel() {
     }
     getCampaigns();
   }, []);
-  
 
   return (
     <Wrapper>
