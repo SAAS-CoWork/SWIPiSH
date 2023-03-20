@@ -7,7 +7,7 @@ import cart from './cart.png';
 import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
-import upgrade from './upgrade.png';
+import swipe from './swipe.png';
 import upgrademobile from './upgrademobile.png';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
@@ -33,7 +33,7 @@ const Wrapper = styled.div`
     flex-wrap: wrap;
     align-content: center;
     justify-content: center;
-}
+  }
 `;
 
 const Logo = styled(Link)`
@@ -44,13 +44,13 @@ const Logo = styled(Link)`
   @media screen and (max-width: 1279px) {
     width: 129px;
     height: 24px;
-    margin-left:0 px;
+    margin-left: 0 px;
   }
 `;
 
 const CategoryLinks = styled.div`
   margin: 16px 0 0 57px;
-  margin-left:20px;
+  margin-left: 20px;
 
   @media screen and (max-width: 1279px) {
     margin: 0;
@@ -234,7 +234,7 @@ const PageLinkText = styled.div`
 const UpgradeIcon = styled(Link)`
   width: 150px;
   height: 50px;
-  background-image: url(${upgrade});
+  background-image: url(${swipe});
   background-size: cover;
   margin-left: auto;
   border: 0;
@@ -244,9 +244,9 @@ const UpgradeIcon = styled(Link)`
     width: 36px;
     height: 36px;
     background-size: cover;
-  margin-left: auto;
-  border: 0;
-  cursor: pointer;
+    margin-left: auto;
+    border: 0;
+    cursor: pointer;
   }
 `;
 
