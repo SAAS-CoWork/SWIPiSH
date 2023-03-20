@@ -347,6 +347,11 @@ function Swipe() {
     navigate(`../products/${db[currentIndex].id}`);
   }
 
+  function handleLike() {
+    swipe('right');
+    addToCollection();
+  }
+
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem('collection'));
     if (savedItems) {
@@ -438,8 +443,7 @@ function Swipe() {
             <LikeBtn
               imgUrl={like}
               onClick={() => {
-                swipe('right');
-                addToCollection();
+                handleLike();
               }}
             ></LikeBtn>
             <LikeBtn
