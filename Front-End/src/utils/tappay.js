@@ -6,7 +6,7 @@ function insertTappayScript() {
     if (document.getElementById(TAPPAY_SCRIPT_ID)) {
       resolve();
       return;
-    };
+    }
     const tappayScriptTag = document.createElement('script');
     tappayScriptTag.setAttribute('id', TAPPAY_SCRIPT_ID);
     tappayScriptTag.setAttribute('src', TAPPAY_SCRIPT_SRC);
@@ -57,6 +57,9 @@ const tappay = {
     return new Promise((resolve) => {
       window.TPDirect.card.getPrime((result) => {
         resolve(result);
+        const prime = result.card.prime;
+        console.log(prime);
+        localStorage.setItem('prime', JSON.stringify(prime));
       });
     });
   },

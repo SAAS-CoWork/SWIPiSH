@@ -321,7 +321,7 @@ function Checkout() {
     try {
       setLoading(true);
 
-      const token = isLogin ? jwtToken : await login();
+      const token = localStorage.getItem('loginToken');
 
       if (!token) {
         window.alert('請登入會員');

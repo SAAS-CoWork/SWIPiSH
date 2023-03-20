@@ -121,14 +121,7 @@ function Carousel() {
           $backgroundImageUrl={picture}
           key={index}
           to={`/products/${product_id}`}
-        >
-          <Story>
-            <StoryContent>
-              {story.split('\r\n').slice(0, 3).join('\r\n')}
-            </StoryContent>
-            <StoryTitle>{story.split('\r\n')[3]}</StoryTitle>
-          </Story>
-        </Campaign>
+        ></Campaign>
       ))}
       <Dots>
         {campaigns.map((_, index) => (

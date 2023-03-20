@@ -1,63 +1,64 @@
-import React, { useState, useMemo, useRef } from "react";
-import TinderCard from "react-tinder-card";
-import styled from "styled-components/macro";
-import heart from "./heart.png";
-import like from "./like.png";
-import notLike from "./notLike.png";
-import superLike from "./superLike.png";
-import goback from "./goback.png";
-import trash from "./trash.png";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import TinderCard from 'react-tinder-card';
+import styled from 'styled-components/macro';
+import heart from './heart.png';
+import like from './like.png';
+import notLike from './notLike.png';
+import superLike from './superLike.png';
+import goback from './goback.png';
+import trash from './trash.png';
+// import product from "./product.png";
 
 const db = [
   {
-    name: "前開衩扭結洋裝",
-    url: "https://api.appworks-school.tw/assets/201902191210/main.jpg",
-    price: "799",
+    name: '前開衩扭結洋裝',
+    url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
+    price: '799',
   },
   {
-    name: "透肌澎澎防曬襯衫",
-    url: "https://api.appworks-school.tw/assets/201807202140/main.jpg",
-    price: "599",
+    name: '透肌澎澎防曬襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
+    price: '599',
   },
   {
-    name: "小扇紋細織上衣",
-    url: "https://api.appworks-school.tw/assets/201807202150/main.jpg",
-    price: "599",
+    name: '小扇紋細織上衣',
+    url: 'https://api.appworks-school.tw/assets/201807202150/main.jpg',
+    price: '599',
   },
   {
-    name: "活力花紋長筒牛仔褲",
-    url: "https://api.appworks-school.tw/assets/201807202157/main.jpg",
-    price: "1299",
+    name: '活力花紋長筒牛仔褲',
+    url: 'https://api.appworks-school.tw/assets/201807202157/main.jpg',
+    price: '1299',
   },
   {
-    name: "純色輕薄百搭襯衫",
-    url: "https://api.appworks-school.tw/assets/201807242211/main.jpg",
-    price: "799",
+    name: '純色輕薄百搭襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
+    price: '799',
   },
   {
-    name: "前開衩扭結洋裝",
-    url: "https://api.appworks-school.tw/assets/201902191210/main.jpg",
-    price: "799",
+    name: '前開衩扭結洋裝',
+    url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
+    price: '799',
   },
   {
-    name: "透肌澎澎防曬襯衫",
-    url: "https://api.appworks-school.tw/assets/201807202140/main.jpg",
-    price: "599",
+    name: '透肌澎澎防曬襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
+    price: '599',
   },
   {
-    name: "小扇紋細織上衣",
-    url: "https://api.appworks-school.tw/assets/201807202150/main.jpg",
-    price: "599",
+    name: '小扇紋細織上衣',
+    url: 'https://api.appworks-school.tw/assets/201807202150/main.jpg',
+    price: '599',
   },
   {
-    name: "活力花紋長筒牛仔褲",
-    url: "https://api.appworks-school.tw/assets/201807202157/main.jpg",
-    price: "1299",
+    name: '活力花紋長筒牛仔褲',
+    url: 'https://api.appworks-school.tw/assets/201807202157/main.jpg',
+    price: '1299',
   },
   {
-    name: "純色輕薄百搭襯衫",
-    url: "https://api.appworks-school.tw/assets/201807242211/main.jpg",
-    price: "799",
+    name: '純色輕薄百搭襯衫',
+    url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
+    price: '799',
   },
 ];
 
@@ -81,7 +82,7 @@ const Collection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width:80%;
+  width: 80%;
 `;
 
 const SwipeZone = styled.div`
@@ -166,10 +167,10 @@ const LikeBtnContainer = styled.div`
 const Buttons = styled.div`
   width: 100%;
   display: flex;
-  gap:20px;
+  gap: 20px;
   justify-content: center;
   @media screen and (max-width: 1279px) {
-    gap:10px;
+    gap: 10px;
   }
 `;
 
@@ -181,7 +182,7 @@ const LikeBtn = styled.button`
   background-color: white;
   background-size: cover;
   cursor: pointer;
-  padding:0px;
+  padding: 0px;
 `;
 
 const Title = styled.div`
@@ -213,9 +214,9 @@ const SplitLine = styled.hr`
 const Products = styled.div`
   width: 90%;
   display: flex;
-  flex-wrap:wrap;
-  flex-direction:row;
-  align-items:center;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
   justify-content: center;
   gap: 15px;
   @media screen and (max-width: 1279px) {
@@ -237,8 +238,8 @@ const ProductImg = styled.div`
   height: 269px;
   background-image: url(${(props) => props.imgUrl});
   margin-bottom: 8px;
-  background-size:cover;
-  cursor:pointer;
+  background-size: cover;
+  cursor: pointer;
 `;
 
 const ProductInfo = styled.div`
@@ -257,7 +258,7 @@ const RemoveIcon = styled.div`
   width: 50px;
   height: 50px;
   background-image: url(${trash});
-  cursor:pointer;
+  cursor: pointer;
 `;
 
 function Swipe() {
@@ -265,6 +266,8 @@ function Swipe() {
   const [lastDirection, setLastDirection] = useState();
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
+
+  useEffect(() => console.log(db[currentIndex]), [currentIndex]);
 
   const childRefs = useMemo(
     () =>
@@ -312,6 +315,8 @@ function Swipe() {
     await childRefs[newIndex].current.restoreCard();
   };
 
+  function addToCollection() {}
+
   return (
     <Wrapper>
       <Collection>
@@ -341,14 +346,14 @@ function Swipe() {
             {db.map((character, index) => (
               <TinderCard
                 ref={childRefs[index]}
-                className="swipe"
+                className='swipe'
                 key={character.name}
                 onSwipe={(dir) => swiped(dir, character.name, index)}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                 style={{
-                  display: "flex",
-                  justifycontent: "center",
-                  position: "absolute",
+                  display: 'flex',
+                  justifycontent: 'center',
+                  position: 'absolute',
                 }}
               >
                 <SwipeBottomContainer>
@@ -357,11 +362,11 @@ function Swipe() {
                 </SwipeBottomContainer>
                 <Card
                   style={{
-                    backgroundImage: "url(" + character.url + ")",
-                    boxShadow: "0px 0px 30px 0px rgba(0,0,0,0.10)",
-                    borderRadius: "20px",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
+                    backgroundImage: 'url(' + character.url + ')',
+                    boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
+                    borderRadius: '20px',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                   }}
                 ></Card>
               </TinderCard>
@@ -370,21 +375,10 @@ function Swipe() {
         </ContentContainer>
         <LikeBtnContainer>
           <Buttons>
-            <LikeBtn
-              imgUrl={goback}
-              onClick={() => goBack()}
-            ></LikeBtn>
-            <LikeBtn
-              imgUrl={notLike}
-              onClick={() => swipe("left")}
-            ></LikeBtn>
-            <LikeBtn
-              imgUrl={like}
-              onClick={() => swipe("right")}
-            ></LikeBtn>
-            <LikeBtn
-              imgUrl={superLike}
-            ></LikeBtn>
+            <LikeBtn imgUrl={goback} onClick={() => goBack()}></LikeBtn>
+            <LikeBtn imgUrl={notLike} onClick={() => swipe('left')}></LikeBtn>
+            <LikeBtn imgUrl={like} onClick={() => swipe('right')}></LikeBtn>
+            <LikeBtn imgUrl={superLike}></LikeBtn>
           </Buttons>
           {/* {lastDirection ? (
             <h2 key={lastDirection} className="infoText">

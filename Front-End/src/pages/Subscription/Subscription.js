@@ -1,17 +1,23 @@
-import React from 'react';
-import styled from "styled-components/macro";
+import React, { useContext, useEffect, useRef, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components/macro';
 import profile from './profile.png';
 import GooglePayBtn from '../../utils/GooglePay';
+import { CartContext } from '../../context/cartContext';
+import tappay from '../../utils/tappay';
+import api from '../../utils/api';
+import Button from '../../components/Button';
 
 const paymentInfo = [
-  { title: "信用卡號", description: "**** **** **** ****" },
-  { title: "有效期限", description: "MM /YY" },
-  { title: "安全碼", description: "後三碼" },
+  { title: '信用卡號', description: '**** **** **** ****' },
+  { title: '有效期限', description: 'MM /YY' },
+  { title: '安全碼', description: '後三碼' },
 ];
 
 const plans = [
-  { title: "Premium", price: "$4.99USD / Month" },
-  { title: "Platinum", price: "$49.99USD / Year" },
+  { title: 'Premium', price: '4.99', duration: 'Month' },
+  { title: 'Platinum', price: '49.99', duration: 'Year' },
 ];
 
 const Wrapper = styled.div`
@@ -49,11 +55,11 @@ const Title = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 34px;
-  gap:15px;
+  gap: 15px;
   @media screen and (max-width: 1279px) {
     flex-direction: column-reverse;
     margin-bottom: 15px;
-    gap:0px;
+    gap: 0px;
   }
 `;
 
@@ -156,26 +162,216 @@ const QuestionInput = styled.input`
   }
 `;
 
-const SubmitBtn = styled.button`
-  width: 240px;
-  height: 64px;
-  background-color: black;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  line-height: 30px;
-  margin-bottom: 30px;
-  letter-spacing: 4px;
-  border: 0;
+const FormFieldSet = styled.fieldset`
+  margin-top: 50px;
+
   @media screen and (max-width: 1279px) {
-    height: 44px;
+    margin-top: 20px;
+  }
+`;
+
+const FormLegend = styled.legend`
+  line-height: 19px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #3f3a3a;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #3f3a3a;
+  width: 100%;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  width: 684px;
+
+  ${FormLegend} + & {
+    margin-top: 25px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    line-height: 17px;
+    font-size: 14px;
+    margin-top: 20px;
+    width: 100%;
+
+    ${FormLegend} + & {
+      margin-top: 20px;
+    }
+  }
+`;
+
+const FormLabel = styled.label`
+  width: 110px;
+  line-height: 19px;
+  font-size: 16px;
+  color: #3f3a3a;
+  display: block;
+
+  @media screen and (max-width: 1279px) {
+    width: 100%;
+  }
+`;
+
+const FormControl = styled.input`
+  width: 574px;
+  height: 30px;
+  border-radius: 8px;
+  border: solid 1px ${({ invalid }) => (invalid ? '#CB4042' : '#979797')};
+
+  @media screen and (max-width: 1279px) {
+    margin-top: 10px;
+    width: 100%;
   }
 `;
 
 export default function Subscription() {
+  const { pricingPlan, setPricingPlan } = useContext(CartContext);
+  const [loading, setLoading] = useState(false);
+  const [membershipChecking, setMembershipChecking] = useState(true);
+  const cardNumberRef = useRef();
+  const cardExpirationDateRef = useRef();
+  const cardCCVRef = useRef();
+  const navigate = useNavigate();
+  const jwt = localStorage.getItem('loginToken');
+
+  function getMembership() {
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // window.location.href = './swipe';
+          navigate('/swipe');
+        } else {
+          setMembershipChecking(false);
+        }
+      })
+      .catch();
+  }
+
+  useEffect(() => {
+    jwt ? getMembership() : navigate('/login');
+  }, []);
+
+  function handleInput(e, data) {
+    const input = e.target.value;
+    setPricingPlan({ plan: input, price: data.price });
+  }
+
+  useEffect(() => {
+    const setupTappay = async () => {
+      await tappay.setupSDK();
+      tappay.setupCard(
+        cardNumberRef.current,
+        cardExpirationDateRef.current,
+        cardCCVRef.current
+      );
+    };
+    setupTappay();
+  }, []);
+
+  // useEffect(() => {
+  //   if (pricingPlan) {
+  //     console.log(pricingPlan);
+  //   }
+  // }, [pricingPlan]);
+
+  async function checkout(e) {
+    try {
+      setLoading(true);
+
+      const token = localStorage.getItem('loginToken');
+
+      if (!token) {
+        window.alert('請登入會員');
+        return;
+      }
+
+      // if (pricingPlan === '') {
+      //   window.alert('請選擇方案');
+      //   return;
+      // }
+
+      if (!tappay.canGetPrime()) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+
+      const result = await tappay.getPrime();
+      if (result.status !== 0) {
+        window.alert('付款資料輸入有誤');
+        return;
+      }
+
+      const subtotal = pricingPlan.price;
+
+      const { data } = await api.checkout(
+        {
+          prime: result.card.prime,
+          order: {
+            shipping: 'delivery',
+            payment: 'credit_card',
+            subtotal,
+            total: subtotal,
+            // recipient,
+            // list: cartItems,
+          },
+        },
+        token
+      );
+      saveData();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function saveData() {
+    const subscriptionInfo = {
+      prime: JSON.parse(localStorage.getItem('prime')),
+      plan: pricingPlan.plan,
+      price: Number(pricingPlan.price),
+      subscription_time: '2023-03-20',
+    };
+    const body = { data: subscriptionInfo };
+
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          window.alert('付款成功');
+          window.location.href = './swipe';
+        } else {
+          console.log('付款失敗！請再試一次');
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  if (membershipChecking === true) {
+    return;
+  }
   return (
     <Wrapper>
-      <ContentContainer>
+      <ContentContainer
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <Title>
           <TitleText>成為尊榮會員</TitleText>
           <ProfileIcon />
@@ -187,21 +383,46 @@ export default function Subscription() {
             <Plans>
               {plans.map((plan) => (
                 <PlanContainer>
-                  <PlanSelect type="radio" />
+                  <PlanSelect
+                    type='radio'
+                    name={plan.title}
+                    value={plan.title}
+                    checked={plan.title === pricingPlan.plan}
+                    onChange={(e) => {
+                      handleInput(e, plan);
+                    }}
+                  />
                   <PlanTitle>{plan.title}</PlanTitle>
-                  <PlanPrice>{plan.price}</PlanPrice>
+                  <PlanPrice>{`$${plan.price} USD / ${plan.duration}`}</PlanPrice>
                 </PlanContainer>
               ))}
             </Plans>
           </InfoRow>
-          {paymentInfo.map((info) => (
-            <InfoRow>
-              <QuestionTitle>{info.title}</QuestionTitle>
-              <QuestionInput placeholder={info.description} />
-            </InfoRow>
-          ))}
-          <GooglePayBtn />
+          {/* <GooglePayBtn /> */}
+          <FormFieldSet>
+            <FormLegend>付款資料</FormLegend>
+            <FormGroup>
+              <FormLabel>信用卡號碼</FormLabel>
+              <FormControl as='div' ref={cardNumberRef} />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>有效期限</FormLabel>
+              <FormControl as='div' ref={cardExpirationDateRef} />
+            </FormGroup>
+            <FormGroup>
+              <FormLabel>安全碼</FormLabel>
+              <FormControl as='div' ref={cardCCVRef} />
+            </FormGroup>
+          </FormFieldSet>
         </InfoContainer>
+        <Button
+          loading={loading}
+          onClick={() => {
+            checkout();
+          }}
+        >
+          確認付款
+        </Button>
       </ContentContainer>
     </Wrapper>
   );

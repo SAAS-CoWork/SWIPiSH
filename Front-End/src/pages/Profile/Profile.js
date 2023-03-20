@@ -1,13 +1,14 @@
-import styled from "styled-components/macro";
-import { Link } from "react-router-dom";
-import edit from "./edit.png";
-import profile from "./profile.png";
-import profilechoose from "./profilechoose.png";
-import fav from "./fav.png";
-import favchoose from "./favchoose.png";
-import cart from "./cart.png";
-import cartchoose from "./cartchoose.png";
-import { useState, useEffect } from "react";
+import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
+import edit from './edit.png';
+import profile from './profile.png';
+import profilechoose from './profilechoose.png';
+import fav from './fav.png';
+import favchoose from './favchoose.png';
+import cart from './cart.png';
+import cartchoose from './cartchoose.png';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -136,7 +137,6 @@ const MemberNavMobile = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-
   }
 `;
 
@@ -278,7 +278,7 @@ const EditBox = styled.div`
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: "Noto Sans TC";
+    font-family: 'Noto Sans TC';
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
@@ -339,26 +339,6 @@ const EmailInput = styled.p`
   color: #3f3a3a;
 `;
 
-const PwWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const PwTitle = styled.p`
-  width: 120px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #3f3a3a;
-`;
-
-const PwInput = styled.p`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  color: #3f3a3a;
-`;
-
 const SubmitContainer = styled.div`
   width: 60%;
   display: flex;
@@ -390,6 +370,7 @@ const Submit = styled.button`
 `;
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
   const handleEditClick = () => {
@@ -399,59 +380,47 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const loginToken = localStorage.getItem("loginToken");
+  const loginToken = localStorage.getItem('loginToken');
 
   function getUserData() {
-    fetch("http://54.64.47.158:3001/api/1.0/user/profile", {
-      method: "GET",
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${loginToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
         if (res.status === 200) {
           return res.json();
         } else {
-          window.location.href = "./login";
+          navigate('/login');
         }
       })
       .then((data) => {
         if (data) {
           setUserData(data.data);
-        } else {
-          // alert('Token Expired!');
-          // window.location.href = './login';
         }
       })
       .catch((err) => console.log(err));
   }
 
   function logOut() {
-    localStorage.removeItem("loginToken");
-    window.location.href = "/";
+    localStorage.removeItem('loginToken');
+    navigate('/');
   }
-
-  // function getSubscriptionData() {
-  //   fetch('https://www.gotolive.online/api/1.0/order/subscription', {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${loginToken}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // }
 
   useEffect(() => {
     if (loginToken) {
       getUserData();
     } else {
-      window.location.href = "./login";
+      navigate('/login');
     }
-    // getSubscriptionData();
   }, []);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   if (!userData) {
     return;
@@ -460,24 +429,24 @@ export default function Profile() {
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
       <MemberNavMobile>
         <MemberButton>
-          <Link to="/Profile"></Link>
+          <Link to='/Profile'></Link>
         </MemberButton>
         <FavButton>
-          <Link to="/FavProducts"></Link>
+          <Link to='/FavProducts'></Link>
         </FavButton>
         <CartButton>
-          <Link to="/OrderStatus"></Link>
+          <Link to='/OrderStatus'></Link>
         </CartButton>
       </MemberNavMobile>
       <Title>
@@ -493,17 +462,23 @@ export default function Profile() {
         <SubWrapper>
           <SubTitle>方案</SubTitle>
           <SubStatus>
-            <BoldText>Platinum</BoldText>
-            <span>(Expiration Date 2024-3-23)</span>
+            <BoldText>
+              {userData.subscription === false
+                ? '非升級會員'
+                : userData.subscription}
+            </BoldText>
+            {userData.subscription === false ? null : (
+              <span>(Expiration Date 2024-3-23)</span>
+            )}
           </SubStatus>
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type="text">{userData.name}</NameInput>
+          <NameInput type='text'>{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type="text" defaultValue={userData.name} />
+              <textarea type='text' defaultValue={userData.name} />
             </EditBox>
           )}
         </NameWrapper>
@@ -513,20 +488,10 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type="text" defaultValue={userData.email} />
+              <textarea type='text' defaultValue={userData.email} />
             </EditBox>
           )}
         </EmailWrapper>
-        {/* <PwWrapper>
-          <PwTitle>密碼</PwTitle>
-          <PwInput>{userData.password}</PwInput>
-          <Edit onClick={handleEditClick}></Edit>
-          {isEditing && (
-            <EditBox>
-              <textarea type='text' defaultValue='******' />
-            </EditBox>
-          )}
-        </PwWrapper> */}
       </ProfileWrapper>
       <SubmitContainer>
         <Submit onClick={handleSaveClick}>確認送出</Submit>
@@ -535,28 +500,3 @@ export default function Profile() {
     </Wrapper>
   );
 }
-
-// function Profile() {
-//   const { user, isLogin, login, logout, loading } = useContext(AuthContext);
-
-//   const renderContent = () => {
-//     if (loading) return <Loading type="spinningBubbles" color="#313538" />;
-//     if (isLogin) return (
-//       <>
-//         <Photo src={user.picture} />
-//         <Content>{user.name}</Content>
-//         <Content>{user.email}</Content>
-//         <LogoutButton
-//           onClick={logout}
-//         >
-//           登出
-//         </LogoutButton>
-//       </>
-//     );
-//     return (
-//       <LogoutButton onClick={login}>登入</LogoutButton>
-//     );
-//   }
-//   return (
-//   );
-// }
