@@ -331,20 +331,22 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
-        <Products>
-          {db.map((item, index) => (
-            <ProductContainer key={index}>
-              <ProductImg imgUrl={item.url} />
-              <ProductInfoContainer>
-                <ProductInfo>
-                  <InfoText>{item.name}</InfoText>
-                  <InfoText>TWD. {item.price}</InfoText>
-                </ProductInfo>
-                <RemoveIcon />
-              </ProductInfoContainer>
-            </ProductContainer>
-          ))}
-        </Products>
+        {collection.length === 0 ? null : (
+          <Products>
+            {collection.map((item, index) => (
+              <ProductContainer key={index}>
+                <ProductImg imgUrl={item.url} />
+                <ProductInfoContainer>
+                  <ProductInfo>
+                    <InfoText>{item.name}</InfoText>
+                    <InfoText>TWD. {item.price}</InfoText>
+                  </ProductInfo>
+                  <RemoveIcon />
+                </ProductInfoContainer>
+              </ProductContainer>
+            ))}
+          </Products>
+        )}
       </Collection>
       <SwipeZone>
         <ContentContainer>
@@ -353,7 +355,7 @@ function Swipe() {
               <TinderCard
                 ref={childRefs[index]}
                 className='swipe'
-                key={character.name}
+                key={index}
                 onSwipe={(dir) => swiped(dir, character.name, index)}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                 style={{
