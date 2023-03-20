@@ -60,43 +60,42 @@ const getUserPaymentsGroupByDB = async () => {
 
 // insert subscription details(not paid yet)
 const createSubDetail = async (id, plan, price) => {
-  const conn = await pool.getConnection();
   try {
-    await conn.beginTransaction();
-    const [result] = await conn.query(`
+    const [result] = await pool.query(`
   INSERT INTO subscription (user_id, plan, price) VALUES (?, ?, ?)
   `, [id, plan, price]);
     subId = result.insertId;
-    await conn.commit();
+    return subId;
   } catch (e) {
     console.error(e)
-    await conn.rollback();
-  } finally {
-    await conn.release();
   }
-  return subId;
 };
 
 // update subscription table after paid success
 // update user role_id
-// function updateAfterPaid(period, paidAt, subId, userId)
+const updateAfterPaid = async (period, paidAt, subId, userId) => {
+  try {
+    await pool.query(`
+    UPDATE subscription 
+    SET expire = DATE_ADD(NOW(), INTERVAL ? DAY),
+    paid_at = ?
+    WHERE id = ?
+    `, [period, paidAt, subId])
 
-// `UPDATE subscription 
-// SET expire = DATE_ADD(NOW(), INTERVAL ? DAY) 
-// SET paid_at = ?
-// WHERE id = ?
-// `, [period, paidAt, subId]
+    await pool.query(`
+    UPDATE user
+    SET role_id = 3
+    WHERE id = ?
+    `, [userId])
 
-//     `UPDATE user
-// SET role_id = 3
-// WHERE id = ?
-// `, [userId]
-
-
-
-
-
-
+    const [expire] = await pool.query(`
+    SELECT expire FROM subscription WHERE id = ? 
+    `, [subId])
+    return expire[0]['expire'];
+  } catch (e) {
+    console.error(e)
+  }
+};
 
 module.exports = {
   createOrder,
@@ -104,5 +103,6 @@ module.exports = {
   payOrderByPrime,
   getUserPayments,
   getUserPaymentsGroupByDB,
-  createSubDetail
+  createSubDetail,
+  updateAfterPaid
 };
