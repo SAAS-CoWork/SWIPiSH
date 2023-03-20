@@ -346,9 +346,8 @@ function Swipe() {
   }, []);
 
   useEffect(() => {
-    if (collection !== null && collection.length !== 0) {
+    if (collection !== null) {
       localStorage.setItem('collection', JSON.stringify(collection));
-      console.log(collection);
     }
   }, [collection]);
 
