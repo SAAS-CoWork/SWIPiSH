@@ -335,8 +335,12 @@ function Swipe() {
   };
 
   function addToCollection() {
-    const newCollection = [...collection, db[currentIndex]];
-    setCollection(newCollection);
+    const ids = collection.map((item) => item.id);
+    if (ids.indexOf(db[currentIndex].id) === -1) {
+      const newCollection = [...collection, db[currentIndex]];
+      setCollection(newCollection);
+    }
+    return;
   }
 
   function handleSuperLike() {
