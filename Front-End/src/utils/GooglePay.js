@@ -5,6 +5,7 @@ import { CartContext } from '../context/cartContext';
 export default function GooglePayBtn() {
   const { pricingPlan } = useContext(CartContext);
   const [purchasedPlan, setPurchasedPlan] = useState('');
+  const loginToken = localStorage.getItem('loginToken');
 
   function getDate() {
     const timestamp = new Date().getTime();
@@ -16,9 +17,34 @@ export default function GooglePayBtn() {
     return formattedDate;
   }
 
+  function sendPaymentInfo() {
+    const paymentInfo = { data: purchasedPlan };
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paymentInfo),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          window.location.href = './swipe';
+        } else {
+          alert('Subscription failed!');
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
   function handlePayment(data) {
-    setPurchasedPlan({ plan: pricingPlan.plan, startDate: getDate() });
-    console.log('Payment Authorised Success', data);
+    setPurchasedPlan({
+      prime: 'testPrime',
+      plan: pricingPlan.plan,
+      price: Number(pricingPlan.price),
+      subscription_time: getDate(),
+    });
+    sendPaymentInfo();
   }
 
   useEffect(() => {
