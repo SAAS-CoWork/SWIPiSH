@@ -8,7 +8,7 @@ import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
 import swipe from './swipe.png';
-import upgrademobile from './upgrademobile.png';
+import swipemobile from './swipemobile.png';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
 
@@ -240,7 +240,7 @@ const UpgradeIcon = styled(Link)`
   border: 0;
   cursor: pointer;
   @media screen and (max-width: 1400px) {
-    background-image: url(${upgrademobile});
+    background-image: url(${swipemobile});
     width: 36px;
     height: 36px;
     background-size: cover;
