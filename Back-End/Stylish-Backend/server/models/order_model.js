@@ -66,7 +66,7 @@ const createSubDetail = async (id, plan, price) => {
     const [result] = await conn.query(`
   INSERT INTO subscription (user_id, plan, price) VALUES (?, ?, ?)
   `, [id, plan, price]);
-    let subId = result.insertId;
+    subId = result.insertId;
     await conn.commit();
   } catch (e) {
     console.error(e)
@@ -77,7 +77,26 @@ const createSubDetail = async (id, plan, price) => {
   return subId;
 };
 
-// 
+// update subscription table after paid success
+// update user role_id
+// function updateAfterPaid(period, paidAt, subId, userId)
+
+// `UPDATE subscription 
+// SET expire = DATE_ADD(NOW(), INTERVAL ? DAY) 
+// SET paid_at = ?
+// WHERE id = ?
+// `, [period, paidAt, subId]
+
+//     `UPDATE user
+// SET role_id = 3
+// WHERE id = ?
+// `, [userId]
+
+
+
+
+
+
 
 module.exports = {
   createOrder,
