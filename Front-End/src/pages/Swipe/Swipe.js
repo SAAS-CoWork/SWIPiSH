@@ -43,6 +43,9 @@ const Wrapper = styled.div`
   display: flex;
   gap: 99px;
   overflow: hidden;
+  @media screen and (max-width: 1279px) {
+    ${'' /* 手機還沒切 */}
+  }
 `;
 
 // const productInfo = {

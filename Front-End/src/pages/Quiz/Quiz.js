@@ -25,6 +25,9 @@ const Wrapper = styled.div`
   width: 1331px;
   margin: 100px auto 50px;
   color: #3f3a3a;
+  @media screen and (max-width: 1279px) {
+    ${'' /* 手機還沒切 */}
+  }
 `;
 
 const MainContent = styled.form`
