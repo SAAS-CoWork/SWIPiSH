@@ -3,9 +3,7 @@ import { Link } from 'react-router-dom';
 import edit from './edit.png';
 import profile from './profile.png';
 import { useState, useEffect } from 'react';
-// import { useContext } from 'react';
-// import ReactLoading from 'react-loading';
-// import { AuthContext } from '../../context/authContext';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -281,6 +279,7 @@ const Submit = styled.button`
 `;
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
   const handleEditClick = () => {
@@ -304,7 +303,7 @@ export default function Profile() {
         if (res.status === 200) {
           return res.json();
         } else {
-          window.location.href = './login';
+          navigate('/login');
         }
       })
       .then((data) => {
@@ -320,14 +319,14 @@ export default function Profile() {
 
   function logOut() {
     localStorage.removeItem('loginToken');
-    window.location.href = '/';
+    navigate('/');
   }
 
   useEffect(() => {
     if (loginToken) {
       getUserData();
     } else {
-      window.location.href = './login';
+      navigate('/login');
     }
   }, []);
 
