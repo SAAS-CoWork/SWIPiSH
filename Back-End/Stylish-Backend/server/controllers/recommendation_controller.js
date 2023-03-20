@@ -48,7 +48,7 @@ const getRecommendation = async function (req, res) {
         const responseObj = { data: '' }
 
         const recommendations = await generateRecommendations( user.id, isNewUser );
-        responseObj.data = recommendations;
+        responseObj.data = recommendations.slice(0, 10);
         return res.status(200).json(responseObj)
         
     } catch (err) {
