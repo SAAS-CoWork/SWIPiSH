@@ -112,9 +112,9 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
   const imagesMap = _.groupBy(images, (v) => v.product_id);
 
   return products.map((p) => {
-    const assetsPath = util.getAssetsPath(protocol, hostname);
-    p.main_image = p.main_image ? assetsPath + p.main_image : null;
-    p.images = p.images ? p.images.split(',').map((img) => assetsPath + img) : null;
+    // const assetsPath = util.getAssetsPath(protocol, hostname);
+    // p.main_image = p.main_image ? assetsPath + p.main_image : null;
+    // p.images = p.images ? p.images.split(',').map((img) => assetsPath + img) : null;
 
     const productVariants = variantsMap[p.id];
     if (!productVariants) {

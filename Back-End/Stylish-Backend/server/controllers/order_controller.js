@@ -75,10 +75,13 @@ const getUserPaymentsGroupByDB = async (req, res) => {
   res.status(200).send({ data: orders });
 };
 
+
+// get Subscription
 const getSubscription = async (req, res) => {
   return res.status(200).json('ok');
 };
 
+// post Subscription
 const subscriptionPayment = async (req, res) => {
   const { data } = req.body;
   if (!data || !data.prime || !data.plan || !data.price || !data.subscription_time) {
