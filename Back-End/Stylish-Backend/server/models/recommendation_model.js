@@ -48,6 +48,13 @@ const generateRecommendations = async function ( user_id, isFirst ) {
     // find 10 recommendations
     const subsets = findAllSubsets(productsScore);
     const result = await doRecommendation( user_id, subsets );
+    console.log(result);
+    if ( result.length < 10 ) {
+        console.log('liked data not enough, generate quiz recommendations');
+        const quizRecos = await quizRecommendations();
+        return quizRecos;
+    }
+
     return result;
 }
 
@@ -153,6 +160,7 @@ async function doRecommendation( user_id, subsets ) {
             return result.slice(0, 10);
         }
     }
+    return result;
 }
 
 function findAllSubsets( productsScore ) {
