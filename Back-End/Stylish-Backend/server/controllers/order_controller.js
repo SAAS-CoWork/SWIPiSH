@@ -133,7 +133,9 @@ const subscriptionPayment = async (req, res) => {
   // server request to tappay
 
 
-  // 根據 TapPay response，更新 order 的 paid_at, paid_status
+  // check TapPay response, update order table(paid_at, paid_status)
+
+  // success => update user's role_id into 3
 
 
   return res.status(200).json({
