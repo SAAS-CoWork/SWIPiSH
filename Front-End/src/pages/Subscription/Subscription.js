@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import profile from './profile.png';
+import GooglePayBtn from '../../utils/GooglePay';
 
 const paymentInfo = [
   { title: '信用卡號碼', description: '**** **** **** ****' },
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
   border-radius: 25px;
   margin: 100px auto 50px;
-  padding: 63px 0 79px;
+  padding: 63px 0 10px;
   color: #3f3a3a;
 `;
 
@@ -49,7 +50,7 @@ const ProfileIcon = styled.div`
 
 const SplitLine = styled.hr`
   width: 941px;
-  margin-bottom: 91px;
+  margin-bottom: 50px;
 `;
 
 const InfoContainer = styled.div`
@@ -58,6 +59,7 @@ const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+  align-items: center;
 `;
 
 const InfoRow = styled.div`
@@ -109,19 +111,6 @@ const QuestionInput = styled.input`
   }
 `;
 
-const SubmitBtn = styled.button`
-  width: 240px;
-  height: 64px;
-  background-color: black;
-  color: white;
-  text-align: center;
-  font-size: 20px;
-  line-height: 30px;
-  margin-bottom: 79px;
-  letter-spacing: 4px;
-  border: 0;
-`;
-
 export default function Subscription() {
   return (
     <Wrapper>
@@ -150,8 +139,8 @@ export default function Subscription() {
               <QuestionInput placeholder={info.description} />
             </InfoRow>
           ))}
+          <GooglePayBtn />
         </InfoContainer>
-        <SubmitBtn>SUBSCRIBE!</SubmitBtn>
       </ContentContainer>
     </Wrapper>
   );
