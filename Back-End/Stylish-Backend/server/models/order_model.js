@@ -58,10 +58,32 @@ const getUserPaymentsGroupByDB = async () => {
   return orders;
 };
 
+// insert subscription details(not paid yet)
+const createSubDetail = async (id, plan, price) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+    const [result] = await conn.query(`
+  INSERT INTO subscription (user_id, plan, price) VALUES (?, ?, ?)
+  `, [id, plan, price]);
+    let subId = result.insertId;
+    await conn.commit();
+  } catch (e) {
+    console.error(e)
+    await conn.rollback();
+  } finally {
+    await conn.release();
+  }
+  return subId;
+};
+
+// 
+
 module.exports = {
   createOrder,
   createPayment,
   payOrderByPrime,
   getUserPayments,
   getUserPaymentsGroupByDB,
+  createSubDetail
 };
