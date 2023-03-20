@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled from 'styled-components/macro';
 import fav from "./fav.png";
 import trash from "./trash.png";
 import dress from "./dress.png";

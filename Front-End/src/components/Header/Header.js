@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import styled from 'styled-components';
-
+import styled from 'styled-components/macro';
 import logo from './logo.png';
 import search from './search.png';
 import cart from './cart.png';
@@ -9,6 +8,7 @@ import cartMobile from './cart-mobile.png';
 import profile from './profile.png';
 import profileMobile from './profile-mobile.png';
 import upgrade from './upgrade.png';
+import upgrademobile from './upgrademobile.png';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
 
@@ -27,10 +27,13 @@ const Wrapper = styled.div`
 
   @media screen and (max-width: 1279px) {
     height: 52px;
-    padding: 0;
+    padding: 0px;
     border: none;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+    align-content: center;
     justify-content: center;
-  }
+}
 `;
 
 const Logo = styled(Link)`
@@ -38,15 +41,16 @@ const Logo = styled(Link)`
   height: 48px;
   background-image: url(${logo});
   background-size: contain;
-
   @media screen and (max-width: 1279px) {
     width: 129px;
     height: 24px;
+    margin-left:0 px;
   }
 `;
 
 const CategoryLinks = styled.div`
   margin: 16px 0 0 57px;
+  margin-left:20px;
 
   @media screen and (max-width: 1279px) {
     margin: 0;
@@ -235,6 +239,15 @@ const UpgradeIcon = styled(Link)`
   margin-left: auto;
   border: 0;
   cursor: pointer;
+  @media screen and (max-width: 1400px) {
+    background-image: url(${upgrademobile});
+    width: 36px;
+    height: 36px;
+    background-size: cover;
+  margin-left: auto;
+  border: 0;
+  cursor: pointer;
+  }
 `;
 
 const categories = [

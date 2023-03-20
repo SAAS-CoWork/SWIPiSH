@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import ReactLoading from 'react-loading';
 
 const Wrapper = styled.button`

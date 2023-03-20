@@ -1,5 +1,5 @@
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 const Wrapper = styled.div`
   padding: 60px 20px;

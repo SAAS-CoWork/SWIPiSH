@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import styled from "styled-components";
+import styled from 'styled-components/macro';
 import cart from "./cart.png";
 import conversation from "./conversation.png";
 import star from "./star.png";

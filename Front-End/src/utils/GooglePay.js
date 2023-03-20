@@ -7,7 +7,8 @@ export default function GooglePayBtn() {
       environment='TEST'
       buttonType='subscribe'
       buttonSizeMode='fill'
-      style={{ width: '240px', height: '70px', marginTop: '10px' }}
+      style={{ width: '240px', height: '70px', marginTop: '10px',alignSelf: "center"
+ }}
       paymentRequest={{
         apiVersion: 2,
         apiVersionMinor: 0,
