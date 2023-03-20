@@ -317,12 +317,11 @@ function Checkout() {
 
   const freight = cartItems.length === 0 ? 0 : 30;
 
-  async function checkout() {
+  async function checkout(e) {
     try {
       setLoading(true);
 
-      // const token = isLogin ? jwtToken : await login();
-      const token = '1234556';
+      const token = localStorage.getItem('loginToken');
 
       if (!token) {
         window.alert('請登入會員');
@@ -372,9 +371,10 @@ function Checkout() {
         },
         token
       );
-      window.alert('付款成功');
-      setCartItems([]);
-      navigate('/thankyou', { state: { orderNumber: data.number } });
+      // window.alert('付款成功');
+      // setCartItems([]);
+      // navigate('/thankyou', { state: { orderNumber: data.number } });
+      e.preventDefault();
     } catch (err) {
       console.log(err);
     } finally {
