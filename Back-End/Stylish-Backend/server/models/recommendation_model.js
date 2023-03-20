@@ -37,14 +37,13 @@ const findSimilarProducts = async function (user_id) {
 const generateRecommendations = async function ( user_id, isFirst ) {
 
     if ( isFirst ) {
-        console.log('new user, generate random recommendations');
+        console.log('new user, generate quiz recommendations');
         const recommendations = await quizRecommendations(user_id);
         return recommendations;   
     }
 
     console.log('old user, generate recommendation through history');
     const productsScore = await findSimilarProducts(user_id);
-    console.log(productsScore);
 
     // find 10 recommendations
     const subsets = findAllSubsets(productsScore);
@@ -52,10 +51,26 @@ const generateRecommendations = async function ( user_id, isFirst ) {
     return result;
 }
 
+async function randomRecommendations() {
+    const [ result ] = await pool.query(`
+    SELECT id, category, title, story, price, main_image
+    FROM product
+    ORDER BY RAND()
+    LIMIT 10;
+    `);
+    return result;
+}
+
 async function quizRecommendations( user_id ) {
     const [ quizAnswer ] = await pool.query(`
     SELECT * FROM quiz WHERE user_id = ?;
     `, [ user_id ]);
+
+    if ( quizAnswer.length === 0 ) {
+        console.log('No quiz data, generate random data instead');
+        const randomRecos = await randomRecommendations();
+        return randomRecos;
+    }
 
     const answers = Object.values(quizAnswer[0]).slice(1);
     const totalScore = answers.reduce((acc, cur) => {
@@ -135,7 +150,7 @@ async function doRecommendation( user_id, subsets ) {
         await Cache.HINCRBY('recommendations', user_id, newPossibleProducts.length);
         result = [...result, ...newPossibleProducts];
         if ( result.length >= 10 ) {
-            return result;
+            return result.slice(0, 10);
         }
     }
 }
@@ -185,7 +200,6 @@ async function updateLikedProduct( user_id, product_id, score ) {
             console.log('updated');
             await conn.commit();
             await conn.release();
-            return true;
         }
 
         if ( score < 0 ) {
@@ -197,8 +211,8 @@ async function updateLikedProduct( user_id, product_id, score ) {
             await conn.commit();
             await conn.release();
             console.log('inserted');
-            return true;
         }
+        return true;
 
     } catch (err) {
         console.error(err);

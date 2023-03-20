@@ -27,7 +27,7 @@ const swipe = async function (req, res) {
     }
 
     // update liked_product table
-    const successfulUpdate =  await updateLikedProduct( user.id, product_id, score );
+    const successfulUpdate = await updateLikedProduct( user.id, product_id, score );
     if ( !successfulUpdate ) {
         return res.status(500).json('Internal server error');
     }
@@ -45,11 +45,8 @@ const getRecommendation = async function (req, res) {
             isNewUser = true;
         }
 
-        const responseObj = { data: '' }
-
         const recommendations = await generateRecommendations( user.id, isNewUser );
-        responseObj.data = recommendations.slice(0, 10);
-        return res.status(200).json(responseObj)
+        return res.status(200).json({data: recommendations})
         
     } catch (err) {
         console.error(err)
