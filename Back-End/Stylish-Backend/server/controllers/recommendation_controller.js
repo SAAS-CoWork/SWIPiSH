@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { use } = require('chai');
 const Cache = require('../../util/cache');
 const {
     generateRecommendations,
@@ -31,6 +32,7 @@ const swipe = async function (req, res) {
     if ( !successfulUpdate ) {
         return res.status(500).json('Internal server error');
     }
+    console.log('successfully update');
     return res.status(200).json('Updated');
 };
 
@@ -39,7 +41,7 @@ const getRecommendation = async function (req, res) {
 
     try {
         let isNewUser = false;
-        const checkResult = await checkIfNewUser();
+        const checkResult = await checkIfNewUser( user.id );
         if ( checkResult.length === 0 ) {
             isNewUser = true;
         }
@@ -48,17 +50,17 @@ const getRecommendation = async function (req, res) {
             await generateRecommendations( user.id, true );
         }
 
-        // get recommendation from database
+        // get recommendation from redis
         const recommendations = [];
         for ( let i = 0; i < 10; i++ ) {
             const reco = await Cache.lPop(user.id);
             recommendations.push(JSON.parse(reco));
         }
         
-        console.log(recommendations);
         const remained = await Cache.lLen(user.id);
+        console.log('Cache remained', remained);
         if ( remained < 20 ) {
-            await generateRecommendations(user_id, false);
+            await generateRecommendations(user.id, false);
         }
 
         const responseObj = {

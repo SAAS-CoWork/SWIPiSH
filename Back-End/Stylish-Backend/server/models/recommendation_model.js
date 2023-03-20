@@ -11,7 +11,6 @@ const findSimilarProducts = async function (user_id) {
     WHERE liked_p.user_id = ? AND liked_p.product_id = p.id;
     `, [user_id]);
 
-    console.log(likedProducts);
     const catScores = {};
     const titleScores = {};
     const priceScores = {};
@@ -39,18 +38,18 @@ const generateRecommendations = async function ( user_id, isFirst ) {
 
     if ( isFirst ) {
         // generate random 10 recommendations
+        console.log('new user, generate random recommendations');
         const recommendations = await randomRecommendations();
         recommendations.forEach((reco) => {
             Cache.rPush(user_id, JSON.stringify(reco));
         });
+        console.log('Push to redis');
         return;   
     }
 
-    const productsScore = await findSimilarProducts(10320);
-    console.log(productsScore);
-
-    const result = findAllSubsets(10320, productsScore);
-    console.log(result);
+    console.log('old user, generate recommendation through history');
+    const productsScore = await findSimilarProducts(user_id);
+    const result = findAllSubsets(user_id, productsScore);
     return;
      
 }
@@ -60,7 +59,7 @@ async function randomRecommendations() {
     SELECT id, category, title, story, price, main_image
     FROM product
     ORDER BY RAND()
-    LIMIT 20;
+    LIMIT 10;
     `);
     return products;
 }
@@ -95,7 +94,7 @@ async function findAllSubsetsHelper( user_id, productsScore, result, temp ) {
     if ( pos === productsScore.length ) {
         result.push(Array.from(temp));
         // select matched product and push to redis list
-        const tagsPattern = '[' + String(temp) + ']';
+        const tagsPattern = JSON.stringify(temp);
         const possibleProducts = await getPossibleProducts( tagsPattern );
         for ( let i = 0; i < possibleProducts.length; i++ ) {
             Cache.rPush(user_id, JSON.stringify(possibleProducts[i]));
@@ -131,7 +130,9 @@ async function updateLikedProduct( user_id, product_id, score ) {
             await conn.query(`
             UPDATE liked_product SET score = score + ? WHERE user_id = ? AND product_id = ?;
             `, [ score, user_id, product_id ]);
+            console.log('updated');
             await conn.commit();
+            await conn.release();
             return true;
         }
 
@@ -140,15 +141,17 @@ async function updateLikedProduct( user_id, product_id, score ) {
         INSERT INTO liked_product ( user_id, product_id )
         VALUES ( ?, ? )
         `, [ user_id, product_id ]);
+        await conn.commit();
+        await conn.release();
+        console.log('inserted');
         return true;
 
     } catch (err) {
         console.error(err);
-        return false;
-    } finally {
+        await conn.rollback();
         await conn.release();
+        return false;
     }
-    
 }
 
 
