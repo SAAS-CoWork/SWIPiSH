@@ -208,6 +208,33 @@ const insertQuizAnswer = async function (userId, answer) {
   }
 };
 
+// get roleId
+const getRoleId = async function (userId) {
+  try {
+    const [[result]] = await pool.query('SELECT role_id FROM user WHERE id = ?',
+      [userId]
+    )
+    return result.role_id;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+};
+
+// get liked_product
+const getLiked = async function (userId) {
+  try {
+    const stat = 'SELECT product_id FROM liked_product WHERE user_id = ?'
+    const [result] = await pool.query(stat, [userId]);
+    productIds = result.map(item => item.product_id)
+    // console.log('map', productIds);
+    return productIds;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+
 module.exports = {
   USER_ROLE,
   signUp,
@@ -215,5 +242,7 @@ module.exports = {
   facebookSignIn,
   getUserDetail,
   getFacebookProfile,
-  insertQuizAnswer
+  insertQuizAnswer,
+  getRoleId,
+  getLiked
 };

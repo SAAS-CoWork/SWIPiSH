@@ -112,9 +112,9 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
   const imagesMap = _.groupBy(images, (v) => v.product_id);
 
   return products.map((p) => {
-    const assetsPath = util.getAssetsPath(protocol, hostname);
-    p.main_image = p.main_image ? assetsPath + p.main_image : null;
-    p.images = p.images ? p.images.split(',').map((img) => assetsPath + img) : null;
+    // const assetsPath = util.getAssetsPath(protocol, hostname);
+    // p.main_image = p.main_image ? assetsPath + p.main_image : null;
+    // p.images = p.images ? p.images.split(',').map((img) => assetsPath + img) : null;
 
     const productVariants = variantsMap[p.id];
     if (!productVariants) {
@@ -135,7 +135,10 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
 
     const allSizes = productVariants.map((v) => v.size);
     p.sizes = _.uniq(allSizes);
-    p.images = imagesMap[p.id].map((img) => assetsPath + img.image);
+
+    if (p.images) {
+      p.images = imagesMap[p.id].map((img) => assetsPath + img.image);
+    }
     return p;
   });
 };
