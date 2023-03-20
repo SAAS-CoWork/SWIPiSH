@@ -222,11 +222,13 @@ function Product() {
         <StoryTitle>細部說明</StoryTitle>
         <StoryContent>{product.story}</StoryContent>
       </Story>
-      <Images>
-        {product.images.map((image, index) => (
-          <Image src={image} key={index} />
-        ))}
-      </Images>
+      {product.images ? (
+        <Images>
+          {product.images.map((image, index) => (
+            <Image src={image} key={index} />
+          ))}
+        </Images>
+      ) : null}
     </Wrapper>
   );
 }

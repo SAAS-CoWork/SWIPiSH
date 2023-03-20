@@ -257,26 +257,6 @@ const EmailInput = styled.p`
   color: #3f3a3a;
 `;
 
-const PwWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const PwTitle = styled.p`
-  width: 120px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 19px;
-  color: #3f3a3a;
-`;
-
-const PwInput = styled.p`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  color: #3f3a3a;
-`;
-
 const SubmitContainer = styled.div`
   width: 60%;
   display: flex;
@@ -313,7 +293,7 @@ export default function Profile() {
   const loginToken = localStorage.getItem('loginToken');
 
   function getUserData() {
-    fetch('http://54.64.47.158:3001/api/1.0/user/profile', {
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${loginToken}`,
@@ -343,26 +323,17 @@ export default function Profile() {
     window.location.href = '/';
   }
 
-  // function getSubscriptionData() {
-  //   fetch('https://www.gotolive.online/api/1.0/order/subscription', {
-  //     method: 'GET',
-  //     headers: {
-  //       Authorization: `Bearer ${loginToken}`,
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // }
-
   useEffect(() => {
     if (loginToken) {
       getUserData();
     } else {
       window.location.href = './login';
     }
-    // getSubscriptionData();
   }, []);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   if (!userData) {
     return;
@@ -393,8 +364,14 @@ export default function Profile() {
         <SubWrapper>
           <SubTitle>方案</SubTitle>
           <SubStatus>
-            <BoldText>Platinum</BoldText>
-            <span>(Expiration Date 2024-3-23)</span>
+            <BoldText>
+              {userData.subscription === false
+                ? '非升級會員'
+                : userData.subscription}
+            </BoldText>
+            {userData.subscription === false ? null : (
+              <span>(Expiration Date 2024-3-23)</span>
+            )}
           </SubStatus>
         </SubWrapper>
         <NameWrapper>
@@ -417,16 +394,6 @@ export default function Profile() {
             </EditBox>
           )}
         </EmailWrapper>
-        {/* <PwWrapper>
-          <PwTitle>密碼</PwTitle>
-          <PwInput>{userData.password}</PwInput>
-          <Edit onClick={handleEditClick}></Edit>
-          {isEditing && (
-            <EditBox>
-              <textarea type='text' defaultValue='******' />
-            </EditBox>
-          )}
-        </PwWrapper> */}
       </ProfileWrapper>
       <SubmitContainer>
         <Submit onClick={handleSaveClick}>確認送出</Submit>
@@ -435,28 +402,3 @@ export default function Profile() {
     </Wrapper>
   );
 }
-
-// function Profile() {
-//   const { user, isLogin, login, logout, loading } = useContext(AuthContext);
-
-//   const renderContent = () => {
-//     if (loading) return <Loading type="spinningBubbles" color="#313538" />;
-//     if (isLogin) return (
-//       <>
-//         <Photo src={user.picture} />
-//         <Content>{user.name}</Content>
-//         <Content>{user.email}</Content>
-//         <LogoutButton
-//           onClick={logout}
-//         >
-//           登出
-//         </LogoutButton>
-//       </>
-//     );
-//     return (
-//       <LogoutButton onClick={login}>登入</LogoutButton>
-//     );
-//   }
-//   return (
-//   );
-// }
