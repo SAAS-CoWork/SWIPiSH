@@ -321,7 +321,9 @@ function Swipe() {
     setCollection(newCollection);
   }
 
-  useEffect(() => console.log(collection), [collection]);
+  useEffect(() => {
+    localStorage.setItem('collection', JSON.stringify(collection));
+  }, [collection]);
 
   return (
     <Wrapper>
@@ -356,7 +358,12 @@ function Swipe() {
                 ref={childRefs[index]}
                 className='swipe'
                 key={index}
-                onSwipe={(dir) => swiped(dir, character.name, index)}
+                onSwipe={(dir) => {
+                  swiped(dir, character.name, index);
+                  if (dir === 'right') {
+                    addToCollection();
+                  }
+                }}
                 onCardLeftScreen={() => outOfFrame(character.name, index)}
                 style={{
                   display: 'flex',
