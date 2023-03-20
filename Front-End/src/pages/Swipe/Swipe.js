@@ -327,6 +327,7 @@ function Swipe() {
   useEffect(() => {
     if (collection.length !== 0) {
       localStorage.setItem('collection', JSON.stringify(collection));
+      console.log(collection);
     }
   }, [collection]);
 
@@ -348,7 +349,13 @@ function Swipe() {
                     <InfoText>{item.name}</InfoText>
                     <InfoText>TWD. {item.price}</InfoText>
                   </ProductInfo>
-                  <RemoveIcon />
+                  <RemoveIcon
+                    onClick={() => {
+                      const newCollection = [...collection];
+                      newCollection.splice(index, 1);
+                      setCollection(newCollection);
+                    }}
+                  />
                 </ProductInfoContainer>
               </ProductContainer>
             ))}
