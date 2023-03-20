@@ -171,7 +171,7 @@ const Card = styled.div`
   @media screen and (max-width: 1279px) {
     width: 300px;
     height: 500px;
-    right:22px;
+    right: 22px;
   }
 `;
 
@@ -360,10 +360,28 @@ function Swipe() {
 
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem('collection'));
+    const jwt = localStorage.getItem('loginToken');
     if (savedItems) {
       setCollection(savedItems);
     } else {
       setCollection([]);
+    }
+
+    if (jwt) {
+      fetch('https://www.gotolive.online/api/1.0/recommendation', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            return res.json();
+          }
+        })
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err));
     }
   }, []);
 
@@ -372,6 +390,8 @@ function Swipe() {
       localStorage.setItem('collection', JSON.stringify(collection));
     }
   }, [collection]);
+
+  useEffect(() => {}, []);
 
   return (
     <Wrapper>

@@ -240,7 +240,9 @@ export default function Subscription() {
         }
       })
       .then((data) => {
-        data.subscription ? navigate('/swipe') : setMembershipChecking(false);
+        data.data.subscription
+          ? navigate('/swipe')
+          : setMembershipChecking(false);
       })
       .catch();
   }
@@ -299,22 +301,22 @@ export default function Subscription() {
         return;
       }
 
-      const subtotal = pricingPlan.price;
+      // const subtotal = pricingPlan.price;
 
-      const { data } = await api.checkout(
-        {
-          prime: result.card.prime,
-          order: {
-            shipping: 'delivery',
-            payment: 'credit_card',
-            subtotal,
-            total: subtotal,
-            // recipient,
-            // list: cartItems,
-          },
-        },
-        token
-      );
+      // const { data } = await api.checkout(
+      //   {
+      //     prime: result.card.prime,
+      //     order: {
+      //       shipping: 'delivery',
+      //       payment: 'credit_card',
+      //       subtotal,
+      //       total: subtotal,
+      //       // recipient,
+      //       // list: cartItems,
+      //     },
+      //   },
+      //   token
+      // );
       saveData();
     } catch (err) {
       console.log(err);
@@ -326,7 +328,7 @@ export default function Subscription() {
   function saveData() {
     const subscriptionInfo = {
       prime: JSON.parse(localStorage.getItem('prime')),
-      plan: pricingPlan.plan,
+      plan: pricingPlan.plan.toLowerCase(),
       price: Number(pricingPlan.price),
       subscription_time: '2023-03-20',
     };
