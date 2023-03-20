@@ -287,7 +287,9 @@ const RemoveIcon = styled.div`
 `;
 
 function Swipe() {
+  const jwt = localStorage.getItem('loginToken');
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
+  const [swipeCount, setSwipeCount] = useState(0);
   const [lastDirection, setLastDirection] = useState();
   const [collection, setCollection] = useState([]);
   const navigate = useNavigate();
@@ -327,6 +329,7 @@ function Swipe() {
   };
 
   const swipe = async (dir) => {
+    setSwipeCount(swipeCount + 1);
     if (canSwipe && currentIndex < db.length) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
@@ -349,18 +352,66 @@ function Swipe() {
     return;
   }
 
-  function handleSuperLike() {
+  async function storeLike(data, like, superLike) {
+    const dataInfo = {
+      product_id: data.id,
+      like: like,
+      super_like: superLike,
+    };
+    try {
+      const res = await fetch(
+        'https://www.gotolive.online/api/1.0/recommendation',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataInfo),
+        }
+      );
+      const data_1 = await res.json();
+      return console.log(data_1);
+    } catch (err) {
+      return console.log(err);
+    }
+  }
+
+  function handleSuperLike(data) {
+    storeLike(data, true, true);
     navigate(`../products/${db[currentIndex].id}`);
   }
 
-  function handleLike() {
+  function handleLike(data) {
     swipe('right');
     addToCollection();
+    storeLike(data, true, false);
+  }
+
+  function handleUnlike(data) {
+    swipe('left');
+    storeLike(data, false, false);
+  }
+
+  function fetchRecommendation() {
+    return fetch('https://www.gotolive.online/api/1.0/recommendation', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem('collection'));
-    const jwt = localStorage.getItem('loginToken');
     if (savedItems) {
       setCollection(savedItems);
     } else {
@@ -368,20 +419,7 @@ function Swipe() {
     }
 
     if (jwt) {
-      fetch('https://www.gotolive.online/api/1.0/recommendation', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          }
-        })
-        .then((data) => console.log(data))
-        .catch((err) => console.log(err));
+      fetchRecommendation();
     }
   }, []);
 
@@ -391,7 +429,11 @@ function Swipe() {
     }
   }, [collection]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (swipeCount % 10 === 8) {
+      fetchRecommendation();
+    }
+  }, [swipeCount]);
 
   return (
     <Wrapper>
@@ -465,17 +507,20 @@ function Swipe() {
         <LikeBtnContainer>
           <Buttons>
             <LikeBtn imgUrl={goback} onClick={() => goBack()}></LikeBtn>
-            <LikeBtn imgUrl={notLike} onClick={() => swipe('left')}></LikeBtn>
+            <LikeBtn
+              imgUrl={notLike}
+              onClick={() => handleUnlike(db[currentIndex])}
+            ></LikeBtn>
             <LikeBtn
               imgUrl={like}
               onClick={() => {
-                handleLike();
+                handleLike(db[currentIndex]);
               }}
             ></LikeBtn>
             <LikeBtn
               imgUrl={superLike}
               onClick={() => {
-                handleSuperLike();
+                handleSuperLike(db[currentIndex]);
               }}
             ></LikeBtn>
           </Buttons>
