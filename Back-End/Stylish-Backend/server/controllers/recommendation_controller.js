@@ -11,7 +11,7 @@ const swipe = async function (req, res) {
     const { product_id } = req.body;
     const { like } = req.body;
 
-    if ( !product_id || !like ) {
+    if ( !product_id || like === undefined ) {
         return res.status(400).json('Missing required info');
     }
 
