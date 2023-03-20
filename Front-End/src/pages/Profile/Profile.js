@@ -1,8 +1,13 @@
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import edit from './edit.png';
-import profile from './profile.png';
-import { useState, useEffect } from 'react';
+import styled from "styled-components/macro";
+import { Link } from "react-router-dom";
+import edit from "./edit.png";
+import profile from "./profile.png";
+import profilechoose from "./profilechoose.png";
+import fav from "./fav.png";
+import favchoose from "./favchoose.png";
+import cart from "./cart.png";
+import cartchoose from "./cartchoose.png";
+import { useState, useEffect } from "react";
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -13,9 +18,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   border-radius: 25px;
   border: 2px solid #3f3a3a;
-  margin: 160px 180px;
+  margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    ${'' /* 手機還沒切 */}
+    margin: 100px 50px 50px;
+    border: none;
   }
 `;
 
@@ -27,7 +33,7 @@ const Title = styled.div`
 `;
 
 const Titletext = styled.h1`
-  margin-top: 91px;
+  margin-top: 50px;
   margin-bottom: 48px;
   text-align: center;
   font-size: 24px;
@@ -38,10 +44,11 @@ const Titletext = styled.h1`
 `;
 
 const FavIcon = styled.div`
-  width: 37.17px;
-  height: 37.53px;
+  width: 35px;
+  height: 35px;
   background-image: url(${profile});
-  margin-top: 91px;
+  background-image: no-repeat;
+  margin-top: 50px;
 `;
 
 const MemberNav = styled.div`
@@ -50,6 +57,9 @@ const MemberNav = styled.div`
   z-index: 10;
   margin-top: -60.5px;
   padding-left: 50px;
+  @media screen and (max-width: 1279px) {
+    display: none;
+  }
 `;
 
 const MemberButton1 = styled.button`
@@ -121,26 +131,79 @@ const MemberButton3 = styled.button`
   }
 `;
 
+const MemberNavMobile = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+
+  }
+`;
+
+const MemberButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${profile});
+    height: 35px;
+    width: 35px;
+  }
+`;
+
+const FavButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${fav});
+    height: 35px;
+    width: 35px;
+  }
+`;
+
+const CartButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${cart});
+    height: 35px;
+    width: 35px;
+  }
+`;
+
 const Splict = styled.div`
   border-top: 1px solid #3f3a3a;
   width: 60%;
   margin-bottom: 74px;
   align-self: center;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 50px;
+  }
 `;
 
 const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 43px;
-  margin-bottom: 100px;
+  margin-bottom: 75px;
   width: 60%;
   margin-left: auto;
   margin-right: auto;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+    gap: 30px;
+  }
 `;
 
 const AccountWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const AccountTitle = styled.p`
@@ -161,6 +224,10 @@ const Account = styled.p`
 const SubWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const SubTitle = styled.p`
@@ -190,6 +257,9 @@ const Edit = styled.div`
   margin-left: 30px;
   cursor: pointer;
   outline: none;
+  @media screen and (max-width: 1279px) {
+    margin-left: 0px;
+  }
 `;
 
 const EditBox = styled.div`
@@ -203,23 +273,31 @@ const EditBox = styled.div`
   position: absolute;
   margin-left: 118px;
   textarea {
-    width: 576px;
+    width: 100%;
     outline: none;
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: 'Noto Sans TC';
+    font-family: "Noto Sans TC";
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
     resize: none;
     white-space: nowrap;
   }
+  @media screen and (max-width: 1279px) {
+    margin-left: 0px;
+    margin-top: 25px;
+  }
 `;
 
 const NameWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const NameTitle = styled.p`
@@ -240,6 +318,10 @@ const NameInput = styled.p`
 const EmailWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const EmailTitle = styled.p`
@@ -283,6 +365,10 @@ const SubmitContainer = styled.div`
   margin: 0 auto;
   gap: 50px;
   justify-content: center;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 const Submit = styled.button`
@@ -298,6 +384,9 @@ const Submit = styled.button`
   align-self: center;
   margin-bottom: 110px;
   cursor: pointer;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
+  }
 `;
 
 export default function Profile() {
@@ -310,21 +399,21 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const loginToken = localStorage.getItem('loginToken');
+  const loginToken = localStorage.getItem("loginToken");
 
   function getUserData() {
-    fetch('http://54.64.47.158:3001/api/1.0/user/profile', {
-      method: 'GET',
+    fetch("http://54.64.47.158:3001/api/1.0/user/profile", {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${loginToken}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
         if (res.status === 200) {
           return res.json();
         } else {
-          window.location.href = './login';
+          window.location.href = "./login";
         }
       })
       .then((data) => {
@@ -339,8 +428,8 @@ export default function Profile() {
   }
 
   function logOut() {
-    localStorage.removeItem('loginToken');
-    window.location.href = '/';
+    localStorage.removeItem("loginToken");
+    window.location.href = "/";
   }
 
   // function getSubscriptionData() {
@@ -359,7 +448,7 @@ export default function Profile() {
     if (loginToken) {
       getUserData();
     } else {
-      window.location.href = './login';
+      window.location.href = "./login";
     }
     // getSubscriptionData();
   }, []);
@@ -371,15 +460,26 @@ export default function Profile() {
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to='/Profile'>會員資料</Link>
+          <Link to="/Profile">會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to='/FavProducts'>收藏商品</Link>
+          <Link to="/FavProducts">收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to='/OrderStatus'>訂單狀態</Link>
+          <Link to="/OrderStatus">訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
+      <MemberNavMobile>
+        <MemberButton>
+          <Link to="/Profile"></Link>
+        </MemberButton>
+        <FavButton>
+          <Link to="/FavProducts"></Link>
+        </FavButton>
+        <CartButton>
+          <Link to="/OrderStatus"></Link>
+        </CartButton>
+      </MemberNavMobile>
       <Title>
         <Titletext>會員資料</Titletext>
         <FavIcon></FavIcon>
@@ -399,11 +499,11 @@ export default function Profile() {
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type='text'>{userData.name}</NameInput>
+          <NameInput type="text">{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue={userData.name} />
+              <textarea type="text" defaultValue={userData.name} />
             </EditBox>
           )}
         </NameWrapper>
@@ -413,7 +513,7 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue={userData.email} />
+              <textarea type="text" defaultValue={userData.email} />
             </EditBox>
           )}
         </EmailWrapper>

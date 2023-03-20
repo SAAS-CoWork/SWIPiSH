@@ -63,7 +63,7 @@ const db = [
 
 const Wrapper = styled.div`
   width: 100%;
-  margin: 100px auto 50px;
+  margin: 45px auto 50px;
   display: flex;
   overflow: hidden;
   justify-content: space-between;

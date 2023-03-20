@@ -1,7 +1,12 @@
 import React from "react";
 import { useState } from "react";
 import styled from 'styled-components/macro';
+import profile from './profile.png';
+import profilechoose from './profilechoose.png';
+import fav from "./fav.png";
+import favchoose from "./favchoose.png";
 import cart from "./cart.png";
+import cartchoose from "./cartchoose.png";
 import conversation from "./conversation.png";
 import star from "./star.png";
 import goldstar from "./goldstar.png";
@@ -9,14 +14,14 @@ import goldstar from "./goldstar.png";
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 25px;
   border: 2px solid #3f3a3a;
-  margin: 160px 180px;
+  margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    ${"" /* 手機還沒切 */}
+    margin: 100px 50px 50px;
+    border: none;
   }
 `;
 
@@ -28,7 +33,7 @@ const Title = styled.div`
 `;
 
 const Titletext = styled.h1`
-  margin-top: 91px;
+  margin-top: 50px;
   margin-bottom: 48px;
   text-align: center;
   font-size: 24px;
@@ -42,7 +47,7 @@ const FavIcon = styled.div`
   width: 37.17px;
   height: 35.53px;
   background-image: url(${cart});
-  margin-top: 91px;
+  margin-top:50px;
 `;
 
 const MemberNav = styled.div`
@@ -73,6 +78,9 @@ const MemberButton1 = styled.button`
       text-decoration: none;
     }
   }
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
 `;
 
 const MemberButton2 = styled.button`
@@ -98,6 +106,9 @@ const MemberButton2 = styled.button`
       text-decoration: none;
     }
   }
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
 `;
 
 const MemberButton3 = styled.button`
@@ -119,6 +130,9 @@ const MemberButton3 = styled.button`
     &:active {
       text-decoration: none;
     }
+  }
+  @media screen and (max-width: 1279px) {
+    display:none;
   }
 `;
 
@@ -146,7 +160,7 @@ const ChartTitle = styled.p`
   width: 116px;
   height: 38px;
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 38px;
   letter-spacing: 6.4px;
   color: #ffffff;
@@ -270,10 +284,6 @@ export default function OrderStatus() {
           <ChartTitle>客戶服務</ChartTitle>
           <ChartTitle>商品評價</ChartTitle>
         </ChartTitleWrapper>
-        <SingleOrderStatus></SingleOrderStatus>
-        <SingleOrderStatus></SingleOrderStatus>
-        <SingleOrderStatus></SingleOrderStatus>
-        <SingleOrderStatus></SingleOrderStatus>
         <SingleOrderStatus></SingleOrderStatus>
         <SingleOrderStatus></SingleOrderStatus>
       </ChartWrapper>

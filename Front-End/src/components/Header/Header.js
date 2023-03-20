@@ -49,9 +49,7 @@ const Logo = styled(Link)`
 `;
 
 const CategoryLinks = styled.div`
-  margin: 16px 0 0 57px;
-  margin-left: 20px;
-
+  margin: 16px 0 0 0px;
   @media screen and (max-width: 1279px) {
     margin: 0;
     position: fixed;
