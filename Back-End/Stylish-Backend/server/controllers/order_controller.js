@@ -185,7 +185,7 @@ const subscriptionPayment = async (req, res) => {
       plan: data.plan,
       expire
     });
-  }
+  };
 
   if (data.paln == "platinum") {
     const period = 365
