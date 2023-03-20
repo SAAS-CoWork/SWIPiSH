@@ -1,6 +1,11 @@
 import React from "react";
 import styled from 'styled-components/macro';
+import profile from './profile.png';
+import profilechoose from './profilechoose.png';
 import fav from "./fav.png";
+import favchoose from "./favchoose.png";
+import cart from "./cart.png";
+import cartchoose from "./cartchoose.png";
 import trash from "./trash.png";
 import dress from "./dress.png";
 import { Link } from "react-router-dom";
@@ -10,10 +15,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   border-radius:25px;
-  border: 2px solid #3F3A3A;
-  margin: 160px 180px;
+  border: 2px solid #3f3a3a;
+  margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    ${'' /* 手機還沒切 */}
+    margin: 100px 50px 50px;
+    border: none;
   }
 `;
 
@@ -25,7 +31,7 @@ const Title = styled.div`
 `;
 
 const Titletext = styled.h1`
-  margin-top: 91px;
+  margin-top: 50px;
   text-align: center;
   font-size: 24px;
   line-height: 38px;
@@ -38,7 +44,7 @@ const FavIcon = styled.div`
   width: 37.17px;
   height: 32.53px;
   background-image: url(${fav});
-  margin-top: 93px;
+  margin-top: 54px;
 `;
 
 const MemberNav = styled.div`
@@ -69,6 +75,9 @@ const MemberButton1 = styled.button`
       text-decoration: none;
     }
   }
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
 `;
 
 const MemberButton2 = styled.button`
@@ -94,6 +103,9 @@ const MemberButton2 = styled.button`
       text-decoration: none;
     }
   }
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
 `;
 
 const MemberButton3 = styled.button`
@@ -116,19 +128,21 @@ const MemberButton3 = styled.button`
       text-decoration: none;
     }
   }
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
 `;
 
 const ProductItemContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding-right: 150px;
-  padding-left: 150px;
   gap: 35px;
   margin-top: 51px;
-  margin-bottom: 110px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 50px;
+  margin-left: 30px;
+  margin-right: 30px;
+  justify-content:center;
 `;
 
 const ProductContainer = styled.div`
