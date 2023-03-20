@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 import profilechoose from './profilechoose.png';
-import fav from "./fav.png";
-import favchoose from "./favchoose.png";
-import cart from "./cart.png";
-import cartchoose from "./cartchoose.png";
-import trash from "./trash.png";
-import dress from "./dress.png";
-import { Link } from "react-router-dom";
+import fav from './fav.png';
+import favchoose from './favchoose.png';
+import cart from './cart.png';
+import cartchoose from './cartchoose.png';
+import trash from './trash.png';
+import dress from './dress.png';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius:25px;
+  border-radius: 25px;
   border: 2px solid #3f3a3a;
   margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
@@ -60,8 +60,8 @@ const MemberButton1 = styled.button`
   height: 61px;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  background: #3F3A3A;
-  border: #3F3A3A solid 2px;
+  background: #3f3a3a;
+  border: #3f3a3a solid 2px;
   color: #ffffff;
   font-size: 24px;
   letter-spacing: 6.4px;
@@ -76,7 +76,7 @@ const MemberButton1 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -86,17 +86,17 @@ const MemberButton2 = styled.button`
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
   background: #ffffff;
-  border-right: #3F3A3A solid 2px;
-  border-top: #3F3A3A solid 2px;
-  border-left: #3F3A3A solid 2px;
+  border-right: #3f3a3a solid 2px;
+  border-top: #3f3a3a solid 2px;
+  border-left: #3f3a3a solid 2px;
   border-bottom: #ffffff solid 2px;
-  color: #3F3A3A;
+  color: #3f3a3a;
   font-size: 24px;
   letter-spacing: 6.4px;
   cursor: pointer;
   a {
     text-decoration: none;
-    color: #3F3A3A;
+    color: #3f3a3a;
     &:hover,
     &:link,
     &:active {
@@ -104,7 +104,7 @@ const MemberButton2 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -113,8 +113,8 @@ const MemberButton3 = styled.button`
   height: 61px;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  background: #3F3A3A;
-  border: #3F3A3A solid 2px;
+  background: #3f3a3a;
+  border: #3f3a3a solid 2px;
   color: #ffffff;
   font-size: 24px;
   letter-spacing: 6.4px;
@@ -129,7 +129,7 @@ const MemberButton3 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -142,7 +142,7 @@ const ProductItemContainer = styled.div`
   margin-bottom: 50px;
   margin-left: 30px;
   margin-right: 30px;
-  justify-content:center;
+  justify-content: center;
 `;
 
 const ProductContainer = styled.div`
@@ -154,7 +154,8 @@ const ProductContainer = styled.div`
 const ProductImg = styled.div`
   width: 239px;
   height: 326px;
-  background-image: url(${dress});
+  background-image: url(${(props) => props.url});
+  background-size: cover;
   cursor: pointer;
 `;
 
@@ -170,14 +171,14 @@ const ProductTitle = styled.p`
   font-size: 12px;
   line-height: 14px;
   font-weight: 400;
-  color: #3F3A3A;
+  color: #3f3a3a;
 `;
 
 const ProductPrice = styled.p`
   font-size: 12px;
   line-height: 14px;
   font-weight: 400;
-  color: #3F3A3A;
+  color: #3f3a3a;
 `;
 
 const Delete = styled.div`
@@ -188,31 +189,28 @@ const Delete = styled.div`
   cursor: pointer;
 `;
 
-function ProductItem() {
-  return (
-    <ProductContainer>
-      <ProductImg></ProductImg>
-      <ProductDetail>
-        <ProductTitle>前開衩扭結洋裝</ProductTitle>
-        <ProductPrice>TWD.799</ProductPrice>
-        <Delete></Delete>
-      </ProductDetail>
-    </ProductContainer>
-  );
-}
-
 export default function FavProducts() {
+  const [collection, setCollection] = useState([]);
+
+  useEffect(() => {
+    const favProduct = JSON.parse(localStorage.getItem('collection'));
+    setCollection(favProduct);
+  }, []);
+
+  if (!collection) {
+    return;
+  }
   return (
     <Wrapper>
       <MemberNav>
         <MemberButton1>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton1>
         <MemberButton2>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton3>
       </MemberNav>
       <Title>
@@ -220,14 +218,16 @@ export default function FavProducts() {
         <FavIcon></FavIcon>
       </Title>
       <ProductItemContainer>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
-        <ProductItem></ProductItem>
+        {collection.map((item) => (
+          <ProductContainer>
+            <ProductImg url={item.url} />
+            <ProductDetail>
+              <ProductTitle>{item.name}</ProductTitle>
+              <ProductPrice>{item.price}</ProductPrice>
+              <Delete />
+            </ProductDetail>
+          </ProductContainer>
+        ))}
       </ProductItemContainer>
     </Wrapper>
   );
