@@ -268,8 +268,6 @@ function Swipe() {
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
-  useEffect(() => console.log(db[currentIndex]), [currentIndex]);
-
   const childRefs = useMemo(
     () =>
       Array(db.length)
@@ -322,7 +320,14 @@ function Swipe() {
   }
 
   useEffect(() => {
-    localStorage.setItem('collection', JSON.stringify(collection));
+    const savedItems = JSON.parse(localStorage.getItem('collection'));
+    setCollection(savedItems);
+  }, []);
+
+  useEffect(() => {
+    if (collection.length !== 0) {
+      localStorage.setItem('collection', JSON.stringify(collection));
+    }
   }, [collection]);
 
   return (
