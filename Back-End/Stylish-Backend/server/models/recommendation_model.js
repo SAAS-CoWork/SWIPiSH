@@ -38,12 +38,7 @@ const generateRecommendations = async function ( user_id, isFirst ) {
 
     if ( isFirst ) {
         console.log('new user, generate random recommendations');
-        // const recommendations = await randomRecommendations();
         const recommendations = await quizRecommendations(user_id);
-        // recommendations.forEach((reco) => {
-        //     Cache.rPush(user_id, JSON.stringify(reco));
-        // });
-        // console.log('Push to redis');
         return recommendations;   
     }
 
@@ -53,7 +48,7 @@ const generateRecommendations = async function ( user_id, isFirst ) {
 
     // find 10 recommendations
     const subsets = findAllSubsets(productsScore);
-    const result = await doRecommendation( subsets );
+    const result = await doRecommendation( user_id, subsets );
     return result;
 }
 
@@ -116,22 +111,32 @@ async function getPossibleProducts( pattern ) {
     return products;
 }
 
-async function doRecommendation( subsets ) {
+async function doRecommendation( user_id, subsets ) {
     let result = [];
+
+    // create user_id field if not exitst
+    await Cache.HSETNX('recommendations', user_id, 0);
+
+    // pass through numbers
+    let pass =  await Cache.HGET('recommendations', user_id);
+    if ( pass > 30 ) {
+        pass = 0;
+        await Cache.HSET('recommendations', user_id, 0);
+    }
+
     for ( let i = 0; i < subsets.length; i++ ) {
         const tagsPattern = JSON.stringify(subsets[i]);
         const possibleProducts = await getPossibleProducts( tagsPattern );
-        // for ( let i = 0; i < possibleProducts.length; i++ ) {
-        //     await Cache.rPush(user_id, JSON.stringify(possibleProducts[i]));
-        // }
-        // counter += possibleProducts.length;
-        // if ( counter >= 10 ) {
-        //     return;
-        // }
-        if ( possibleProducts.length >= 10 ) {
-            return possibleProducts;
+        if ( pass >= possibleProducts.length ) {
+            pass -= possibleProducts.length;
+            continue;
         }
-        result = [...result, possibleProducts];
+        const newPossibleProducts = possibleProducts.slice(pass);
+        await Cache.HINCRBY('recommendations', user_id, newPossibleProducts.length);
+        result = [...result, ...newPossibleProducts];
+        if ( result.length >= 10 ) {
+            return result;
+        }
     }
 }
 
@@ -183,16 +188,18 @@ async function updateLikedProduct( user_id, product_id, score ) {
             return true;
         }
 
-        // new like
-        await conn.query(`
-        INSERT INTO liked_product ( user_id, product_id )
-        VALUES ( ?, ? )
-        `, [ user_id, product_id ]);
-        await conn.commit();
-        await conn.release();
-        console.log('inserted');
-        return true;
-
+        if ( score < 0 ) {
+             // new like
+            await conn.query(`
+            INSERT INTO liked_product ( user_id, product_id, score )
+            VALUES ( ?, ?, ? )
+            `, [ user_id, product_id, 100+score ]);
+            await conn.commit();
+            await conn.release();
+            console.log('inserted');
+            return true;
+        }
+        
     } catch (err) {
         console.error(err);
         await conn.rollback();
