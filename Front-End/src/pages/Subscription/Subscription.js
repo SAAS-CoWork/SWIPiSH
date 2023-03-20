@@ -1,17 +1,18 @@
-import React from 'react';
-import styled from "styled-components/macro";
+import React, { useContext, useEffect } from 'react';
+import styled from 'styled-components/macro';
 import profile from './profile.png';
 import GooglePayBtn from '../../utils/GooglePay';
+import { CartContext } from '../../context/cartContext';
 
 const paymentInfo = [
-  { title: "信用卡號", description: "**** **** **** ****" },
-  { title: "有效期限", description: "MM /YY" },
-  { title: "安全碼", description: "後三碼" },
+  { title: '信用卡號', description: '**** **** **** ****' },
+  { title: '有效期限', description: 'MM /YY' },
+  { title: '安全碼', description: '後三碼' },
 ];
 
 const plans = [
-  { title: "Premium", price: "$4.99USD / Month" },
-  { title: "Platinum", price: "$49.99USD / Year" },
+  { title: 'Premium', price: '4.99', duration: 'Month' },
+  { title: 'Platinum', price: '49.99', duration: 'Year' },
 ];
 
 const Wrapper = styled.div`
@@ -49,11 +50,11 @@ const Title = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 34px;
-  gap:15px;
+  gap: 15px;
   @media screen and (max-width: 1279px) {
     flex-direction: column-reverse;
     margin-bottom: 15px;
-    gap:0px;
+    gap: 0px;
   }
 `;
 
@@ -156,23 +157,20 @@ const QuestionInput = styled.input`
   }
 `;
 
-const SubmitBtn = styled.button`
-  width: 240px;
-  height: 64px;
-  background-color: black;
-  color: white;
-  text-align: center;
-  font-size: 16px;
-  line-height: 30px;
-  margin-bottom: 30px;
-  letter-spacing: 4px;
-  border: 0;
-  @media screen and (max-width: 1279px) {
-    height: 44px;
-  }
-`;
-
 export default function Subscription() {
+  const { pricingPlan, setPricingPlan } = useContext(CartContext);
+
+  function handleInput(e, data) {
+    const input = e.target.value;
+    setPricingPlan({ plan: input, price: data.price });
+  }
+
+  useEffect(() => {
+    if (pricingPlan) {
+      console.log(pricingPlan);
+    }
+  }, [pricingPlan]);
+
   return (
     <Wrapper>
       <ContentContainer>
@@ -187,19 +185,21 @@ export default function Subscription() {
             <Plans>
               {plans.map((plan) => (
                 <PlanContainer>
-                  <PlanSelect type="radio" />
+                  <PlanSelect
+                    type='radio'
+                    name={plan.title}
+                    value={plan.title}
+                    checked={plan.title === pricingPlan.plan}
+                    onChange={(e) => {
+                      handleInput(e, plan);
+                    }}
+                  />
                   <PlanTitle>{plan.title}</PlanTitle>
-                  <PlanPrice>{plan.price}</PlanPrice>
+                  <PlanPrice>{`$${plan.price} USD / ${plan.duration}`}</PlanPrice>
                 </PlanContainer>
               ))}
             </Plans>
           </InfoRow>
-          {paymentInfo.map((info) => (
-            <InfoRow>
-              <QuestionTitle>{info.title}</QuestionTitle>
-              <QuestionInput placeholder={info.description} />
-            </InfoRow>
-          ))}
           <GooglePayBtn />
         </InfoContainer>
       </ContentContainer>

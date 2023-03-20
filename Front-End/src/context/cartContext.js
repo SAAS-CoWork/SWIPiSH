@@ -21,9 +21,17 @@ export const CartContextProvider = ({ children }) => {
     0
   );
 
+  const [pricingPlan, setPricingPlan] = useState('');
+
   return (
     <CartContext.Provider
-      value={{ cartItems, setCartItems, cartCount: cartItemsTotalNum }}
+      value={{
+        cartItems,
+        setCartItems,
+        cartCount: cartItemsTotalNum,
+        pricingPlan,
+        setPricingPlan,
+      }}
     >
       {children}
     </CartContext.Provider>

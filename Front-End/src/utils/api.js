@@ -8,6 +8,9 @@ const api = {
   },
   async getCampaigns() {
     const response = await fetch(`${this.hostname}/marketing/campaigns`);
+    // const response = await fetch(
+    //   `https://api.appworks-school.tw/api/1.0/marketing/campaigns`
+    // );
     return await response.json();
   },
   async searchProducts(keyword, paging) {
