@@ -77,16 +77,64 @@ const getUserPaymentsGroupByDB = async (req, res) => {
 
 // get Subscription
 const getSubscription = async (req, res) => {
-  return res.status(200).json('ok');
+  return res.status(200).json('pass authentication to get subscription page');
 };
+
+/*
+req.user {
+  provider: 'native',
+  name: 'as',
+  email: 'abcdefgh@gmail.com',
+  picture: null,
+  id: 10297,
+  iat: 1679212798
+}
+*/
 
 // post Subscription
 const subscriptionPayment = async (req, res) => {
+  const user = req.user
+  const userId = user.id
+  let roleId = await User.getRoleId(userId)
+
+  // role_id = 3 redirect to index
+  if (roleId == 3) {
+    return res.status(307).json({ message: 'Already paid, redirect to index' })
+  }
+
+  // proceeed to payment
+  console.log('body', req.body)
   const { data } = req.body;
   if (!data || !data.prime || !data.plan || !data.price || !data.subscription_time) {
-    res.status(400).send({ error: 'Subscription Error: Wrong Data Format' });
-    return;
+    return res.status(400).json({ error: 'Subscription Error: Wrong Data Format' });
   }
+
+  // validate frontend data - price & plan matched
+  if (data.plan !== "premium" || data.plan !== "platinum") {
+    return res.status(400).json({ error: 'Wrong Plan' })
+  }
+  if (data.plan === "premium") {
+    if (data.price !== 4.99) {
+      return res.status(400).json({ error: 'Wrong Price' });
+    }
+  }
+
+  if (data.plan == "platinum") {
+    if (data.price !== 49.99) {
+      return res.status(400).send({ error: 'Wrong Price' });
+    }
+  }
+
+  // create sub details into DB
+  const subId = await createSubDetail(user.id, data.plan, data.price)
+  console.log({ subId })
+
+  // server request to tappay
+
+
+  // 根據 TapPay response，更新 order 的 paid_at, paid_status
+
+
   return res.status(200).json({
     plan: "premium",
     expire: "2023-03-19"
