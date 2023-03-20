@@ -6,8 +6,8 @@ const { swipe, getRecommendation } = require('../controllers/recommendation_cont
 
 const { USER_ROLE } = require('../models/user_model');
 
-router.route('/recommendation').post(authentication(USER_ROLE.ALL), wrapAsync(swipe));
+router.route('/recommendation').post(authentication(USER_ROLE.VIPUSER), wrapAsync(swipe));
 
-router.route('/recommendation').get(authentication(USER_ROLE.ALL), wrapAsync(getRecommendation));
+router.route('/recommendation').get(authentication(USER_ROLE.VIPUSER), wrapAsync(getRecommendation));
 
 module.exports = router;
