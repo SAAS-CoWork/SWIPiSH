@@ -234,8 +234,8 @@ export default function Subscription() {
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
-  const jwt = localStorage.getItem('loginToken');
   const navigate = useNavigate();
+  const jwt = localStorage.getItem('loginToken');
 
   function getMembership() {
     fetch('https://www.gotolive.online/api/1.0/order/subscription', {
@@ -256,7 +256,9 @@ export default function Subscription() {
       .catch();
   }
 
-  useEffect(getMembership, []);
+  useEffect(() => {
+    jwt ? getMembership() : navigate('/login');
+  }, []);
 
   function handleInput(e, data) {
     const input = e.target.value;
