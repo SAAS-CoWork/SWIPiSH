@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { use } = require('chai');
 const Cache = require('../../util/cache');
 const {
     generateRecommendations,
