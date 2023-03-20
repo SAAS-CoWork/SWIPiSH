@@ -135,7 +135,10 @@ const getProductsWithDetail = async (protocol, hostname, products) => {
 
     const allSizes = productVariants.map((v) => v.size);
     p.sizes = _.uniq(allSizes);
-    p.images = imagesMap[p.id].map((img) => assetsPath + img.image);
+
+    if (p.images) {
+      p.images = imagesMap[p.id].map((img) => assetsPath + img.image);
+    }
     return p;
   });
 };
