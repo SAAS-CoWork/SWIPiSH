@@ -39,7 +39,8 @@ const generateRecommendations = async function ( user_id, isFirst ) {
     if ( isFirst ) {
         // generate random 10 recommendations
         console.log('new user, generate random recommendations');
-        const recommendations = await randomRecommendations();
+        // const recommendations = await randomRecommendations();
+        const recommendations = await quizRecommendations(user_id);
         recommendations.forEach((reco) => {
             Cache.rPush(user_id, JSON.stringify(reco));
         });
@@ -54,15 +55,57 @@ const generateRecommendations = async function ( user_id, isFirst ) {
      
 }
 
-async function randomRecommendations() {
-    const [ products ] = await pool.query(`
-    SELECT id, category, title, story, price, main_image
-    FROM product
-    ORDER BY RAND()
-    LIMIT 10;
-    `);
-    return products;
+async function quizRecommendations( user_id ) {
+    const [ quizAnswer ] = await pool.query(`
+    SELECT * FROM quiz WHERE user_id = ?;
+    `, [ user_id ]);
+
+    const answers = Object.values(quizAnswer[0]).slice(1);
+    const totalScore = answers.reduce((acc, cur) => {
+        return acc + +cur;
+    }, 0);
+
+    let result;
+    // if totalScore > 10 | 送洗
+    if ( totalScore > 10 ) {
+        result = await pool.query(`
+        SELECT id, category, title, story, price, main_image
+        FROM product
+        WHERE wash = ?;
+        `, ['送洗']);
+    }
+
+    // if 5 < totalScore <= 10 | 可機洗
+    if ( 5 < totalScore <= 10 ) {
+        result = await pool.query(`
+        SELECT id, category, title, story, price, main_image
+        FROM product
+        WHERE wash = ?;
+        `, ['可機洗']);
+    }
+
+    // is 5 <= total score | 手洗
+    if ( 5 <= totalScore ) {
+        result = await pool.query(`
+        SELECT id, category, title, story, price, main_image
+        FROM product
+        WHERE wash = ?;
+        `, ['手洗']);
+    }
+
+    console.log(result[0].slice(0, 10));
+    return result[0].slice(0, 10);
 }
+
+// async function randomRecommendations() {
+//     const [ products ] = await pool.query(`
+//     SELECT id, category, title, story, price, main_image
+//     FROM product
+//     ORDER BY RAND()
+//     LIMIT 10;
+//     `);
+//     return products;
+// }
 
 function addScore( scoresObj, score, tag ) {
     if ( scoresObj.hasOwnProperty(tag) ) {
