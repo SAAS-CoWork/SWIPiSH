@@ -100,7 +100,7 @@ const subscriptionPayment = async (req, res) => {
   let roleId = await User.getRoleId(userId)
 
   // role_id = 3 redirect to index
-  if (roleId == 3) {
+  if (roleId == 4) {
     return res.status(307).json({ message: 'Already paid, redirect to index' })
   }
 
@@ -175,21 +175,27 @@ const subscriptionPayment = async (req, res) => {
   //         => update user's role_id into 3
   const paidAt = paidResult.transaction_time_millis
 
+  if (data.plan == "premium") {
+    const period = 30
+    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    const expire = expireObj.toLocaleString();
 
-  if (data.paln == "premium") {
-    const expire = created - date + 30
+    return res.status(200).json({
+      plan: data.plan,
+      expire
+    });
   }
 
   if (data.paln == "platinum") {
+    const period = 365
+    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    const expire = expireObj.toLocaleString();
 
+    return res.status(200).json({
+      plan: data.plan,
+      expire
+    });
   }
-
-
-  // response 
-  res.status(200).json({
-    plan: data.paln,
-    expire
-  });
 };
 
 module.exports = {
