@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import styled from 'styled-components/macro';
+import React, { useState } from "react";
+import styled from "styled-components/macro";
 
 const questions = [
-  { number: 1, title: '你的感情狀態', options: ['單身', '有伴', '不好說'] },
-  { number: 2, title: '你的穿搭風格', options: ['帥氣', '氣質', '中性'] },
-  { number: 3, title: '你喜歡的顏色', options: ['彩色', '黑色', '白色'] },
+  { number: 1, title: "你的感情狀態", options: ["不好說", "有伴", "單身"] },
+  { number: 2, title: "你的穿搭風格", options: ["中性", "氣質", "帥氣"] },
+  { number: 3, title: "你喜歡的顏色", options: ["黑色", "白色", "彩色"] },
   {
     number: 4,
-    title: '當收到禮物時，你的反應是',
-    options: ['開心', '靦腆', '立刻打開給予評價'],
+    title: "當收到禮物時，你的反應是?",
+    options: ["靦腆", "開心", "立刻打開給予評價"],
   },
   {
     number: 5,
-    title: '在巴黎香榭大道上，看到一對擁吻的情侶，你覺得他們身分可能是？',
-    options: ['老闆', '學生', '咖啡廳員工'],
+    title: "在巴黎香榭大道上，看到一對擁吻的情侶，你覺得他們身分可能是？",
+    options: ["學生跟教授", "咖啡廳員工跟客人", "老闆跟秘書"],
     noBorder: true,
   },
 ];
@@ -22,11 +22,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 1331px;
-  margin: 100px auto 50px;
+  width: 60%;
+  margin: 50px auto 50px;
   color: #3f3a3a;
   @media screen and (max-width: 1279px) {
-    ${'' /* 手機還沒切 */}
+    width: 80%;
   }
 `;
 
@@ -49,10 +49,13 @@ const Title = styled.h1`
 const ContentContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
-  padding: 113px 99px;
+  padding: 80px 80px;
   margin-bottom: 40px;
   border: 1px solid black;
   border-radius: 25px;
+  @media screen and (max-width: 1279px) {
+    padding: 30px 30px;
+  }
 `;
 
 const Content = styled.div`
@@ -72,6 +75,10 @@ const QuestionContainer = styled.div`
   display: flex;
   gap: 36px;
   margin-bottom: 36px;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 25px;
+    gap: 20px;
+  }
 `;
 
 const NumberIcon = styled.div`
@@ -80,6 +87,11 @@ const NumberIcon = styled.div`
   background-color: black;
   border-radius: 50%;
   position: relative;
+  flex-shrink:0;
+  @media screen and (max-width: 1279px) {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const NumberText = styled.p`
@@ -91,6 +103,11 @@ const NumberText = styled.p`
   line-height: 38px;
   top: 6px;
   left: 21px;
+  @media screen and (max-width: 1279px) {
+    font-size: 16px;
+    top: -2px;
+    left: 13px;
+  }
 `;
 
 const QuestionContent = styled.div`
@@ -103,13 +120,22 @@ const QuestionTitle = styled.h2`
   font-size: 24px;
   font-weight: 700;
   line-height: 38px;
-  letter-spacing: 6.4px;
+  letter-spacing: 3px;
+  @media screen and (max-width: 1279px) {
+    font-size: 16px;
+    line-height: 20px;
+  }
 `;
 
 const OptionContainer = styled.div`
   display: flex;
   gap: 35px;
   justify-content: flex-start;
+  @media screen and (max-width: 1279px) {
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 1px;
+  }
 `;
 
 const Options = styled.div`
@@ -125,6 +151,7 @@ const CheckInput = styled.input`
 
 const CheckLabel = styled.label`
   line-height: 26px;
+  font-size: 16px;
 `;
 
 const SubmitBtn = styled.button`
@@ -143,7 +170,7 @@ const SubmitBtn = styled.button`
 
 export default function Quiz() {
   const [userInput, setUserInput] = useState({});
-  const loginToken = localStorage.getItem('loginToken');
+  const loginToken = localStorage.getItem("loginToken");
 
   function handleInput(e, item) {
     const newAnswer = { ...userInput, [`q${item}`]: e.target.value };
@@ -155,20 +182,20 @@ export default function Quiz() {
   }
 
   function sendUserData(data) {
-    fetch('https://www.gotolive.online/api/1.0/user/quiz', {
-      method: 'POST',
+    fetch("https://www.gotolive.online/api/1.0/user/quiz", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${loginToken}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ answer: data }),
     })
       .then((res) => {
         if (res.status === 200) {
-          alert('Registration Successful!');
-          window.location.href = '/';
+          alert("Registration Successful!");
+          window.location.href = "/";
         } else {
-          console.log('Error! Please refresh the browser and try again');
+          console.log("Error! Please refresh the browser and try again");
         }
       })
       .catch((err) => console.log(err));
@@ -189,7 +216,7 @@ export default function Quiz() {
               return (
                 <ContentRow
                   key={index}
-                  borderBottom={question.noBorder ? 0 : '1px solid black'}
+                  borderBottom={question.noBorder ? 0 : "1px solid black"}
                 >
                   <QuestionContainer>
                     <NumberIcon>
@@ -202,7 +229,7 @@ export default function Quiz() {
                           return (
                             <Options key={`${question.number}-${index}`}>
                               <CheckInput
-                                type='radio'
+                                type="radio"
                                 name={`question-${question.number}`}
                                 value={index.toString()}
                                 checked={
@@ -225,7 +252,7 @@ export default function Quiz() {
             })}
           </Content>
         </ContentContainer>
-        <SubmitBtn type='submit'>READY TO SWIPE!</SubmitBtn>
+        <SubmitBtn type="submit">READY TO SWIPE!</SubmitBtn>
       </MainContent>
     </Wrapper>
   );
