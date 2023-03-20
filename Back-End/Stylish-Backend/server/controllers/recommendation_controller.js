@@ -17,13 +17,13 @@ const swipe = async function (req, res) {
 
     const { super_like } = req.body;
 
-    let score = 3;
+    let score = 10;
     if ( !like ) {
-        score = -1;
+        score = -5;
     }
 
     if ( super_like ) {
-        score = 6;
+        score = 20;
     }
 
     // update liked_product table
@@ -37,7 +37,7 @@ const swipe = async function (req, res) {
 
 const getRecommendation = async function (req, res) {
     const { user } = req;
-
+    console.log(user.id);
     try {
         let isNewUser = false;
         const checkResult = await checkIfNewUser( user.id );
@@ -45,29 +45,29 @@ const getRecommendation = async function (req, res) {
             isNewUser = true;
         }
 
-        if ( isNewUser ) {
-            await generateRecommendations( user.id, true );
-        }
+        const responseObj = { data: '' }
+
+        const recommendations = await generateRecommendations( user.id, isNewUser );
+        responseObj.data = recommendations;
+        return res.status(200).json(responseObj)
 
         // get recommendation from redis
+        // const remained = await Cache.lLen(user.id);
+        // console.log('Cache remained', remained);
+        // if ( remained < 10 ) {
+        //     await generateRecommendations(user.id, false);
+        // }
+        // const recommendations = [];
+        // for ( let i = 0; i < 10; i++ ) {
+        //     const reco = await Cache.lPop(user.id);
+        //     recommendations.push(JSON.parse(reco));
+        // }
 
-        const remained = await Cache.lLen(user.id);
-        console.log('Cache remained', remained);
-        if ( remained < 20 ) {
-            await generateRecommendations(user.id, false);
-        }
+        // const responseObj = {
+        //     data: recommendations
+        // }
 
-        const recommendations = [];
-        for ( let i = 0; i < 10; i++ ) {
-            const reco = await Cache.lPop(user.id);
-            recommendations.push(JSON.parse(reco));
-        }
-        
-        const responseObj = {
-            data: recommendations
-        }
-
-        return res.status(200).json(responseObj)
+        // return res.status(200).json(responseObj)
         
     } catch (err) {
         console.error(err)

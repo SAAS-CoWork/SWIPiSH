@@ -37,22 +37,24 @@ const findSimilarProducts = async function (user_id) {
 const generateRecommendations = async function ( user_id, isFirst ) {
 
     if ( isFirst ) {
-        // generate random 10 recommendations
         console.log('new user, generate random recommendations');
         // const recommendations = await randomRecommendations();
         const recommendations = await quizRecommendations(user_id);
-        recommendations.forEach((reco) => {
-            Cache.rPush(user_id, JSON.stringify(reco));
-        });
-        console.log('Push to redis');
-        return;   
+        // recommendations.forEach((reco) => {
+        //     Cache.rPush(user_id, JSON.stringify(reco));
+        // });
+        // console.log('Push to redis');
+        return recommendations;   
     }
 
     console.log('old user, generate recommendation through history');
     const productsScore = await findSimilarProducts(user_id);
-    const result = findAllSubsets(user_id, productsScore);
-    return;
-     
+    console.log(productsScore);
+
+    // find 10 recommendations
+    const subsets = findAllSubsets(productsScore);
+    const result = await doRecommendation( subsets );
+    return result;
 }
 
 async function quizRecommendations( user_id ) {
@@ -97,16 +99,6 @@ async function quizRecommendations( user_id ) {
     return result[0].slice(0, 10);
 }
 
-// async function randomRecommendations() {
-//     const [ products ] = await pool.query(`
-//     SELECT id, category, title, story, price, main_image
-//     FROM product
-//     ORDER BY RAND()
-//     LIMIT 10;
-//     `);
-//     return products;
-// }
-
 function addScore( scoresObj, score, tag ) {
     if ( scoresObj.hasOwnProperty(tag) ) {
         scoresObj[tag] += score;
@@ -121,31 +113,43 @@ async function getPossibleProducts( pattern ) {
     FROM product
     WHERE tags = ?;
     `, [ pattern ]);
-
     return products;
 }
 
-function findAllSubsets( user_id, productsScore ) {
+async function doRecommendation( subsets ) {
+    let result = [];
+    for ( let i = 0; i < subsets.length; i++ ) {
+        const tagsPattern = JSON.stringify(subsets[i]);
+        const possibleProducts = await getPossibleProducts( tagsPattern );
+        // for ( let i = 0; i < possibleProducts.length; i++ ) {
+        //     await Cache.rPush(user_id, JSON.stringify(possibleProducts[i]));
+        // }
+        // counter += possibleProducts.length;
+        // if ( counter >= 10 ) {
+        //     return;
+        // }
+        if ( possibleProducts.length >= 10 ) {
+            return possibleProducts;
+        }
+        result = [...result, possibleProducts];
+    }
+}
+
+function findAllSubsets( productsScore ) {
     const result = [];
     const temp = [];
-    findAllSubsetsHelper( user_id, productsScore, result, temp );
+    findAllSubsetsHelper( productsScore, result, temp );
     return result;
 }
 
-async function findAllSubsetsHelper( user_id, productsScore, result, temp ) {
+function findAllSubsetsHelper( productsScore, result, temp ) {
     const pos = temp.length;
     if ( pos === productsScore.length ) {
         result.push(Array.from(temp));
-        // select matched product and push to redis list
-        const tagsPattern = JSON.stringify(temp);
-        const possibleProducts = await getPossibleProducts( tagsPattern );
-        for ( let i = 0; i < possibleProducts.length; i++ ) {
-            Cache.rPush(user_id, JSON.stringify(possibleProducts[i]));
-        }
     } else {
         for ( let i = 0; i < productsScore[pos].length; i++ ) {
-            temp.push(productsScore[pos][i][0]);
-            findAllSubsetsHelper( user_id, productsScore, result, temp );
+            temp.push(Number(productsScore[pos][i][0]));
+            findAllSubsetsHelper( productsScore, result, temp );
             temp.pop();
         }
     }
