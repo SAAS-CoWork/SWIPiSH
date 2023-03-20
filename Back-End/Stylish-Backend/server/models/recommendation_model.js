@@ -120,8 +120,8 @@ async function doRecommendation( user_id, subsets ) {
     // pass through numbers
     let pass =  await Cache.HGET('recommendations', user_id);
     if ( pass > 30 ) {
-        pass = 0;
-        await Cache.HSET('recommendations', user_id, 0);
+        pass -= 30;
+        await Cache.HSET('recommendations', user_id, pass);
     }
 
     for ( let i = 0; i < subsets.length; i++ ) {
@@ -199,7 +199,7 @@ async function updateLikedProduct( user_id, product_id, score ) {
             console.log('inserted');
             return true;
         }
-        
+
     } catch (err) {
         console.error(err);
         await conn.rollback();
