@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   left: 0;
   height: 140px;
   width: 100%;
-  padding: 0 54px 0 60px;
+  padding: 0 30px 0 30px;
   border-bottom: 40px solid #313538;
   z-index: 99;
   background-color: white;
@@ -48,6 +48,7 @@ const Logo = styled(Link)`
   }
 `;
 
+
 const CategoryLinks = styled.div`
   margin: 16px 0 0 0px;
   @media screen and (max-width: 1279px) {
@@ -66,7 +67,7 @@ const CategoryLink = styled.a`
   font-size: 20px;
   letter-spacing: 30px;
   padding-left: 39px;
-  padding-right: 11px;
+  ${'' /* padding-right: 11px; */}
   position: relative;
   text-decoration: none;
   color: ${(props) => (props.$isActive ? '#8b572a' : '#3f3a3a')};
@@ -137,7 +138,7 @@ const SearchInput = styled.input`
 `;
 
 const PageLinks = styled.div`
-  margin-left: 42px;
+  margin-left: 30px;
   display: flex;
 
   @media screen and (max-width: 1279px) {
@@ -237,14 +238,28 @@ const UpgradeIcon = styled(Link)`
   margin-left: auto;
   border: 0;
   cursor: pointer;
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 1279px) {
+    display:none;
+  }
+`;
+
+const UpgradeIconBottom = styled(Link)`
+  @media screen and (max-width: 1279px) {
     background-image: url(${swipemobile});
-    width: 36px;
-    height: 36px;
+    width: 80px;
+    height: 80px;
     background-size: cover;
     margin-left: auto;
     border: 0;
     cursor: pointer;
+    position: absolute;
+    top: 83vh;
+    z-index: 100;
+    right: 5vw;
+    position: fixed;
+  }
+  @media screen and (min-width: 1279px) {
+    display:none;
   }
 `;
 
@@ -270,7 +285,11 @@ function Header() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
+  const [upgradeClicked, setUpgradeClicked] = useState(false);
 
+  const handleUpgradeClick = () => {
+    setUpgradeClicked(true);
+  }
   useEffect(() => {
     if (category) setInputValue('');
   }, [category]);
@@ -317,6 +336,7 @@ function Header() {
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>
+      {!upgradeClicked && <UpgradeIconBottom onClick={handleUpgradeClick} to='/subscription'/>}
     </Wrapper>
   );
 }

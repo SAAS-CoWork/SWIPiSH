@@ -88,11 +88,12 @@ const Wrapper = styled.div`
   overflow: hidden;
   justify-content: space-between;
   @media screen and (max-width: 1279px) {
+    overflow: hidden;
     flex-direction: column-reverse;
     flex-wrap: wrap;
     width: 100%;
     align-items: center;
-    margin-top: 50px;
+    margin-top: 10px;
     gap: 50px;
   }
 `;
@@ -112,6 +113,7 @@ const SwipeZone = styled.div`
   align-items: center;
   @media screen and (max-width: 1279px) {
     width: 340px;
+    gap: 0px;
   }
 `;
 
@@ -125,7 +127,8 @@ const SwipeBottomContainer = styled.div`
   left: 100px;
   z-index: 100;
   @media screen and (max-width: 1279px) {
-    left: 55px;
+    left: 57px;
+    bottom: -483px;
   }
 `;
 
@@ -148,6 +151,7 @@ const SwipeImg = styled.div`
   position: relative;
   @media screen and (max-width: 1279px) {
     width: 100%;
+    height: 549px;
   }
 `;
 
@@ -165,7 +169,9 @@ const Card = styled.div`
   position: absolute;
   background-size: fill;
   @media screen and (max-width: 1279px) {
-    width: 330px;
+    width: 300px;
+    height: 500px;
+    right:22px;
   }
 `;
 
