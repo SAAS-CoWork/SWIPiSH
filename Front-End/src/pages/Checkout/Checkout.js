@@ -317,7 +317,7 @@ function Checkout() {
 
   const freight = cartItems.length === 0 ? 0 : 30;
 
-  async function checkout(e) {
+  async function checkout() {
     try {
       setLoading(true);
 
@@ -371,10 +371,9 @@ function Checkout() {
         },
         token
       );
-      // window.alert('付款成功');
-      // setCartItems([]);
-      // navigate('/thankyou', { state: { orderNumber: data.number } });
-      e.preventDefault();
+      window.alert('付款成功');
+      setCartItems([]);
+      navigate('/thankyou', { state: { orderNumber: data.number } });
     } catch (err) {
       console.log(err);
     } finally {

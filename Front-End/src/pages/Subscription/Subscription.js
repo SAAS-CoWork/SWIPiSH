@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 import GooglePayBtn from '../../utils/GooglePay';
@@ -228,9 +230,33 @@ const FormControl = styled.input`
 export default function Subscription() {
   const { pricingPlan, setPricingPlan } = useContext(CartContext);
   const [loading, setLoading] = useState(false);
+  const [membershipChecking, setMembershipChecking] = useState(true);
   const cardNumberRef = useRef();
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
+  const jwt = localStorage.getItem('loginToken');
+  const navigate = useNavigate();
+
+  function getMembership() {
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          // window.location.href = './swipe';
+          navigate('/swipe');
+        } else {
+          setMembershipChecking(false);
+        }
+      })
+      .catch();
+  }
+
+  useEffect(getMembership, []);
 
   function handleInput(e, data) {
     const input = e.target.value;
@@ -282,25 +308,23 @@ export default function Subscription() {
         return;
       }
 
+      const subtotal = pricingPlan.price;
+
       const { data } = await api.checkout(
         {
           prime: result.card.prime,
           order: {
             shipping: 'delivery',
             payment: 'credit_card',
-            // subtotal,
-            // freight,
-            // total: subtotal + freight,
+            subtotal,
+            total: subtotal,
             // recipient,
             // list: cartItems,
           },
         },
         token
       );
-      // window.alert('付款成功');
-      // setCartItems([]);
-      // navigate('/thankyou', { state: { orderNumber: data.number } });
-      e.preventDefault();
+      saveData();
     } catch (err) {
       console.log(err);
     } finally {
@@ -308,6 +332,37 @@ export default function Subscription() {
     }
   }
 
+  function saveData() {
+    const subscriptionInfo = {
+      prime: JSON.parse(localStorage.getItem('prime')),
+      plan: pricingPlan.plan,
+      price: Number(pricingPlan.price),
+      subscription_time: '2023-03-20',
+    };
+    const body = { data: subscriptionInfo };
+
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          window.alert('付款成功');
+          window.location.href = './swipe';
+        } else {
+          console.log('付款失敗！請再試一次');
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  if (membershipChecking === true) {
+    return;
+  }
   return (
     <Wrapper>
       <ContentContainer
