@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TinderCard from 'react-tinder-card';
 import styled from 'styled-components/macro';
 import heart from './heart.png';
@@ -9,16 +10,26 @@ import goback from './goback.png';
 import trash from './trash.png';
 // import product from "./product.png";
 
+// fetch('https://www.gotolive.online/api/1.0/user/profile', {
+//   method: 'GET',
+//   headers: {
+//     Authorization: `Bearer ${loginToken}`,
+//     'Content-Type': 'application/json',
+//   },
+// })
+
 const db = [
   {
     name: '前開衩扭結洋裝',
     url: 'https://api.appworks-school.tw/assets/201902191210/main.jpg',
     price: '799',
+    id: '201902191210',
   },
   {
     name: '透肌澎澎防曬襯衫',
     url: 'https://api.appworks-school.tw/assets/201807202140/main.jpg',
     price: '599',
+    id: '201807202140',
   },
   {
     name: '小扇紋細織上衣',
@@ -59,6 +70,7 @@ const db = [
     name: '純色輕薄百搭襯衫',
     url: 'https://api.appworks-school.tw/assets/201807242211/main.jpg',
     price: '799',
+    id: '201807242211',
   },
 ];
 
@@ -265,6 +277,7 @@ function Swipe() {
   const [currentIndex, setCurrentIndex] = useState(db.length - 1);
   const [lastDirection, setLastDirection] = useState();
   const [collection, setCollection] = useState([]);
+  const navigate = useNavigate();
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
@@ -319,13 +332,21 @@ function Swipe() {
     setCollection(newCollection);
   }
 
+  function handleSuperLike() {
+    navigate(`../products/${db[currentIndex].id}`);
+  }
+
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem('collection'));
-    setCollection(savedItems);
+    if (savedItems) {
+      setCollection(savedItems);
+    } else {
+      setCollection([]);
+    }
   }, []);
 
   useEffect(() => {
-    if (collection.length !== 0) {
+    if (collection !== null && collection.length !== 0) {
       localStorage.setItem('collection', JSON.stringify(collection));
       console.log(collection);
     }
@@ -339,7 +360,7 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
-        {collection.length === 0 ? null : (
+        {!collection || collection.length === 0 ? null : (
           <Products>
             {collection.map((item, index) => (
               <ProductContainer key={index}>
@@ -411,7 +432,12 @@ function Swipe() {
                 addToCollection();
               }}
             ></LikeBtn>
-            <LikeBtn imgUrl={superLike}></LikeBtn>
+            <LikeBtn
+              imgUrl={superLike}
+              onClick={() => {
+                handleSuperLike();
+              }}
+            ></LikeBtn>
           </Buttons>
           {/* {lastDirection ? (
             <h2 key={lastDirection} className="infoText">
