@@ -1,6 +1,7 @@
-import React from "react";
+import React from 'react';
 import styled from "styled-components/macro";
-import profile from "./profile.png";
+import profile from './profile.png';
+import GooglePayBtn from '../../utils/GooglePay';
 
 const paymentInfo = [
   { title: "信用卡號", description: "**** **** **** ****" },
@@ -18,7 +19,7 @@ const Wrapper = styled.div`
   border: 1px solid black;
   border-radius: 25px;
   margin: 100px auto 50px;
-  padding: 63px 0 79px;
+  padding: 63px 0 10px;
   color: #3f3a3a;
   margin-top: 50px;
   padding-top: 63px;
@@ -199,8 +200,8 @@ export default function Subscription() {
               <QuestionInput placeholder={info.description} />
             </InfoRow>
           ))}
+          <GooglePayBtn />
         </InfoContainer>
-        <SubmitBtn>SUBSCRIBE!</SubmitBtn>
       </ContentContainer>
     </Wrapper>
   );
