@@ -8,6 +8,9 @@ import notLike from './notLike.png';
 import superLike from './superLike.png';
 import goback from './goback.png';
 import trash from './trash.png';
+import likeMsg from './likeMsg.png';
+import notlikeMsg from './notLikeMsg.png';
+import soso from './soso.png';
 
 const Wrapper = styled.div`
   width: 100%;
