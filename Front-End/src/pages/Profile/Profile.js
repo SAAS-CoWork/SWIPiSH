@@ -263,8 +263,7 @@ const ProfileImgWrapper = styled.form`
 const ProfileImg = styled.div`
   width: 150px;
   height: 150px;
-  background-image: url(${(props) =>
-    props.selectedFileUrl ? props.selectedFileUrl : biggerprofile});
+  background-image: url(${(props) => props.selectedFileUrl ?? biggerprofile});
   background-size: cover;
   background-position: center;
   border-radius: 100px;
@@ -483,7 +482,25 @@ export default function Profile() {
   };
 
   const handleCancelClick = (e) => {
-    setIsSubscribed(false);
+    const body = {
+      data: {
+        cancel: true,
+      },
+    };
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${loginToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        if (res.status === 200) {
+          alert('恭喜你做了人生中最錯誤的選擇');
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const loginToken = localStorage.getItem('loginToken');

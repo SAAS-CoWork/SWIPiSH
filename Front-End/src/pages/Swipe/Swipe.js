@@ -224,8 +224,6 @@ function Swipe() {
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
-  useEffect(() => console.log(currentIndex), [currentIndex]);
-
   const childRefs = useMemo(
     () =>
       Array(10)
@@ -362,14 +360,6 @@ function Swipe() {
       localStorage.setItem('collection', JSON.stringify(collection));
     }
   }, [collection]);
-
-  useEffect(() => {
-    if (swipeCount === 10) {
-      fetchRecommendation().then((data) => console.log(data));
-    }
-  }, [swipeCount]);
-
-  useEffect(() => console.log(db), [db]);
 
   if (!db) {
     return;
