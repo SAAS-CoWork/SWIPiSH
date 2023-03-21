@@ -295,6 +295,17 @@ export default function FavProducts() {
     setCollection(favProduct);
   }, []);
 
+  useEffect(() => {
+    const jsonCollectoin = JSON.stringify(collection);
+    localStorage.setItem('collection', jsonCollectoin);
+  }, [collection]);
+
+  function handleRemove(index) {
+    const newCollection = [...collection];
+    newCollection.splice(index, 1);
+    setCollection(newCollection);
+  }
+
   if (!collection) {
     return;
   }
@@ -328,13 +339,13 @@ export default function FavProducts() {
       </Title>
       <Splict></Splict>
       <ProductItemContainer>
-        {collection.map((item) => (
-          <ProductContainer>
+        {collection.map((item, index) => (
+          <ProductContainer key={index}>
             <ProductImg url={item.url} />
             <ProductDetail>
               <ProductTitle>{item.name}</ProductTitle>
               <ProductPrice>{item.price}</ProductPrice>
-              <Delete />
+              <Delete onClick={() => handleRemove(index)} />
             </ProductDetail>
           </ProductContainer>
         ))}

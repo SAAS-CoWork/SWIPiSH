@@ -1,23 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components/macro";
-import profile from "./profile.png";
-import GooglePayBtn from "../../utils/GooglePay";
-import { CartContext } from "../../context/cartContext";
-import tappay from "../../utils/tappay";
-import api from "../../utils/api";
-import Button from "../../components/Button";
-
-const paymentInfo = [
-  { title: "信用卡號", description: "**** **** **** ****" },
-  { title: "有效期限", description: "MM /YY" },
-  { title: "安全碼", description: "後三碼" },
-];
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import profile from './profile.png';
+// import GooglePayBtn from '../../utils/GooglePay';
+import { CartContext } from '../../context/cartContext';
+import tappay from '../../utils/tappay';
+import api from '../../utils/api';
+import Button from '../../components/Button';
 
 const plans = [
-  { title: "Premium", price: "4.99", duration: "Month" },
-  { title: "Platinum", price: "49.99", duration: "Year" },
+  { title: 'Premium', price: '4.99', duration: 'Month' },
+  { title: 'Platinum', price: '49.99', duration: 'Year' },
 ];
 
 const Wrapper = styled.div`
@@ -178,7 +172,7 @@ const FormGroup = styled.div`
   flex-wrap: wrap;
   margin-top: 30px;
   width: 100%;
-  gap:10px;
+  gap: 10px;
 
   ${FormLegend} + & {
     margin-top: 25px;
@@ -212,7 +206,7 @@ const FormControl = styled.input`
   width: 100%;
   height: 30px;
   border-radius: 8px;
-  border: solid 1px ${({ invalid }) => (invalid ? "#CB4042" : "#979797")};
+  border: solid 1px ${({ invalid }) => (invalid ? '#CB4042' : '#979797')};
 
   @media screen and (max-width: 1279px) {
     margin-top: 10px;
@@ -228,30 +222,33 @@ export default function Subscription() {
   const cardExpirationDateRef = useRef();
   const cardCCVRef = useRef();
   const navigate = useNavigate();
-  const jwt = localStorage.getItem("loginToken");
+  const jwt = localStorage.getItem('loginToken');
 
   function getMembership() {
-    fetch("https://www.gotolive.online/api/1.0/order/subscription", {
-      method: "GET",
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
         if (res.status === 200) {
-          window.location.href = './swipe';
-          navigate('/swipe');
-          setMembershipChecking(false);
+          return res.json();
         } else {
           setMembershipChecking(false);
         }
+      })
+      .then((data) => {
+        data.data.subscription
+          ? navigate('/swipe')
+          : setMembershipChecking(false);
       })
       .catch();
   }
 
   useEffect(() => {
-    jwt ? getMembership() : navigate("/login");
+    jwt ? getMembership() : navigate('/login');
   }, []);
 
   function handleInput(e, data) {
@@ -281,10 +278,10 @@ export default function Subscription() {
     try {
       setLoading(true);
 
-      const token = localStorage.getItem("loginToken");
+      const token = localStorage.getItem('loginToken');
 
       if (!token) {
-        window.alert("請登入會員");
+        window.alert('請登入會員');
         return;
       }
 
@@ -294,32 +291,32 @@ export default function Subscription() {
       // }
 
       if (!tappay.canGetPrime()) {
-        window.alert("付款資料輸入有誤");
+        window.alert('付款資料輸入有誤');
         return;
       }
 
       const result = await tappay.getPrime();
       if (result.status !== 0) {
-        window.alert("付款資料輸入有誤");
+        window.alert('付款資料輸入有誤');
         return;
       }
 
-      const subtotal = pricingPlan.price;
+      // const subtotal = pricingPlan.price;
 
-      const { data } = await api.checkout(
-        {
-          prime: result.card.prime,
-          order: {
-            shipping: "delivery",
-            payment: "credit_card",
-            subtotal,
-            total: subtotal,
-            // recipient,
-            // list: cartItems,
-          },
-        },
-        token
-      );
+      // const { data } = await api.checkout(
+      //   {
+      //     prime: result.card.prime,
+      //     order: {
+      //       shipping: 'delivery',
+      //       payment: 'credit_card',
+      //       subtotal,
+      //       total: subtotal,
+      //       // recipient,
+      //       // list: cartItems,
+      //     },
+      //   },
+      //   token
+      // );
       saveData();
     } catch (err) {
       console.log(err);
@@ -330,27 +327,27 @@ export default function Subscription() {
 
   function saveData() {
     const subscriptionInfo = {
-      prime: JSON.parse(localStorage.getItem("prime")),
-      plan: pricingPlan.plan,
+      prime: JSON.parse(localStorage.getItem('prime')),
+      plan: pricingPlan.plan.toLowerCase(),
       price: Number(pricingPlan.price),
-      subscription_time: "2023-03-20",
+      subscription_time: '2023-03-20',
     };
     const body = { data: subscriptionInfo };
 
-    fetch("https://www.gotolive.online/api/1.0/order/subscription", {
-      method: "POST",
+    fetch('https://www.gotolive.online/api/1.0/order/subscription', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(body),
     })
       .then((res) => {
         if (res.status === 200) {
-          window.alert("付款成功");
-          window.location.href = "./swipe";
+          window.alert('付款成功');
+          window.location.href = './swipe';
         } else {
-          console.log("付款失敗！請再試一次");
+          console.log('付款失敗！請再試一次');
         }
       })
       .catch((err) => console.log(err));
@@ -378,7 +375,7 @@ export default function Subscription() {
               {plans.map((plan) => (
                 <PlanContainer>
                   <PlanSelect
-                    type="radio"
+                    type='radio'
                     name={plan.title}
                     value={plan.title}
                     checked={plan.title === pricingPlan.plan}
@@ -397,15 +394,15 @@ export default function Subscription() {
             <FormLegend>付款資料</FormLegend>
             <FormGroup>
               <FormLabel>信用卡號碼</FormLabel>
-              <FormControl as="div" ref={cardNumberRef} />
+              <FormControl as='div' ref={cardNumberRef} />
             </FormGroup>
             <FormGroup>
               <FormLabel>有效期限</FormLabel>
-              <FormControl as="div" ref={cardExpirationDateRef} />
+              <FormControl as='div' ref={cardExpirationDateRef} />
             </FormGroup>
             <FormGroup>
               <FormLabel>安全碼</FormLabel>
-              <FormControl as="div" ref={cardCCVRef} />
+              <FormControl as='div' ref={cardCCVRef} />
             </FormGroup>
           </FormFieldSet>
         </InfoContainer>
@@ -414,7 +411,12 @@ export default function Subscription() {
           onClick={() => {
             checkout();
           }}
-          style={{ marginLeft: "0px", marginBottom: "50px", marginTop: "30px", width: "240px"}}
+          style={{
+            marginLeft: '0px',
+            marginBottom: '50px',
+            marginTop: '30px',
+            width: '240px',
+          }}
         >
           確認付款
         </Button>
