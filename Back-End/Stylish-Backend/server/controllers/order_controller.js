@@ -200,7 +200,7 @@ const subscriptionPayment = async (req, res) => {
   }
 };
 
-const cancelSub = async (req, res) => {
+const cancelSub = async (req, res, next) => {
   // cancel = false
   const cancel = req.body
   if (!cancel) {
@@ -216,7 +216,10 @@ const cancelSub = async (req, res) => {
       return res.status(200).json({ message: 'canceled success' })
     }
   }
+  next()
 };
+
+
 
 module.exports = {
   checkout,

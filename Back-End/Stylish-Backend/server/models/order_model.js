@@ -102,7 +102,10 @@ const updateCancel = async (userId) => {
   try {
     await pool.query(`
     UPDATE subscription
-    SET card_secret="",
+    SET \`card_secret\` = JSON_SET(
+       \`card_secret\`,
+      '$.card_key',
+      ''),
     cancel=true
     WHERE user_id = ?
     `, [userId])
