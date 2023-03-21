@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/macro";
-import profile from "./profile.png";
-import fav from "./fav.png";
-import favchoose from "./favchoose.png";
-import cart from "./cart.png";
-import trash from "./trash.png";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components/macro';
+import profile from './profile.png';
+import fav from './fav.png';
+import favchoose from './favchoose.png';
+import cart from './cart.png';
+import trash from './trash.png';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -161,7 +161,7 @@ const MemberNavMobile = styled.div`
     justify-content: center;
     align-items: center;
     align-self: center;
-    gap:80px;
+    gap: 80px;
   }
 `;
 
@@ -291,8 +291,9 @@ export default function FavProducts() {
   const [collection, setCollection] = useState([]);
 
   useEffect(() => {
-    const favProduct = JSON.parse(localStorage.getItem("collection"));
-    setCollection(favProduct);
+    const favProduct = JSON.parse(localStorage.getItem('collection'));
+    const validFavProduct = favProduct ?? [];
+    setCollection(validFavProduct);
   }, []);
 
   useEffect(() => {
@@ -313,23 +314,23 @@ export default function FavProducts() {
     <Wrapper>
       <MemberNav>
         <MemberButton1>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton1>
         <MemberButton2>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton3>
       </MemberNav>
       <MemberNavMobile>
-        <Link to="/Profile">
+        <Link to='/Profile'>
           <MemberButton></MemberButton>
         </Link>
-        <Link to="/FavProducts">
+        <Link to='/FavProducts'>
           <FavButton></FavButton>
         </Link>
-        <Link to="/OrderStatus">
+        <Link to='/OrderStatus'>
           <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
