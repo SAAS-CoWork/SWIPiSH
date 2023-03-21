@@ -330,7 +330,7 @@ function Swipe() {
   const canSwipe = currentIndex >= 0;
 
   const swipe = async (dir) => {
-    console.log('swipe');
+    setSwipeCount(swipeCount + 1);
     if (canSwipe && currentIndex < 10) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
@@ -379,19 +379,25 @@ function Swipe() {
   }
 
   function handleSuperLike(data) {
-    storeLike(data, true, true);
-    navigate(`../products/${db[currentIndex].id}`);
+    if (canSwipe) {
+      storeLike(data, true, true);
+      navigate(`../products/${db[currentIndex].id}`);
+    }
   }
 
   function handleLike(data) {
-    swipe('right');
-    addToCollection();
-    storeLike(data, true, false);
+    if (canSwipe) {
+      swipe('right');
+      addToCollection();
+      storeLike(data, true, false);
+    }
   }
 
   function handleUnlike(data) {
-    swipe('left');
-    storeLike(data, false, false);
+    if (canSwipe) {
+      swipe('left');
+      storeLike(data, false, false);
+    }
   }
 
   function fetchRecommendation() {
@@ -407,7 +413,6 @@ function Swipe() {
           return res.json();
         }
       })
-      .then((data) => setDb(data.data))
       .catch((err) => console.log(err));
   }
 
@@ -420,7 +425,7 @@ function Swipe() {
     }
 
     if (jwt) {
-      fetchRecommendation();
+      fetchRecommendation().then((data) => setDb(data.data));
     }
   }, []);
 
@@ -431,10 +436,12 @@ function Swipe() {
   }, [collection]);
 
   useEffect(() => {
-    if (swipeCount % 10 === 8) {
-      fetchRecommendation();
+    if (swipeCount === 10) {
+      fetchRecommendation().then((data) => console.log(data));
     }
   }, [swipeCount]);
+
+  // useEffect(() => console.log(db), [db]);
 
   if (!db) {
     return;
