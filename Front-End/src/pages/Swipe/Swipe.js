@@ -311,10 +311,6 @@ function Swipe() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < 10;
-
-  const canSwipe = currentIndex >= 0;
-
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
     updateCurrentIndex(index - 1);
@@ -329,9 +325,13 @@ function Swipe() {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   };
 
+  const canGoBack = currentIndex < 10;
+
+  const canSwipe = currentIndex >= 0;
+
   const swipe = async (dir) => {
     console.log('swipe');
-    if (canSwipe && currentIndex < 9) {
+    if (canSwipe && currentIndex < 10) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
   };
@@ -372,7 +372,7 @@ function Swipe() {
         }
       );
       const data_1 = await res.json();
-      return console.log(data_1);
+      return data_1;
     } catch (err) {
       return console.log(err);
     }
@@ -452,10 +452,10 @@ function Swipe() {
           <Products>
             {collection.map((item, index) => (
               <ProductContainer key={index}>
-                <ProductImg imgUrl={item.url} />
+                <ProductImg imgUrl={item.main_image} />
                 <ProductInfoContainer>
                   <ProductInfo>
-                    <InfoText>{item.name}</InfoText>
+                    <InfoText>{item.title}</InfoText>
                     <InfoText>TWD. {item.price}</InfoText>
                   </ProductInfo>
                   <RemoveIcon
