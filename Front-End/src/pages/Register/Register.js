@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 
@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   color: #3f3a3a;
   @media screen and (max-width: 1279px) {
     width: 80%;
-    padding-top: 20px
+    padding-top: 20px;
   }
 `;
 
@@ -35,9 +35,9 @@ const Title = styled.div`
   @media screen and (max-width: 1279px) {
     flex-direction: column-reverse;
     margin-bottom: 15px;
-    gap:0px;
-    justify-content:center;
-    align-items:center;
+    gap: 0px;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -78,14 +78,14 @@ const InfoRow = styled.div`
   @media screen and (max-width: 1279px) {
     flex-direction: column;
     align-items: flex-start;
-    gap:5px;
+    gap: 5px;
   }
 `;
 
 const QuestionTitle = styled.label`
   width: 120px;
   line-height: 19px;
-  margin-right:5px;
+  margin-right: 5px;
 `;
 
 const QuestionInput = styled.input`
@@ -125,6 +125,14 @@ export default function Register() {
   }
 
   function SendUserData() {
+    if (
+      !Object.keys(userData).length ||
+      Object.keys(userData).length < 4 ||
+      Object.values(userData).some((answer) => answer === '')
+    ) {
+      alert('Please do not leave any questions empty');
+      return;
+    }
     const data = {
       name: userData.name,
       email: userData.email,
@@ -154,9 +162,17 @@ export default function Register() {
   }
 
   function handleSubmit(e) {
+    // if (Object.keys.length(userData < 4)) {
+    //   e.preventDefault();
+    //   alert('Please do not leave any questions empty');
+    // }
     e.preventDefault();
     SendUserData();
   }
+
+  useEffect(() => {
+    console.log(Object.values(userData));
+  }, [userData]);
 
   return (
     <Wrapper>
