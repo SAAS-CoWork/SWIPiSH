@@ -224,6 +224,7 @@ const AdContainer = styled.div`
   top: 20%;
   left: 20%;
   background-image: url(${notlikeMsg});
+  display: ${(props) => props.display};
 
   @media screen and (max-width: 1280px) {
     width: 360px;
@@ -238,6 +239,7 @@ function Swipe() {
   const [swipeCount, setSwipeCount] = useState(0);
   const [collection, setCollection] = useState([]);
   const navigate = useNavigate();
+  const [hasSwipeSeven, setHasSwipeSeven] = useState(false);
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
@@ -390,7 +392,7 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
-        <AdContainer />
+        <AdContainer display={hasSwipeSeven ? 'block' : 'none'} />
         {!collection || collection.length === 0 ? null : (
           <Products>
             {collection.map((item, index) => (
