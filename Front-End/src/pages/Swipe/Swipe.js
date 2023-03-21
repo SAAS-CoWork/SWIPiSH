@@ -287,8 +287,10 @@ const RemoveIcon = styled.div`
 `;
 
 function Swipe() {
+  const jwt = localStorage.getItem('loginToken');
   const [db, setDb] = useState();
   const [currentIndex, setCurrentIndex] = useState(9);
+  const [swipeCount, setSwipeCount] = useState(0);
   const [collection, setCollection] = useState([]);
   const navigate = useNavigate();
   // used for outOfFrame closure
@@ -309,7 +311,7 @@ function Swipe() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < 9;
+  const canGoBack = currentIndex < 10;
 
   const canSwipe = currentIndex >= 0;
 
@@ -405,7 +407,7 @@ function Swipe() {
           return res.json();
         }
       })
-      .then((data) => console.log(data))
+      .then((data) => setDb(data.data))
       .catch((err) => console.log(err));
   }
 
@@ -433,6 +435,10 @@ function Swipe() {
       fetchRecommendation();
     }
   }, [swipeCount]);
+
+  if (!db) {
+    return;
+  }
 
   return (
     <Wrapper>
