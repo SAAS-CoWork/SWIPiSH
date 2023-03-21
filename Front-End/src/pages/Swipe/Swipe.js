@@ -18,68 +18,68 @@ import trash from './trash.png';
 //   },
 // })
 
-const db = [
-  {
-    name: '前開衩扭結洋裝',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
-    price: '799',
-    id: '201902191248',
-  },
-  {
-    name: 'S曲線翹臀心機修修褲',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
-    price: '790',
-    id: '201902191335',
-  },
-  {
-    name: '傑利鼠手提袋',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
-    price: '790',
-    id: '201902191449',
-  },
-  {
-    name: '三眼怪防潑水短褲',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
-    price: '790',
-    id: '201902191255',
-  },
-  {
-    name: '傑利鼠撞色襯衫',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
-    price: '799',
-    id: '201902191298',
-  },
-  {
-    name: '前開衩扭結洋裝',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
-    price: '799',
-    id: '201902191248',
-  },
-  {
-    name: 'S曲線翹臀心機修修褲',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
-    price: '790',
-    id: '201902191335',
-  },
-  {
-    name: '傑利鼠手提袋',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
-    price: '790',
-    id: '201902191449',
-  },
-  {
-    name: '三眼怪防潑水短褲',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
-    price: '790',
-    id: '201902191255',
-  },
-  {
-    name: '傑利鼠撞色襯衫',
-    url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
-    price: '799',
-    id: '201902191298',
-  },
-];
+// const db = [
+//   {
+//     name: '前開衩扭結洋裝',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
+//     price: '799',
+//     id: '201902191248',
+//   },
+//   {
+//     name: 'S曲線翹臀心機修修褲',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191335',
+//   },
+//   {
+//     name: '傑利鼠手提袋',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191449',
+//   },
+//   {
+//     name: '三眼怪防潑水短褲',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191255',
+//   },
+//   {
+//     name: '傑利鼠撞色襯衫',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
+//     price: '799',
+//     id: '201902191298',
+//   },
+//   {
+//     name: '前開衩扭結洋裝',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI001_09_M_01_m.jpg',
+//     price: '799',
+//     id: '201902191248',
+//   },
+//   {
+//     name: 'S曲線翹臀心機修修褲',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2CO017_09_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191335',
+//   },
+//   {
+//     name: '傑利鼠手提袋',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F2WB015_47_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191449',
+//   },
+//   {
+//     name: '三眼怪防潑水短褲',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1DI011_09_M_01_m.jpg',
+//     price: '790',
+//     id: '201902191255',
+//   },
+//   {
+//     name: '傑利鼠撞色襯衫',
+//     url: 'https://hbt001.ccis.chiefappc.com/cac/CmiProd/F1WB013_27_M_01_m.jpg',
+//     price: '799',
+//     id: '201902191298',
+//   },
+// ];
 
 const Wrapper = styled.div`
   width: 100%;
@@ -287,16 +287,18 @@ const RemoveIcon = styled.div`
 `;
 
 function Swipe() {
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1);
-  const [lastDirection, setLastDirection] = useState();
+  const [db, setDb] = useState();
+  const [currentIndex, setCurrentIndex] = useState(9);
   const [collection, setCollection] = useState([]);
   const navigate = useNavigate();
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
+  useEffect(() => console.log(currentIndex), [currentIndex]);
+
   const childRefs = useMemo(
     () =>
-      Array(db.length)
+      Array(10)
         .fill(0)
         .map((i) => React.createRef()),
     []
@@ -307,13 +309,12 @@ function Swipe() {
     currentIndexRef.current = val;
   };
 
-  const canGoBack = currentIndex < db.length - 1;
+  const canGoBack = currentIndex < 9;
 
   const canSwipe = currentIndex >= 0;
 
   // set last direction and decrease current index
   const swiped = (direction, nameToDelete, index) => {
-    setLastDirection(direction);
     updateCurrentIndex(index - 1);
   };
 
@@ -327,7 +328,8 @@ function Swipe() {
   };
 
   const swipe = async (dir) => {
-    if (canSwipe && currentIndex < db.length) {
+    console.log('swipe');
+    if (canSwipe && currentIndex < 9) {
       await childRefs[currentIndex].current.swipe(dir); // Swipe the card!
     }
   };
@@ -354,6 +356,7 @@ function Swipe() {
   }
 
   function handleLike() {
+    console.log('triggered');
     swipe('right');
     addToCollection();
   }
@@ -380,7 +383,7 @@ function Swipe() {
             return res.json();
           }
         })
-        .then((data) => console.log(data))
+        .then((data) => setDb(data.data))
         .catch((err) => console.log(err));
     }
   }, []);
@@ -392,6 +395,9 @@ function Swipe() {
   }, [collection]);
 
   useEffect(() => {}, []);
+  if (!db) {
+    return;
+  }
 
   return (
     <Wrapper>
@@ -446,12 +452,12 @@ function Swipe() {
                 }}
               >
                 <SwipeBottomContainer>
-                  <SwipeTitle>{character.name}</SwipeTitle>
+                  <SwipeTitle>{character.title}</SwipeTitle>
                   <SwipePrice>TWD.{character.price}</SwipePrice>
                 </SwipeBottomContainer>
                 <Card
                   style={{
-                    backgroundImage: 'url(' + character.url + ')',
+                    backgroundImage: 'url(' + character.main_image + ')',
                     boxShadow: '0px 0px 30px 0px rgba(0,0,0,0.10)',
                     borderRadius: '20px',
                     backgroundSize: 'cover',
