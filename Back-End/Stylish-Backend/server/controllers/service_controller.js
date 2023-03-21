@@ -1,20 +1,14 @@
 
 require('dotenv').config({ path: '../../.env' });
 const { SENDER } = require('../constants/mail');
-const formData = require('form-data');
-const Mailgun = require('mailgun.js');
 const path = require('path');
 const fsPromises = require('fs').promises;
-const mailgun = new Mailgun(formData);
-const mg = mailgun.client({
-    username: 'api',
-    key: process.env.MAILGUN_API_KEY
-});
+const { mgClient } = require('../../util/mail');
 
 const mgDomain = process.env.MAILGUN_DOMAIN;
 const logoPath = path.resolve(__dirname, '../../public/images/Swipe_1.png');
 
-const sendEmail = (req, res) => {
+const sendEmail = async (req, res) => {
     // organize req data
     const { user } = req;
     if ( !user ) {
@@ -28,7 +22,8 @@ const sendEmail = (req, res) => {
 
     const messageData = {
         from: SENDER,
-        to: 'c.s.fangyolk@gmail.com',
+        // to: `${user.email}`,
+        to: `${user.email}`,
         subject: `Hi ${user.name} 感謝您的來信`,
         html: message
     }
@@ -42,7 +37,7 @@ const sendEmail = (req, res) => {
             }
 
             messageData.inline = file;
-            return mg.messages.create(mgDomain, messageData);
+            return mgClient.messages.create(mgDomain, messageData);
         })
         .then(response => {
             console.log(response);
