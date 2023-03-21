@@ -161,7 +161,7 @@ const MemberNavMobile = styled.div`
     justify-content: center;
     align-items: center;
     align-self: center;
-    gap:80px;
+    gap: 80px;
   }
 `;
 
@@ -297,7 +297,7 @@ export default function FavProducts() {
 
   useEffect(() => {
     const jsonCollectoin = JSON.stringify(collection);
-    localStorage.setItem('collection', jsonCollectoin);
+    localStorage.setItem("collection", jsonCollectoin);
   }, [collection]);
 
   function handleRemove(index) {
@@ -341,7 +341,9 @@ export default function FavProducts() {
       <ProductItemContainer>
         {collection.map((item, index) => (
           <ProductContainer key={index}>
-            <ProductImg url={item.url} />
+            <Link to={`/products/${item.id}`}>
+              <ProductImg url={item.url} />
+            </Link>
             <ProductDetail>
               <ProductTitle>{item.name}</ProductTitle>
               <ProductPrice>{item.price}</ProductPrice>
