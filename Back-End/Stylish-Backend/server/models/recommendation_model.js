@@ -14,7 +14,6 @@ const findSimilarProducts = async function (user_id) {
     const catScores = {};
     const titleScores = {};
     const priceScores = {};
-    const textureScores = {};
 
     likedProducts.map((likedProduct) => {
         const { score } = likedProduct;
@@ -22,10 +21,9 @@ const findSimilarProducts = async function (user_id) {
         addScore( catScores, score, tags[0] );
         addScore( titleScores, score, tags[1] );
         addScore( priceScores, score, tags[2] );
-        addScore( textureScores, score, tags[3] );
     })
 
-    const arr = [ catScores, titleScores, priceScores, textureScores ];
+    const arr = [ catScores, titleScores, priceScores ];
 
     return arr.map((obj) => {
         return Object.entries(obj).sort((a, b) => {
