@@ -37,7 +37,7 @@ const sendEmail = async (req, res) => {
             }
 
             messageData.inline = file;
-            return mgClient.messages.create(mgDomain, messageData);
+            return mg.messages.create('sandbox-123.mailgun.org', messageData);
         })
         .then(response => {
             console.log(response);
