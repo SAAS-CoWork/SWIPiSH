@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components/macro";
 import profile from "./profile.png";
-import profilechoose from "./profilechoose.png";
 import fav from "./fav.png";
 import favchoose from "./favchoose.png";
 import cart from "./cart.png";
-import cartchoose from "./cartchoose.png";
 import trash from "./trash.png";
 import { Link } from "react-router-dom";
 
@@ -17,7 +15,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    margin: 100px 50px 50px;
+    margin: 50px 50px 50px;
     border: none;
   }
 `;
@@ -59,6 +57,9 @@ const MemberNav = styled.div`
   z-index: 10;
   margin-top: -60.5px;
   padding-left: 50px;
+  @media screen and (max-width: 1279px) {
+    margin-top: 0px;
+  }
 `;
 
 const Splict = styled.div`
@@ -189,7 +190,7 @@ const FavButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${fav});
+    background-image: url(${favchoose});
     height: 32px;
     width: 38px;
     cursor: pointer;
@@ -235,6 +236,10 @@ const ProductItemContainer = styled.div`
   margin-left: 30px;
   margin-right: 30px;
   justify-content: center;
+  @media screen and (max-width: 1279px) {
+    width: 80%;
+    align-self: center;
+  }
 `;
 
 const ProductContainer = styled.div`
@@ -283,18 +288,6 @@ const Delete = styled.div`
 
 export default function FavProducts() {
   const [collection, setCollection] = useState([]);
-  const [profileBgImage, setProfileBgImage] = useState(profile);
-  const [favBgImage, setFavBgImage] = useState(fav);
-  const [orderBgImage, setOrderBgImage] = useState(cart);
-  const handleProfileClick = () => {
-    setProfileBgImage(profilechoose);
-  };
-  const handleFavClick = () => {
-    setFavBgImage(favchoose);
-  };
-  const handleOrderClick = () => {
-    setOrderBgImage(cartchoose);
-  };
 
   useEffect(() => {
     const favProduct = JSON.parse(localStorage.getItem("collection"));
@@ -319,19 +312,13 @@ export default function FavProducts() {
       </MemberNav>
       <MemberNavMobile>
         <Link to="/Profile">
-          <MemberButton
-            bgImage={profileBgImage}
-            onClick={handleProfileClick}
-          ></MemberButton>
+          <MemberButton></MemberButton>
         </Link>
         <Link to="/FavProducts">
-          <FavButton bgImage={favBgImage} onClick={handleFavClick}></FavButton>
+          <FavButton></FavButton>
         </Link>
         <Link to="/OrderStatus">
-          <CartButton
-            bgImage={orderBgImage}
-            onClick={handleOrderClick}
-          ></CartButton>
+          <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
       <Title>

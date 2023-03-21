@@ -2,15 +2,13 @@ import React from "react";
 import { useState } from "react";
 import styled from "styled-components/macro";
 import profile from "./profile.png";
-import profilechoose from "./profilechoose.png";
 import fav from "./fav.png";
-import favchoose from "./favchoose.png";
 import cart from "./cart.png";
 import cartchoose from "./cartchoose.png";
 import conversation from "./conversation.png";
+import conversationchoose from "./conversationchoose.png";
 import star from "./star.png";
 import goldstar from "./goldstar.png";
-
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
@@ -20,7 +18,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    margin: 100px 50px 50px;
+    margin: 50px 50px 50px;
     border: none;
   }
 `;
@@ -62,6 +60,19 @@ const MemberNav = styled.div`
   z-index: 10;
   margin-top: -60.5px;
   padding-left: 50px;
+  @media screen and (max-width: 1279px) {
+    margin-top: 0px;
+  }
+`;
+
+const Splict = styled.div`
+  border-top: 1px solid #3f3a3a;
+  width: 80%;
+  margin-bottom: 74px;
+  align-self: center;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 40px;
+  }
 `;
 
 const MemberButton1 = styled.button`
@@ -161,7 +172,7 @@ const MemberButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${profile});
     height: 35px;
     width: 35px;
     cursor: pointer;
@@ -182,7 +193,7 @@ const FavButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${fav});
     height: 32px;
     width: 38px;
     cursor: pointer;
@@ -203,7 +214,7 @@ const CartButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${cartchoose});
     height: 35px;
     width: 35px;
     cursor: pointer;
@@ -228,6 +239,10 @@ const ChartWrapper = styled.div`
   margin: 160px 180px 110px;
   align-self: center;
   margin-top: 0px;
+  @media screen and (max-width: 1279px) {
+    border: none;
+    border-radius: none;
+  }
 `;
 
 const ChartTitleWrapper = styled.div`
@@ -237,6 +252,12 @@ const ChartTitleWrapper = styled.div`
   background: #3f3f3a;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
+  @media screen and (max-width: 1279px) {
+    border: none;
+    border-radius: 0;
+    background: #ffffff;
+    flex-wrap: wrap;
+  }
 `;
 
 const ChartTitle = styled.p`
@@ -249,6 +270,9 @@ const ChartTitle = styled.p`
   color: #ffffff;
   margin: 23px auto;
   white-space: nowrap;
+  @media screen and (max-width: 1279px) {
+    color: #3f3f3a;
+  }
 `;
 
 const OrderStatusWrapper = styled.div`
@@ -261,6 +285,7 @@ const OrderStatusWrapper = styled.div`
   align-items: center;
   &:last-child {
     border-bottom: none;
+    flex-wrap: wrap;
   }
 `;
 
@@ -306,7 +331,7 @@ const OrderRequest = styled.p`
 `;
 
 const CustomerService = styled.div`
-  background-image: url(${conversation});
+  background-image: url(${(props) => props.bgImage});
   background-color: #ffffff;
   width: 32px;
   height: 31px;
@@ -315,48 +340,68 @@ const CustomerService = styled.div`
   cursor: pointer;
 `;
 
+const ReviewContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 135px;
+`;
+
 const Review = styled.div`
   background-image: url(${(props) => props.backgroundImage});
-  background-repeat: repeat-x;
+  background-repeat: no-repeat;
   cursor: pointer;
-  width: 140px;
-  height: 25px;
+  width: 28px;
+  height: 26px;
 `;
 
 function SingleOrderStatus() {
-  const [isFilled, setIsFilled] = useState(false);
-
-  const handleClick = () => {
-    setIsFilled(!isFilled);
+  const [conversationBgImage, setConversationBgImage] = useState(conversation);
+  const handleConversationClick = () => {
+    setConversationBgImage(conversationchoose);
   };
+  const [stars, setStars] = useState([
+    { id: 1, isFilled: false },
+    { id: 2, isFilled: false },
+    { id: 3, isFilled: false },
+    { id: 4, isFilled: false },
+    { id: 5, isFilled: false },
+  ]);
+
+  function handleClick(starId) {
+    const updatedStars = stars.map((star) => {
+      if (star.id <= starId) {
+        return { ...star, isFilled: true };
+      } else {
+        return { ...star, isFilled: false };
+      }
+    });
+    setStars(updatedStars);
+  }
+
   return (
     <OrderStatusWrapper>
       <OrderNum>0012123</OrderNum>
       <ShipStatus>出貨處理</ShipStatus>
       <OrderPrize>NT.1200</OrderPrize>
       <OrderRequest>尚未申請</OrderRequest>
-      <CustomerService></CustomerService>
-      <Review
-        backgroundImage={isFilled ? goldstar : star}
-        onClick={handleClick}
-      ></Review>
+      <CustomerService
+        bgImage={conversationBgImage}
+        onClick={handleConversationClick}
+      ></CustomerService>
+      <ReviewContainer>
+        {stars.map((item) => (
+          <Review
+            key={item.id}
+            backgroundImage={item.isFilled ? goldstar : star}
+            onClick={() => handleClick(item.id)}
+          />
+        ))}
+      </ReviewContainer>
     </OrderStatusWrapper>
   );
 }
 
 export default function OrderStatus() {
-  const [profileBgImage, setProfileBgImage] = useState(profile);
-  const [favBgImage, setFavBgImage] = useState(fav);
-  const [orderBgImage, setOrderBgImage] = useState(cart);
-  const handleProfileClick = () => {
-    setProfileBgImage(profilechoose);
-  };
-  const handleFavClick = () => {
-    setFavBgImage(favchoose);
-  };
-  const handleOrderClick = () => {
-    setOrderBgImage(cartchoose);
-  };
   return (
     <Wrapper>
       <MemberNav>
@@ -372,25 +417,20 @@ export default function OrderStatus() {
       </MemberNav>
       <MemberNavMobile>
         <Link to="/Profile">
-          <MemberButton
-            bgImage={profileBgImage}
-            onClick={handleProfileClick}
-          ></MemberButton>
+          <MemberButton></MemberButton>
         </Link>
         <Link to="/FavProducts">
-          <FavButton bgImage={favBgImage} onClick={handleFavClick}></FavButton>
+          <FavButton></FavButton>
         </Link>
         <Link to="/OrderStatus">
-          <CartButton
-            bgImage={orderBgImage}
-            onClick={handleOrderClick}
-          ></CartButton>
+          <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
       <Title>
         <Titletext>訂單狀態</Titletext>
         <FavIcon></FavIcon>
       </Title>
+      <Splict></Splict>
       <ChartWrapper>
         <ChartTitleWrapper>
           <ChartTitle>訂單編號</ChartTitle>

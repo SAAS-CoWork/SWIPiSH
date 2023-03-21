@@ -4,9 +4,7 @@ import edit from "./edit.png";
 import profile from "./profile.png";
 import profilechoose from "./profilechoose.png";
 import fav from "./fav.png";
-import favchoose from "./favchoose.png";
 import cart from "./cart.png";
-import cartchoose from "./cartchoose.png";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 // import { useContext } from 'react';
@@ -154,7 +152,7 @@ const MemberButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${profilechoose});
     height: 35px;
     width: 35px;
     cursor: pointer;
@@ -175,7 +173,7 @@ const FavButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${fav});
     height: 32px;
     width: 38px;
     cursor: pointer;
@@ -196,7 +194,7 @@ const CartButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${(props) => props.bgImage});
+    background-image: url(${cart});
     height: 35px;
     width: 35px;
     cursor: pointer;
@@ -414,18 +412,6 @@ export default function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
-  const [profileBgImage, setProfileBgImage] = useState(profile);
-  const [favBgImage, setFavBgImage] = useState(fav);
-  const [orderBgImage, setOrderBgImage] = useState(cart);
-  const handleProfileClick = () => {
-    setProfileBgImage(profilechoose);
-  };
-  const handleFavClick = () => {
-    setFavBgImage(favchoose);
-  };
-  const handleOrderClick = () => {
-    setOrderBgImage(cartchoose);
-  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -494,19 +480,13 @@ export default function Profile() {
       </MemberNav>
       <MemberNavMobile>
         <Link to="/Profile">
-          <MemberButton
-            bgImage={profileBgImage}
-            onClick={handleProfileClick}
-          ></MemberButton>
+          <MemberButton></MemberButton>
         </Link>
         <Link to="/FavProducts">
-          <FavButton bgImage={favBgImage} onClick={handleFavClick}></FavButton>
+          <FavButton></FavButton>
         </Link>
         <Link to="/OrderStatus">
-          <CartButton
-            bgImage={orderBgImage}
-            onClick={handleOrderClick}
-          ></CartButton>
+          <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
       <Title>
