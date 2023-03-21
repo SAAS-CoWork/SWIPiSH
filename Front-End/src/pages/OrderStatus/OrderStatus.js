@@ -1,16 +1,14 @@
 import React from "react";
 import { useState } from "react";
-import styled from 'styled-components/macro';
-import profile from './profile.png';
-import profilechoose from './profilechoose.png';
+import styled from "styled-components/macro";
+import profile from "./profile.png";
 import fav from "./fav.png";
-import favchoose from "./favchoose.png";
 import cart from "./cart.png";
 import cartchoose from "./cartchoose.png";
 import conversation from "./conversation.png";
+import conversationchoose from "./conversationchoose.png";
 import star from "./star.png";
 import goldstar from "./goldstar.png";
-
 import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
@@ -20,7 +18,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    margin: 100px 50px 50px;
+    margin: 50px 50px 50px;
     border: none;
   }
 `;
@@ -41,13 +39,19 @@ const Titletext = styled.h1`
   font-weight: 700;
   letter-spacing: 6.4px;
   color: #3f3f3a;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const FavIcon = styled.div`
   width: 37.17px;
   height: 35.53px;
   background-image: url(${cart});
-  margin-top:50px;
+  margin-top: 50px;
+  @media screen and (max-width: 1279px) {
+    display: none;
+  }
 `;
 
 const MemberNav = styled.div`
@@ -56,6 +60,19 @@ const MemberNav = styled.div`
   z-index: 10;
   margin-top: -60.5px;
   padding-left: 50px;
+  @media screen and (max-width: 1279px) {
+    margin-top: 0px;
+  }
+`;
+
+const Splict = styled.div`
+  border-top: 1px solid #3f3a3a;
+  width: 80%;
+  margin-bottom: 74px;
+  align-self: center;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 40px;
+  }
 `;
 
 const MemberButton1 = styled.button`
@@ -79,7 +96,7 @@ const MemberButton1 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -107,7 +124,7 @@ const MemberButton2 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -132,7 +149,85 @@ const MemberButton3 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
+  }
+`;
+
+const MemberNavMobile = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    gap:80px;
+  }
+`;
+
+const MemberButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${profile});
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
+  }
+`;
+
+const FavButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${fav});
+    height: 32px;
+    width: 38px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
+  }
+`;
+
+const CartButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${cartchoose});
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
@@ -145,6 +240,10 @@ const ChartWrapper = styled.div`
   margin: 160px 180px 110px;
   align-self: center;
   margin-top: 0px;
+  @media screen and (max-width: 1279px) {
+    border: none;
+    border-radius: none;
+  }
 `;
 
 const ChartTitleWrapper = styled.div`
@@ -154,6 +253,12 @@ const ChartTitleWrapper = styled.div`
   background: #3f3f3a;
   border-top-left-radius: 22px;
   border-top-right-radius: 22px;
+  @media screen and (max-width: 1279px) {
+    border: none;
+    border-radius: 0;
+    background: #ffffff;
+    flex-wrap: wrap;
+  }
 `;
 
 const ChartTitle = styled.p`
@@ -166,6 +271,9 @@ const ChartTitle = styled.p`
   color: #ffffff;
   margin: 23px auto;
   white-space: nowrap;
+  @media screen and (max-width: 1279px) {
+    color: #3f3f3a;
+  }
 `;
 
 const OrderStatusWrapper = styled.div`
@@ -178,6 +286,7 @@ const OrderStatusWrapper = styled.div`
   align-items: center;
   &:last-child {
     border-bottom: none;
+    flex-wrap: wrap;
   }
 `;
 
@@ -189,7 +298,7 @@ const OrderNum = styled.p`
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
-  font-weight:700;
+  font-weight: 700;
 `;
 
 const ShipStatus = styled.p`
@@ -223,36 +332,72 @@ const OrderRequest = styled.p`
 `;
 
 const CustomerService = styled.div`
-  background-image: url(${conversation});
-  background-color: #ffffff; 
-  width:32px;
-  height:31px;
-  margin-right:24px;
-  margin-left:28px;
-  cursor:pointer;
+  background-image: url(${(props) => props.bgImage});
+  background-color: #ffffff;
+  width: 32px;
+  height: 31px;
+  margin-right: 24px;
+  margin-left: 28px;
+  cursor: pointer;
+`;
+
+const ReviewContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 135px;
 `;
 
 const Review = styled.div`
-  background-image: url(${props => props.backgroundImage});
-  background-repeat: repeat-x;
-  cursor:pointer;
-  width:140px;
-  height:25px;
+  background-image: url(${(props) => props.backgroundImage});
+  background-repeat: no-repeat;
+  cursor: pointer;
+  width: 28px;
+  height: 26px;
 `;
 
 function SingleOrderStatus() {
-  const [isFilled, setIsFilled] = useState(false);
-  const handleClick = () => {
-    setIsFilled(!isFilled);
+  const [conversationBgImage, setConversationBgImage] = useState(conversation);
+  const handleConversationClick = () => {
+    setConversationBgImage(conversationchoose);
   };
+  const [stars, setStars] = useState([
+    { id: 1, isFilled: false },
+    { id: 2, isFilled: false },
+    { id: 3, isFilled: false },
+    { id: 4, isFilled: false },
+    { id: 5, isFilled: false },
+  ]);
+
+  function handleClick(starId) {
+    const updatedStars = stars.map((star) => {
+      if (star.id <= starId) {
+        return { ...star, isFilled: true };
+      } else {
+        return { ...star, isFilled: false };
+      }
+    });
+    setStars(updatedStars);
+  }
+
   return (
     <OrderStatusWrapper>
       <OrderNum>0012123</OrderNum>
       <ShipStatus>出貨處理</ShipStatus>
       <OrderPrize>NT.1200</OrderPrize>
       <OrderRequest>尚未申請</OrderRequest>
-      <CustomerService></CustomerService>
-      <Review backgroundImage={isFilled ? goldstar : star} onClick={handleClick}></Review>
+      <CustomerService
+        bgImage={conversationBgImage}
+        onClick={handleConversationClick}
+      ></CustomerService>
+      <ReviewContainer>
+        {stars.map((item) => (
+          <Review
+            key={item.id}
+            backgroundImage={item.isFilled ? goldstar : star}
+            onClick={() => handleClick(item.id)}
+          />
+        ))}
+      </ReviewContainer>
     </OrderStatusWrapper>
   );
 }
@@ -271,10 +416,22 @@ export default function OrderStatus() {
           <Link to="/OrderStatus">訂單狀態</Link>
         </MemberButton2>
       </MemberNav>
+      <MemberNavMobile>
+        <Link to="/Profile">
+          <MemberButton></MemberButton>
+        </Link>
+        <Link to="/FavProducts">
+          <FavButton></FavButton>
+        </Link>
+        <Link to="/OrderStatus">
+          <CartButton></CartButton>
+        </Link>
+      </MemberNavMobile>
       <Title>
         <Titletext>訂單狀態</Titletext>
         <FavIcon></FavIcon>
       </Title>
+      <Splict></Splict>
       <ChartWrapper>
         <ChartTitleWrapper>
           <ChartTitle>訂單編號</ChartTitle>
