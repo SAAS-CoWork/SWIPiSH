@@ -208,6 +208,7 @@ async function updateLikedProduct( user_id, product_id, score ) {
             console.log('updated');
             await conn.commit();
             await conn.release();
+            return true;
         }
 
         if ( score < 0 ) {
@@ -219,6 +220,7 @@ async function updateLikedProduct( user_id, product_id, score ) {
             await conn.commit();
             await conn.release();
             console.log('inserted');
+            return true;
         }
         return true;
 
