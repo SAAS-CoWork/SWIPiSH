@@ -73,14 +73,15 @@ const createSubDetail = async (id, plan, price) => {
 
 // update subscription table after paid success
 // update user role_id
-const updateAfterPaid = async (period, paidAt, subId, userId) => {
+const updateAfterPaid = async (period, paidAt, card, subId, userId) => {
   try {
     await pool.query(`
     UPDATE subscription 
     SET expire = DATE_ADD(NOW(), INTERVAL ? DAY),
-    paid_at = ?
+    paid_at = ?,
+    card_secret = ?
     WHERE id = ?
-    `, [period, paidAt, subId])
+    `, [period, paidAt, card, subId])
 
     await pool.query(`
     UPDATE user
@@ -96,6 +97,7 @@ const updateAfterPaid = async (period, paidAt, subId, userId) => {
     console.error(e)
   }
 };
+
 
 module.exports = {
   createOrder,
