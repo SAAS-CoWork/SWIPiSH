@@ -264,7 +264,7 @@ const ProfileImg = styled.div`
   width: 150px;
   height: 150px;
   background-image: url(${(props) =>
-    props.selectedFileUrl ? props.selectedFileUrl : biggerprofile});
+    props.selectedFileUrl ?? biggerprofile});
   background-size: cover;
   background-position: center;
   border-radius: 100px;
