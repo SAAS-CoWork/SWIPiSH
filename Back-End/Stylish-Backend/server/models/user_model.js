@@ -237,11 +237,11 @@ const getLiked = async function (userId) {
 
 const getSub = async function (userId) {
   try {
-    const [[result]] = await pool.query(`
+    const [result] = await pool.query(`
     SELECT plan, expire FROM subscription
     WHERE user_id = ?
     `, [userId])
-    return result;
+    return result.pop();
   } catch (e) {
     console.log(e);
   }
