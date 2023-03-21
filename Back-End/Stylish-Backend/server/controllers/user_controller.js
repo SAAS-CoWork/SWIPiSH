@@ -139,11 +139,17 @@ const getUserProfile = async (req, res) => {
 
   if (roleId == User.USER_ROLE.VIPUSER) {
     const liked = await User.getLiked(id)
+    const sub = await User.getSub(id)
+    const plan = sub.plan
+    const expire = sub.expire.toLocaleString()
+
     return res.status(200).json({
       data: {
         name: req.user.name,
         email: req.user.email,
         subscription: true,
+        plan,
+        expire,
         liked_product: liked
       },
     })
