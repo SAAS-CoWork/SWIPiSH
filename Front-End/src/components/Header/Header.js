@@ -200,9 +200,10 @@ const PageLinkCartIcon = styled(PageLinkIcon)`
 `;
 
 const PageLinkProfileIcon = styled(PageLinkIcon)`
-  background-image: url(${({ url }) => url ?? profile});
+  ${'' /* background-image: url(${({ url }) => url ?? profile}); */}
+  background-image: url(${(props) =>
+    props.profileImgUrl ?? profile});
   border-radius: 50%;
-
   @media screen and (max-width: 1279px) {
     background-image: url(${profileMobile});
   }
@@ -286,6 +287,8 @@ function Header() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get('category');
   const [upgradeClicked, setUpgradeClicked] = useState(false);
+  const [profileImgUrl, setProfileImgUrl] = useState('');
+
 
   const handleUpgradeClick = () => {
     setUpgradeClicked(true);
@@ -293,6 +296,13 @@ function Header() {
   useEffect(() => {
     if (category) setInputValue('');
   }, [category]);
+
+  useEffect(() => {
+    const imgSrc = localStorage.getItem('profileImg');
+    if (imgSrc) {
+      setProfileImgUrl(imgSrc);
+    }
+  }, []);
 
   return (
     <Wrapper>
@@ -332,7 +342,7 @@ function Header() {
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
         <PageLink to='/profile'>
-          <PageLinkProfileIcon icon={profile} url={user?.picture} />
+        <PageLinkProfileIcon src={profileImgUrl} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>

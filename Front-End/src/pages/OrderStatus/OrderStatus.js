@@ -1,16 +1,16 @@
-import React from 'react';
-import { useState } from 'react';
-import styled from 'styled-components/macro';
-import profile from './profile.png';
-import fav from './fav.png';
-import cart from './cart.png';
-import cartchoose from './cartchoose.png';
-import conversation from './conversation.png';
-import conversationchoose from './conversationchoose.png';
-import star from './star.png';
-import goldstar from './goldstar.png';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useState } from "react";
+import styled from "styled-components/macro";
+import profile from "./profile.png";
+import fav from "./fav.png";
+import cart from "./cart.png";
+import cartchoose from "./cartchoose.png";
+import conversation from "./conversation.png";
+import conversationchoose from "./conversationchoose.png";
+import star from "./star.png";
+import goldstar from "./goldstar.png";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -244,6 +244,10 @@ const ChartWrapper = styled.div`
   @media screen and (max-width: 1279px) {
     border: none;
     border-radius: none;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    width: 261px;
   }
 `;
 
@@ -259,6 +263,8 @@ const ChartTitleWrapper = styled.div`
     border-radius: 0;
     background: #ffffff;
     flex-wrap: wrap;
+    gap: 16px;
+    justify-content: flex-start;
   }
 `;
 
@@ -274,6 +280,8 @@ const ChartTitle = styled.p`
   white-space: nowrap;
   @media screen and (max-width: 1279px) {
     color: #3f3f3a;
+    font-weight: 700;
+    margin: 0;
   }
 `;
 
@@ -285,9 +293,20 @@ const OrderStatusWrapper = styled.div`
   padding-top: 28px;
   padding-bottom: 28px;
   align-items: center;
-  &:last-child {
+  border-bottom: none;
+  align-content: flex-start;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  @media screen and (max-width: 1279px) {
+    border-bottom: 2px solid #3f3f3a;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    align-items: center;
     border-bottom: none;
     flex-wrap: wrap;
+    align-content: flex-start;
+    padding: 0;
+    justify-content: flex-start;
   }
 `;
 
@@ -300,6 +319,9 @@ const OrderNum = styled.p`
   color: #3f3a3a;
   white-space: nowrap;
   font-weight: 700;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 14px;
+  }
 `;
 
 const ShipStatus = styled.p`
@@ -310,6 +332,9 @@ const ShipStatus = styled.p`
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 14px;
+  }
 `;
 
 const OrderPrize = styled.p`
@@ -320,6 +345,9 @@ const OrderPrize = styled.p`
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 14px;
+  }
 `;
 
 const OrderRequest = styled.p`
@@ -330,6 +358,9 @@ const OrderRequest = styled.p`
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 14px;
+  }
 `;
 
 const CustomerService = styled.div`
@@ -340,6 +371,12 @@ const CustomerService = styled.div`
   margin-right: 24px;
   margin-left: 28px;
   cursor: pointer;
+  @media screen and (max-width: 1279px) {
+    margin-right: 0px;
+    margin-left: 0px;
+    margin-bottom: 24px;
+    margin-top: 10px;
+  }
 `;
 
 const ReviewContainer = styled.div`
@@ -354,6 +391,9 @@ const Review = styled.div`
   cursor: pointer;
   width: 28px;
   height: 26px;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 0px;
+  }
 `;
 
 function SingleOrderStatus() {
@@ -361,7 +401,7 @@ function SingleOrderStatus() {
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
     setConversationBgImage(conversationchoose);
-    navigate('/customerservice');
+    navigate("/customerservice");
   };
   const [stars, setStars] = useState([
     { id: 1, isFilled: false },
@@ -410,23 +450,23 @@ export default function OrderStatus() {
     <Wrapper>
       <MemberNav>
         <MemberButton1>
-          <Link to='/Profile'>會員資料</Link>
+          <Link to="/Profile">會員資料</Link>
         </MemberButton1>
         <MemberButton3>
-          <Link to='/FavProducts'>收藏商品</Link>
+          <Link to="/FavProducts">收藏商品</Link>
         </MemberButton3>
         <MemberButton2>
-          <Link to='/OrderStatus'>訂單狀態</Link>
+          <Link to="/OrderStatus">訂單狀態</Link>
         </MemberButton2>
       </MemberNav>
       <MemberNavMobile>
-        <Link to='/Profile'>
+        <Link to="/Profile">
           <MemberButton></MemberButton>
         </Link>
-        <Link to='/FavProducts'>
+        <Link to="/FavProducts">
           <FavButton></FavButton>
         </Link>
-        <Link to='/OrderStatus'>
+        <Link to="/OrderStatus">
           <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
@@ -444,7 +484,6 @@ export default function OrderStatus() {
           <ChartTitle>客戶服務</ChartTitle>
           <ChartTitle>商品評價</ChartTitle>
         </ChartTitleWrapper>
-        <SingleOrderStatus></SingleOrderStatus>
         <SingleOrderStatus></SingleOrderStatus>
       </ChartWrapper>
     </Wrapper>
