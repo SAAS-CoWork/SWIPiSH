@@ -1,15 +1,16 @@
-import React from "react";
-import { useState } from "react";
-import styled from "styled-components/macro";
-import profile from "./profile.png";
-import fav from "./fav.png";
-import cart from "./cart.png";
-import cartchoose from "./cartchoose.png";
-import conversation from "./conversation.png";
-import conversationchoose from "./conversationchoose.png";
-import star from "./star.png";
-import goldstar from "./goldstar.png";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { useState } from 'react';
+import styled from 'styled-components/macro';
+import profile from './profile.png';
+import fav from './fav.png';
+import cart from './cart.png';
+import cartchoose from './cartchoose.png';
+import conversation from './conversation.png';
+import conversationchoose from './conversationchoose.png';
+import star from './star.png';
+import goldstar from './goldstar.png';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   display: flex;
@@ -164,7 +165,7 @@ const MemberNavMobile = styled.div`
     justify-content: center;
     align-items: center;
     align-self: center;
-    gap:80px;
+    gap: 80px;
   }
 `;
 
@@ -356,9 +357,11 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
+  const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
     setConversationBgImage(conversationchoose);
+    navigate('/customerservice');
   };
   const [stars, setStars] = useState([
     { id: 1, isFilled: false },
@@ -407,23 +410,23 @@ export default function OrderStatus() {
     <Wrapper>
       <MemberNav>
         <MemberButton1>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton1>
         <MemberButton3>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton3>
         <MemberButton2>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton2>
       </MemberNav>
       <MemberNavMobile>
-        <Link to="/Profile">
+        <Link to='/Profile'>
           <MemberButton></MemberButton>
         </Link>
-        <Link to="/FavProducts">
+        <Link to='/FavProducts'>
           <FavButton></FavButton>
         </Link>
-        <Link to="/OrderStatus">
+        <Link to='/OrderStatus'>
           <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
