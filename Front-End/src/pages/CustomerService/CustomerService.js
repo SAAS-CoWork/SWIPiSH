@@ -85,7 +85,7 @@ const ContentInput = styled.input`
   border: 1px solid #979797;
   border-radius: 8px;
   input{
-    text-align: center;
+    padding-top: 10px;
   }
 `;
 
