@@ -1,8 +1,10 @@
 // import React, { useState, useEffect } from 'react';
-import styled from "styled-components/macro";
-import conversation from "./conversation.png";
+import styled from 'styled-components/macro';
+import conversation from './conversation.png';
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const Wrapper = styled.div`
+const Wrapper = styled.form`
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -84,8 +86,8 @@ const ContentInput = styled.input`
   height: 200px;
   border: 1px solid #979797;
   border-radius: 8px;
-  input{
-    padding-top: 10px;
+  input {
+    text-align: center;
   }
 `;
 
@@ -114,8 +116,51 @@ const SubmitBtn = styled.button`
 `;
 
 export default function CustomerService() {
+  const titleRef = useRef(undefined);
+  const textRef = useRef(undefined);
+  const questions = useRef([titleRef, textRef]);
+  const [userInput, setUserInput] = useState({});
+  const jwt = localStorage.getItem('loginToken');
+
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const userInput = {
+      title: titleRef.current.value,
+      text: textRef.current.value,
+    };
+    setUserInput(userInput);
+    saveInput();
+  }
+
+  function saveInput() {
+    fetch('https://www.gotolive.online/api/1.0/service/email', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userInput),
+    })
+      .then((res) =>
+        res.status === 200
+          ? alert('Successfully Submitted!')
+          : alert('Please try again')
+      )
+      .catch((err) => console.log(err));
+  }
+
+  if (!jwt) {
+    navigate('/login');
+  }
+
   return (
-    <Wrapper>
+    <Wrapper
+      onSubmit={(e) => {
+        handleSubmit(e);
+      }}
+    >
       <Title>
         <Titletext>聯絡我們</Titletext>
         <FavIcon></FavIcon>
@@ -123,9 +168,9 @@ export default function CustomerService() {
       <Splict></Splict>
       <ConversationContainer>
         <ConversationTitle>主旨</ConversationTitle>
-        <ConversationInput></ConversationInput>
+        <ConversationInput ref={titleRef}></ConversationInput>
         <ConversationTitle>內容</ConversationTitle>
-        <ContentInput></ContentInput>
+        <ContentInput ref={textRef}></ContentInput>
       </ConversationContainer>
       <BtnContainer>
         <SubmitBtn>確認送出</SubmitBtn>
