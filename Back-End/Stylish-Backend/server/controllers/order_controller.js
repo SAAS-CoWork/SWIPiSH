@@ -2,6 +2,8 @@ require('dotenv').config();
 const validator = require('validator');
 const { TAPPAY_PARTNER_KEY, TAPPAY_MERCHANT_ID } = process.env;
 const Order = require('../models/order_model');
+const User = require('../models/user_model');
+const axios = require("axios")
 
 const checkout = async (req, res) => {
   const data = req.body;
@@ -78,20 +80,123 @@ const getUserPaymentsGroupByDB = async (req, res) => {
 
 // get Subscription
 const getSubscription = async (req, res) => {
-  return res.status(200).json('ok');
+  return res.status(200).json('pass authentication to get subscription page');
 };
+
+/*
+req.user {
+  provider: 'native',
+  name: 'as',
+  email: 'abcdefgh@gmail.com',
+  picture: null,
+  id: 10297,
+  iat: 1679212798
+}
+*/
 
 // post Subscription
 const subscriptionPayment = async (req, res) => {
-  const { data } = req.body;
-  if (!data || !data.prime || !data.plan || !data.price || !data.subscription_time) {
-    res.status(400).send({ error: 'Subscription Error: Wrong Data Format' });
-    return;
+  const user = req.user
+  const userId = user.id
+  let roleId = await User.getRoleId(userId)
+
+  // role_id = 3 redirect to index
+  if (roleId == 3) {
+    return res.status(307).json({ message: 'Already paid, redirect to index' })
   }
-  return res.status(200).json({
-    plan: "premium",
-    expire: "2023-03-19"
-  });
+
+  // proceeed to payment
+  const { data } = req.body;
+  if (!data || !data.prime || !data.plan || !data.price) {
+    return res.status(400).json({ error: 'Subscription Error: Wrong Data Format' });
+  }
+
+  // validate frontend data - price & plan matched
+  if (data.plan != "premium" && data.plan != "platinum") {
+    return res.status(400).json({ error: 'Wrong Plan' })
+  }
+
+  if (data.plan == "premium") {
+    if (data.price !== 4.99) {
+      return res.status(400).json({ error: 'Wrong Price' });
+    }
+  }
+
+  if (data.plan == "platinum") {
+    if (data.price !== 49.99) {
+      return res.status(400).send({ error: 'Wrong Price' });
+    }
+  }
+
+  // create sub details into DB
+  const subId = await Order.createSubDetail(user.id, data.plan, data.price)
+
+  // server request to tappay
+  try {
+    const tapPayData = {
+      partner_key: TAPPAY_PARTNER_KEY,
+      prime: `${data.prime}`,
+      amount: 5,
+      merchant_id: TAPPAY_MERCHANT_ID,
+      details: "Some item",
+      cardholder: {
+        phone_number: "+886923456789",
+        name: "王小明",
+        email: "LittleMing@Wang.com",
+        zip_code: "100",
+        address: "台北市天龍區芝麻街1號1樓",
+        national_id: "A123456789"
+      },
+      remember: true
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": TAPPAY_PARTNER_KEY
+      }
+    }
+
+    const result = await axios.post(
+      'https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime', tapPayData, config)
+
+    paidResult = result.data
+  } catch (e) {
+    console.error(e)
+    return res.status(400).json({ error: "axios failed" })
+  }
+
+  // payment failed => response to frontend
+  const paidStatus = paidResult.status
+  if (paidStatus != 0) {
+    return res.status(400).json({ error: paidResult.msg })
+  }
+
+  // success => update order table(paid_at, paid_status, expiry)
+  //         => update user's role_id into 3
+  const paidAt = paidResult.transaction_time_millis
+
+  if (data.plan == "premium") {
+    const period = 30
+    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    const expire = expireObj.toLocaleString();
+
+    return res.status(200).json({
+      plan: data.plan,
+      expire
+    });
+  };
+
+  if (data.paln == "platinum") {
+    const period = 365
+    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    const expire = expireObj.toLocaleString();
+
+    return res.status(200).json({
+      plan: data.plan,
+      expire
+    });
+  }
 };
 
 module.exports = {

@@ -58,10 +58,51 @@ const getUserPaymentsGroupByDB = async () => {
   return orders;
 };
 
+// insert subscription details(not paid yet)
+const createSubDetail = async (id, plan, price) => {
+  try {
+    const [result] = await pool.query(`
+  INSERT INTO subscription (user_id, plan, price) VALUES (?, ?, ?)
+  `, [id, plan, price]);
+    subId = result.insertId;
+    return subId;
+  } catch (e) {
+    console.error(e)
+  }
+};
+
+// update subscription table after paid success
+// update user role_id
+const updateAfterPaid = async (period, paidAt, subId, userId) => {
+  try {
+    await pool.query(`
+    UPDATE subscription 
+    SET expire = DATE_ADD(NOW(), INTERVAL ? DAY),
+    paid_at = ?
+    WHERE id = ?
+    `, [period, paidAt, subId])
+
+    await pool.query(`
+    UPDATE user
+    SET role_id = 3
+    WHERE id = ?
+    `, [userId])
+
+    const [expire] = await pool.query(`
+    SELECT expire FROM subscription WHERE id = ? 
+    `, [subId])
+    return expire[0]['expire'];
+  } catch (e) {
+    console.error(e)
+  }
+};
+
 module.exports = {
   createOrder,
   createPayment,
   payOrderByPrime,
   getUserPayments,
   getUserPaymentsGroupByDB,
+  createSubDetail,
+  updateAfterPaid
 };

@@ -67,7 +67,6 @@ const authentication = (roleId) => {
       } else {
         let userDetail;
         if (roleId == User.USER_ROLE.ALL) {
-          console.log("here", req.user)
           userDetail = await User.getUserDetail(user.email);
         } else {
           userDetail = await User.getUserDetail(user.email, roleId);
@@ -77,7 +76,6 @@ const authentication = (roleId) => {
         } else {
           req.user.id = userDetail.id;
           req.user.role_id = userDetail.role_id;
-          console.log("here", req.user)
           next();
         }
       }

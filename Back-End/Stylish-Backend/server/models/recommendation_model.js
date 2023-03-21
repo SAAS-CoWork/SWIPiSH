@@ -194,38 +194,33 @@ async function checkIfNewUser( user_id ) {
 async function updateLikedProduct( user_id, product_id, score ) {
 
     try {
-        const conn = await pool.getConnection();
-        await conn.beginTransaction();
         const [ data ] = await pool.query(`
         SELECT product_id FROM liked_product WHERE user_id = ? AND product_id = ?
         `, [ user_id, product_id ]);
 
         // already liked
         if ( data.length !== 0 ) {
-            await conn.query(`
+            await pool.query(`
             UPDATE liked_product SET score = score + ? WHERE user_id = ? AND product_id = ?;
             `, [ score, user_id, product_id ]);
             console.log('updated');
-            await conn.commit();
-            await conn.release();
+            return true;
         }
 
-        if ( score < 0 ) {
+        if ( score > 0 ) {
              // new like
-            await conn.query(`
-            INSERT INTO liked_product ( user_id, product_id, score )
-            VALUES ( ?, ?, ? )
-            `, [ user_id, product_id, 100+score ]);
-            await conn.commit();
-            await conn.release();
+            await pool.query(`
+            INSERT INTO liked_product ( user_id, product_id )
+            VALUES ( ?, ? )
+            `, [ user_id, product_id ]);
             console.log('inserted');
+            return true;
         }
+
         return true;
 
     } catch (err) {
         console.error(err);
-        await conn.rollback();
-        await conn.release();
         return false;
     }
 }
