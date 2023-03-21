@@ -30,6 +30,7 @@ app.use('/api/' + API_VERSION, rateLimiterRoute, [
   require('./server/routes/user_route'),
   require('./server/routes/order_route'),
   require('./server/routes/recommendation_route'),
+  require('./server/routes/service_route'),
 ]);
 
 // Page not found
