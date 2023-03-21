@@ -2,8 +2,10 @@ const router = require('express').Router();
 
 const { wrapAsync, authentication } = require('../../util/util');
 
-router.route('/service/email').get(authentication(), wrapAsync(getUserProfile));
+const { sendEmail, getEmailHistory } =  require('../controllers/service_controller');
 
-router.route('/service/email').post(authentication(), wrapAsync(createQuizAnswer));
+router.route('/service/email').get(authentication(), wrapAsync(getEmailHistory));
+
+router.route('/service/email').post(authentication(), wrapAsync(sendEmail));
 
 module.exports = router;
