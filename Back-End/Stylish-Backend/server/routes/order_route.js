@@ -19,8 +19,8 @@ router.route('/order/payments').get(wrapAsync(getUserPayments));
 router.route('/order/payments2').get(wrapAsync(getUserPaymentsGroupByDB));
 
 // subscription
-router.route('/order/subscription').get(authentication(USER_ROLE.ALL), wrapAsync(getSubscription));
+router.route('/order/subscription').get(authentication(), wrapAsync(getSubscription));
 
-router.route('/order/subscription').post(authentication(USER_ROLE.ALL), wrapAsync(subscriptionPayment));
+router.route('/order/subscription').post(authentication(), wrapAsync(subscriptionPayment));
 
 module.exports = router;
