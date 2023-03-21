@@ -217,6 +217,20 @@ const RemoveIcon = styled.div`
   cursor: pointer;
 `;
 
+const AdContainer = styled.div`
+  width: 800px;
+  height: 600px;
+  position: fixed;
+  top: 20%;
+  left: 20%;
+  background-image: url(${notlikeMsg});
+
+  @media screen and (max-width: 1280px) {
+    width: 360px;
+    height: 200px;
+  }
+`;
+
 function Swipe() {
   const jwt = localStorage.getItem('loginToken');
   const [db, setDb] = useState();
@@ -376,6 +390,7 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
+        <AdContainer />
         {!collection || collection.length === 0 ? null : (
           <Products>
             {collection.map((item, index) => (
