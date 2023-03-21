@@ -115,6 +115,40 @@ const updateCancel = async (userId) => {
   }
 }
 
+const getTodayExpire = async () => {
+  try {
+    const [result] = await pool.query(`
+    SELECT user_id FROM subscription
+    WHERE DATE(expire) = DATE(now()) && 
+    cancel is NULL
+    `)
+
+    const userId = result.map(item => item.user_id)
+    return userId
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// async function test() {
+//   const seeTest = await getTodayExpire()
+//   console.log(`seeTest`, seeTest)
+// }
+// test()
+
+const resetRole = async (userId) => {
+  try {
+    const reset = await pool.query(`
+    UPDATE user 
+    SET role_id = 2
+    WHERE id = ? 
+    `, [userId])
+    return true
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 module.exports = {
   createOrder,
   createPayment,
@@ -123,5 +157,7 @@ module.exports = {
   getUserPaymentsGroupByDB,
   createSubDetail,
   updateAfterPaid,
-  updateCancel
+  updateCancel,
+  getTodayExpire,
+  resetRole
 };

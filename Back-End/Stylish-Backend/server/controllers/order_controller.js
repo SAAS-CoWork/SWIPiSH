@@ -219,6 +219,20 @@ const cancelSub = async (req, res, next) => {
   next()
 };
 
+// const doOnExpireDay = async () => {
+//   const userId = await Order.getTodayExpire();
+//   // card_key_API
+
+
+// }
+
+// doOnExpireDay()
+
+// // cancel is true set role_id =2 
+// if (cancel == true) {
+//   const reset = await resetRole(userId);
+//   return
+// }
 
 
 module.exports = {
@@ -227,5 +241,5 @@ module.exports = {
   getUserPaymentsGroupByDB,
   getSubscription,
   subscriptionPayment,
-  cancelSub
+  cancelSub,
 };
