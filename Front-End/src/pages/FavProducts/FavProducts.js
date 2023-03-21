@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 import fav from './fav.png';
@@ -289,8 +290,13 @@ const Delete = styled.div`
 
 export default function FavProducts() {
   const [collection, setCollection] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const jwt = localStorage.getItem('loginToken');
+    if (!jwt) {
+      navigate('./login');
+    }
     const favProduct = JSON.parse(localStorage.getItem('collection'));
     const validFavProduct = favProduct ?? [];
     setCollection(validFavProduct);
@@ -342,9 +348,9 @@ export default function FavProducts() {
       <ProductItemContainer>
         {collection.map((item, index) => (
           <ProductContainer key={index}>
-            <ProductImg url={item.url} />
+            <ProductImg url={item.main_image} />
             <ProductDetail>
-              <ProductTitle>{item.name}</ProductTitle>
+              <ProductTitle>{item.title}</ProductTitle>
               <ProductPrice>{item.price}</ProductPrice>
               <Delete onClick={() => handleRemove(index)} />
             </ProductDetail>
