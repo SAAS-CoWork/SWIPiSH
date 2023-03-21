@@ -11,7 +11,7 @@ const logoPath = path.resolve(__dirname, '../../public/images/Swipe_1.png');
 const sendEmail = async (req, res) => {
     // organize req data
     const { user } = req;
-    if ( !user ) {
+    if (!user) {
         return res.status(400).json('Missing request parameters');
     }
 
@@ -42,10 +42,4 @@ const sendEmail = async (req, res) => {
         .then(response => {
             console.log(response);
         })
-
-    return res.status(200).json('Successfully send email');
-}
-
-module.exports = {
-    sendEmail
 }
