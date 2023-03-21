@@ -217,13 +217,25 @@ const RemoveIcon = styled.div`
   cursor: pointer;
 `;
 
+const AdContainer = styled.div`
+  width: 800px;
+  height: 600px;
+  position: fixed;
+  left: 20%;
+  top: 20%;
+  background-image: url(${notlikeMsg});
+  display: ${(props) => props.display};
+`;
+
 function Swipe() {
   const jwt = localStorage.getItem('loginToken');
   const [db, setDb] = useState();
   const [currentIndex, setCurrentIndex] = useState(9);
   const [swipeCount, setSwipeCount] = useState(0);
   const [collection, setCollection] = useState([]);
+  const [hasSwipeSeven, setHasSwipeSeven] = useState(false);
   const navigate = useNavigate();
+
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
@@ -345,6 +357,13 @@ function Swipe() {
       .catch((err) => console.log(err));
   }
 
+  function handleAdShow() {
+    if (hasSwipeSeven) {
+      navigate('/');
+      window.removeEventListener(handleAdShow);
+    }
+  }
+
   useEffect(() => {
     const savedItems = JSON.parse(localStorage.getItem('collection'));
     if (savedItems) {
@@ -364,6 +383,27 @@ function Swipe() {
     }
   }, [collection]);
 
+  useEffect(() => {
+    if (swipeCount === 7) {
+      setHasSwipeSeven(true);
+    }
+  }, [swipeCount]);
+
+  useEffect(() => {
+    const handleClick = () => {
+      if (hasSwipeSeven) {
+        navigate('/');
+        window.removeEventListener('click', handleClick);
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('click', handleClick);
+    };
+  }, [hasSwipeSeven]);
+
   if (!db) {
     return;
   }
@@ -376,6 +416,7 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
+        <AdContainer display={hasSwipeSeven ? 'block' : 'none'} />
         {!collection || collection.length === 0 ? null : (
           <Products>
             {collection.map((item, index) => (
