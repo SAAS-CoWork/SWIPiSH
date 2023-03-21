@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import styled from 'styled-components/macro';
-import profile from './profile.png';
-import profilechoose from './profilechoose.png';
+import styled from "styled-components/macro";
+import profile from "./profile.png";
+import profilechoose from "./profilechoose.png";
 import fav from "./fav.png";
 import favchoose from "./favchoose.png";
 import cart from "./cart.png";
@@ -41,13 +41,19 @@ const Titletext = styled.h1`
   font-weight: 700;
   letter-spacing: 6.4px;
   color: #3f3f3a;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const FavIcon = styled.div`
   width: 37.17px;
   height: 35.53px;
   background-image: url(${cart});
-  margin-top:50px;
+  margin-top: 50px;
+  @media screen and (max-width: 1279px) {
+    display: none;
+  }
 `;
 
 const MemberNav = styled.div`
@@ -79,7 +85,7 @@ const MemberButton1 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -107,7 +113,7 @@ const MemberButton2 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -132,7 +138,84 @@ const MemberButton3 = styled.button`
     }
   }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
+  }
+`;
+
+const MemberNavMobile = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
+  }
+`;
+
+const MemberButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${(props) => props.bgImage});
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
+  }
+`;
+
+const FavButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${(props) => props.bgImage});
+    height: 32px;
+    width: 38px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
+  }
+`;
+
+const CartButton = styled.div`
+  @media screen and (min-width: 1279px) {
+    display: none;
+  }
+  @media screen and (max-width: 1279px) {
+    background-image: url(${(props) => props.bgImage});
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
@@ -189,7 +272,7 @@ const OrderNum = styled.p`
   letter-spacing: 6.4px;
   color: #3f3a3a;
   white-space: nowrap;
-  font-weight:700;
+  font-weight: 700;
 `;
 
 const ShipStatus = styled.p`
@@ -224,24 +307,25 @@ const OrderRequest = styled.p`
 
 const CustomerService = styled.div`
   background-image: url(${conversation});
-  background-color: #ffffff; 
-  width:32px;
-  height:31px;
-  margin-right:24px;
-  margin-left:28px;
-  cursor:pointer;
+  background-color: #ffffff;
+  width: 32px;
+  height: 31px;
+  margin-right: 24px;
+  margin-left: 28px;
+  cursor: pointer;
 `;
 
 const Review = styled.div`
-  background-image: url(${props => props.backgroundImage});
+  background-image: url(${(props) => props.backgroundImage});
   background-repeat: repeat-x;
-  cursor:pointer;
-  width:140px;
-  height:25px;
+  cursor: pointer;
+  width: 140px;
+  height: 25px;
 `;
 
 function SingleOrderStatus() {
   const [isFilled, setIsFilled] = useState(false);
+
   const handleClick = () => {
     setIsFilled(!isFilled);
   };
@@ -252,12 +336,27 @@ function SingleOrderStatus() {
       <OrderPrize>NT.1200</OrderPrize>
       <OrderRequest>尚未申請</OrderRequest>
       <CustomerService></CustomerService>
-      <Review backgroundImage={isFilled ? goldstar : star} onClick={handleClick}></Review>
+      <Review
+        backgroundImage={isFilled ? goldstar : star}
+        onClick={handleClick}
+      ></Review>
     </OrderStatusWrapper>
   );
 }
 
 export default function OrderStatus() {
+  const [profileBgImage, setProfileBgImage] = useState(profile);
+  const [favBgImage, setFavBgImage] = useState(fav);
+  const [orderBgImage, setOrderBgImage] = useState(cart);
+  const handleProfileClick = () => {
+    setProfileBgImage(profilechoose);
+  };
+  const handleFavClick = () => {
+    setFavBgImage(favchoose);
+  };
+  const handleOrderClick = () => {
+    setOrderBgImage(cartchoose);
+  };
   return (
     <Wrapper>
       <MemberNav>
@@ -271,6 +370,23 @@ export default function OrderStatus() {
           <Link to="/OrderStatus">訂單狀態</Link>
         </MemberButton2>
       </MemberNav>
+      <MemberNavMobile>
+        <Link to="/Profile">
+          <MemberButton
+            bgImage={profileBgImage}
+            onClick={handleProfileClick}
+          ></MemberButton>
+        </Link>
+        <Link to="/FavProducts">
+          <FavButton bgImage={favBgImage} onClick={handleFavClick}></FavButton>
+        </Link>
+        <Link to="/OrderStatus">
+          <CartButton
+            bgImage={orderBgImage}
+            onClick={handleOrderClick}
+          ></CartButton>
+        </Link>
+      </MemberNavMobile>
       <Title>
         <Titletext>訂單狀態</Titletext>
         <FavIcon></FavIcon>

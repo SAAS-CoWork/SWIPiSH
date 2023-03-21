@@ -1,14 +1,14 @@
-import styled from 'styled-components/macro';
-import { Link } from 'react-router-dom';
-import edit from './edit.png';
-import profile from './profile.png';
-import profilechoose from './profilechoose.png';
-import fav from './fav.png';
-import favchoose from './favchoose.png';
-import cart from './cart.png';
-import cartchoose from './cartchoose.png';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components/macro";
+import { Link } from "react-router-dom";
+import edit from "./edit.png";
+import profile from "./profile.png";
+import profilechoose from "./profilechoose.png";
+import fav from "./fav.png";
+import favchoose from "./favchoose.png";
+import cart from "./cart.png";
+import cartchoose from "./cartchoose.png";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   border: 2px solid #3f3a3a;
   margin: 100px 180px 50px;
   @media screen and (max-width: 1279px) {
-    margin: 100px 50px 50px;
+    margin: 50px 50px 50px;
     border: none;
   }
 `;
@@ -42,6 +42,9 @@ const Titletext = styled.h1`
   font-weight: 700;
   letter-spacing: 6.4px;
   color: #3f3f3a;
+  @media screen and (max-width: 1279px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const FavIcon = styled.div`
@@ -50,6 +53,9 @@ const FavIcon = styled.div`
   background-image: url(${profile});
   background-image: no-repeat;
   margin-top: 50px;
+  @media screen and (max-width: 1279px) {
+    display: none;
+  }
 `;
 
 const MemberNav = styled.div`
@@ -76,7 +82,6 @@ const MemberButton1 = styled.button`
   cursor: pointer;
   a {
     color: #ffffff;
-    text-decoration: none;
     &:hover,
     &:link,
     &:active {
@@ -101,7 +106,6 @@ const MemberButton2 = styled.button`
   cursor: pointer;
   a {
     color: #3f3a3a;
-    text-decoration: none;
     &:hover,
     &:link,
     &:active {
@@ -122,7 +126,6 @@ const MemberButton3 = styled.button`
   letter-spacing: 6.4px;
   cursor: pointer;
   a {
-    text-decoration: none;
     color: #ffffff;
     &:hover,
     &:link,
@@ -137,6 +140,12 @@ const MemberNavMobile = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: space-between;
+    align-items: center;
+    align-self: center;
   }
 `;
 
@@ -145,9 +154,19 @@ const MemberButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${profile});
+    background-image: url(${(props) => props.bgImage});
     height: 35px;
     width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
@@ -156,9 +175,19 @@ const FavButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${fav});
-    height: 35px;
-    width: 35px;
+    background-image: url(${(props) => props.bgImage});
+    height: 32px;
+    width: 38px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
@@ -167,19 +196,29 @@ const CartButton = styled.div`
     display: none;
   }
   @media screen and (max-width: 1279px) {
-    background-image: url(${cart});
+    background-image: url(${(props) => props.bgImage});
     height: 35px;
     width: 35px;
+    cursor: pointer;
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      &:hover,
+      &:link,
+      &:active {
+        text-decoration: none;
+      }
+    }
   }
 `;
 
 const Splict = styled.div`
   border-top: 1px solid #3f3a3a;
-  width: 60%;
+  width: 80%;
   margin-bottom: 74px;
   align-self: center;
   @media screen and (max-width: 1279px) {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
   }
 `;
 
@@ -187,7 +226,7 @@ const ProfileWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 43px;
-  margin-bottom: 75px;
+  margin-bottom: 50px;
   width: 60%;
   margin-left: auto;
   margin-right: auto;
@@ -278,7 +317,7 @@ const EditBox = styled.div`
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: 'Noto Sans TC';
+    font-family: "Noto Sans TC";
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
@@ -365,7 +404,9 @@ const Submit = styled.button`
   margin-bottom: 110px;
   cursor: pointer;
   @media screen and (max-width: 1279px) {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
+    height: 44px;
+    font-size: 16px;
   }
 `;
 
@@ -373,6 +414,18 @@ export default function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
+  const [profileBgImage, setProfileBgImage] = useState(profile);
+  const [favBgImage, setFavBgImage] = useState(fav);
+  const [orderBgImage, setOrderBgImage] = useState(cart);
+  const handleProfileClick = () => {
+    setProfileBgImage(profilechoose);
+  };
+  const handleFavClick = () => {
+    setFavBgImage(favchoose);
+  };
+  const handleOrderClick = () => {
+    setOrderBgImage(cartchoose);
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -381,21 +434,21 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const loginToken = localStorage.getItem('loginToken');
+  const loginToken = localStorage.getItem("loginToken");
 
   function getUserData() {
-    fetch('https://www.gotolive.online/api/1.0/user/profile', {
-      method: 'GET',
+    fetch("https://www.gotolive.online/api/1.0/user/profile", {
+      method: "GET",
       headers: {
         Authorization: `Bearer ${loginToken}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
         if (res.status === 200) {
           return res.json();
         } else {
-          navigate('/login');
+          navigate("/login");
         }
       })
       .then((data) => {
@@ -407,15 +460,15 @@ export default function Profile() {
   }
 
   function logOut() {
-    localStorage.removeItem('loginToken');
-    navigate('/');
+    localStorage.removeItem("loginToken");
+    navigate("/");
   }
 
   useEffect(() => {
     if (loginToken) {
       getUserData();
     } else {
-      navigate('/login');
+      navigate("/login");
     }
   }, []);
 
@@ -430,25 +483,31 @@ export default function Profile() {
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to='/Profile'>會員資料</Link>
+          <Link to="/Profile">會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to='/FavProducts'>收藏商品</Link>
+          <Link to="/FavProducts">收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to='/OrderStatus'>訂單狀態</Link>
+          <Link to="/OrderStatus">訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
       <MemberNavMobile>
-        <MemberButton>
-          <Link to='/Profile'></Link>
-        </MemberButton>
-        <FavButton>
-          <Link to='/FavProducts'></Link>
-        </FavButton>
-        <CartButton>
-          <Link to='/OrderStatus'></Link>
-        </CartButton>
+        <Link to="/Profile">
+          <MemberButton
+            bgImage={profileBgImage}
+            onClick={handleProfileClick}
+          ></MemberButton>
+        </Link>
+        <Link to="/FavProducts">
+          <FavButton bgImage={favBgImage} onClick={handleFavClick}></FavButton>
+        </Link>
+        <Link to="/OrderStatus">
+          <CartButton
+            bgImage={orderBgImage}
+            onClick={handleOrderClick}
+          ></CartButton>
+        </Link>
       </MemberNavMobile>
       <Title>
         <Titletext>會員資料</Titletext>
@@ -465,7 +524,7 @@ export default function Profile() {
           <SubStatus>
             <BoldText>
               {userData.subscription === false
-                ? '非升級會員'
+                ? "非升級會員"
                 : userData.subscription}
             </BoldText>
             {userData.subscription === false ? null : (
@@ -475,11 +534,11 @@ export default function Profile() {
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type='text'>{userData.name}</NameInput>
+          <NameInput type="text">{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue={userData.name} />
+              <textarea type="text" defaultValue={userData.name} />
             </EditBox>
           )}
         </NameWrapper>
@@ -489,7 +548,7 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type='text' defaultValue={userData.email} />
+              <textarea type="text" defaultValue={userData.email} />
             </EditBox>
           )}
         </EmailWrapper>
