@@ -348,7 +348,9 @@ export default function FavProducts() {
       <ProductItemContainer>
         {collection.map((item, index) => (
           <ProductContainer key={index}>
-            <ProductImg url={item.main_image} />
+            <Link to={`/products/${item.id}`}>
+              <ProductImg url={item.main_image} />
+            </Link>
             <ProductDetail>
               <ProductTitle>{item.title}</ProductTitle>
               <ProductPrice>{item.price}</ProductPrice>

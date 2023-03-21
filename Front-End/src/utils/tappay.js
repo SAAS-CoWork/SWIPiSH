@@ -29,7 +29,7 @@ const tappay = {
       fields: {
         number: {
           element: numberElement,
-          placeholder: '**** **** **** ****',
+          placeholder: '   ',
         },
         expirationDate: {
           element: expirationDateElement,
