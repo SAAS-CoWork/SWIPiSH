@@ -369,7 +369,7 @@ function Swipe() {
     }
   }, [swipeCount]);
 
-  // useEffect(() => console.log(db), [db]);
+  useEffect(() => console.log(db), [db]);
 
   if (!db) {
     return;

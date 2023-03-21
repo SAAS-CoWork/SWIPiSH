@@ -239,11 +239,11 @@ export default function Subscription() {
           setMembershipChecking(false);
         }
       })
-      .then((data) => {
-        data.data.subscription
-          ? navigate('/swipe')
-          : setMembershipChecking(false);
-      })
+      // .then((data) => {
+      //   data.data.subscription
+      //     ? navigate('/swipe')
+      //     : setMembershipChecking(false);
+      // })
       .catch();
   }
 

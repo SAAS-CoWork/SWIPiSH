@@ -2,6 +2,7 @@ import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import edit from "./edit.png";
 import profile from "./profile.png";
+import biggerprofile from "./biggerprofile.png";
 import profilechoose from "./profilechoose.png";
 import fav from "./fav.png";
 import cart from "./cart.png";
@@ -240,37 +241,36 @@ const ProfileImgWrapper = styled.form`
   flex-direction: column;
   gap:10px;
   align-items: center;
-  
-  & > *:nth-child(2),
-  & > *:nth-child(3) {
-    display: inline-block;
-  }
-  ${'' /* input {
+  input {
     color: transparent;
-  } */}
+    margin-left: 174px;
+    margin-top: 10px;
+  }
 
   @media screen and (max-width: 1279px) {
     justify-content:center;
     flex-direction: column;
     align-self: center;
     gap:10px;
-    & > *:first-child {
-    margin-right: 0px;
-  }
-  input {
-    align-self: center;
-    margin-right:0;
-    margin-left:0;
+    input {
     color: transparent;
+    margin-left: 172px;
+    margin-top: 10px;
   }
   }
 `;
 
 const ProfileImg = styled.div`
-  width: 35px;
-  height: 35px;
-  background-image: url(${profile});
-  background-image: no-repeat;
+  width: 150px;
+  height: 150px;
+  background-image: url(${(props) => props.selectedFileUrl ? props.selectedFileUrl : biggerprofile});
+  background-size: cover;
+  background-position: center;
+  border-radius: 100px;
+  @media screen and (max-width: 1279px) {
+  width: 100px;
+  height: 100px;
+  }
 `
 
 const AccountWrapper = styled.div`
@@ -305,6 +305,10 @@ const SubWrapper = styled.div`
     gap: 10px;
   }
 `;
+
+const Cancel = styled.button`
+  margin-left: 10px;
+`
 
 const SubTitle = styled.p`
   width: 120px;
@@ -453,10 +457,11 @@ export default function Profile() {
   const [userData, setUserData] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+  const [isSubscribed, setIsSubscribed] = useState(true);
 
   const handleFileSelect = (e) => {
     setSelectedFile(e.target.files[0]);
-    setSelectedFileUrl(URL.createObjectURL());
+    setSelectedFileUrl(URL.createObjectURL(e.target.files[0]));
   };
 
   const handleEditClick = () => {
@@ -473,7 +478,12 @@ export default function Profile() {
     formData.append("file", selectedFile);
     // add additional form data, such as user ID or file name
     // send the form data to the server using an HTTP request, such as fetch()
+    console.log(formData);
   };
+
+  const handleCancelClick =(e) => {
+    setIsSubscribed(false);
+  }
 
   const loginToken = localStorage.getItem("loginToken");
 
@@ -550,12 +560,10 @@ export default function Profile() {
       </Title>
       <Splict></Splict>
       <ProfileWrapper>
-        <ProfileImgWrapper onSubmit={handleSubmit}>
-          <ProfileImg></ProfileImg>
-          {/* <label for="uploadImage" class="uploadImage">點我上傳</label> */}
-          <input type="file" accept="image/*" onChange={handleFileSelect} value="" id="uploadImage" />
-          {selectedFileUrl && <img src={selectedFileUrl} alt="Selected file" />}
-          <button type="submit">確認送出</button>
+        <ProfileImgWrapper >
+          <ProfileImg selectedFileUrl={selectedFileUrl}></ProfileImg>
+          <input type="file" accept="image/*" onChange={handleFileSelect} name="上傳" id="uploadImage" />
+          {/* <button type="submit" onSubmit={handleSubmit}>確認送出</button> */}
         </ProfileImgWrapper>
         <AccountWrapper>
           <AccountTitle>帳號</AccountTitle>
@@ -565,13 +573,14 @@ export default function Profile() {
           <SubTitle>方案</SubTitle>
           <SubStatus>
             <BoldText>
-              {userData.subscription === false
+              {userData.plan === ""
                 ? "非升級會員"
-                : userData.subscription}
+                : userData.plan}
             </BoldText>
-            {userData.subscription === false ? null : (
-              <span>(Expiration Date 2024-3-23)</span>
+            {userData.expire === true ? null : (
+              <span>{userData.expire}</span>
             )}
+            <Cancel onClick={handleCancelClick}>取消訂閱</Cancel>
           </SubStatus>
         </SubWrapper>
         <NameWrapper>
