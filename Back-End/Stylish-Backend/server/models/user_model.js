@@ -235,6 +235,19 @@ const getLiked = async function (userId) {
   }
 }
 
+const getSub = async function (userId) {
+  try {
+    const [[result]] = await pool.query(`
+    SELECT plan, expire FROM subscription
+    WHERE user_id = ?
+    AND cancel is NULL
+    `, [userId])
+    return result;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 module.exports = {
   USER_ROLE,
   signUp,
@@ -244,5 +257,6 @@ module.exports = {
   getFacebookProfile,
   insertQuizAnswer,
   getRoleId,
-  getLiked
+  getLiked,
+  getSub
 };
