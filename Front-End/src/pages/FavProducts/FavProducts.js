@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/macro";
-import profile from "./profile.png";
-import fav from "./fav.png";
-import favchoose from "./favchoose.png";
-import cart from "./cart.png";
-import trash from "./trash.png";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import profile from './profile.png';
+import fav from './fav.png';
+import favchoose from './favchoose.png';
+import cart from './cart.png';
+import trash from './trash.png';
+import { Link } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100%;
@@ -289,15 +290,21 @@ const Delete = styled.div`
 
 export default function FavProducts() {
   const [collection, setCollection] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const favProduct = JSON.parse(localStorage.getItem("collection"));
-    setCollection(favProduct);
+    const jwt = localStorage.getItem('loginToken');
+    if (!jwt) {
+      navigate('./login');
+    }
+    const favProduct = JSON.parse(localStorage.getItem('collection'));
+    const validFavProduct = favProduct ?? [];
+    setCollection(validFavProduct);
   }, []);
 
   useEffect(() => {
     const jsonCollectoin = JSON.stringify(collection);
-    localStorage.setItem("collection", jsonCollectoin);
+    localStorage.setItem('collection', jsonCollectoin);
   }, [collection]);
 
   function handleRemove(index) {
@@ -313,23 +320,23 @@ export default function FavProducts() {
     <Wrapper>
       <MemberNav>
         <MemberButton1>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton1>
         <MemberButton2>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton3>
       </MemberNav>
       <MemberNavMobile>
-        <Link to="/Profile">
+        <Link to='/Profile'>
           <MemberButton></MemberButton>
         </Link>
-        <Link to="/FavProducts">
+        <Link to='/FavProducts'>
           <FavButton></FavButton>
         </Link>
-        <Link to="/OrderStatus">
+        <Link to='/OrderStatus'>
           <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
@@ -342,10 +349,10 @@ export default function FavProducts() {
         {collection.map((item, index) => (
           <ProductContainer key={index}>
             <Link to={`/products/${item.id}`}>
-              <ProductImg url={item.url} />
+              <ProductImg url={item.main_image} />
             </Link>
             <ProductDetail>
-              <ProductTitle>{item.name}</ProductTitle>
+              <ProductTitle>{item.title}</ProductTitle>
               <ProductPrice>{item.price}</ProductPrice>
               <Delete onClick={() => handleRemove(index)} />
             </ProductDetail>

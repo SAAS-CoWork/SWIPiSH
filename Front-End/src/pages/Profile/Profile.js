@@ -1,13 +1,13 @@
-import styled from "styled-components/macro";
-import { Link } from "react-router-dom";
-import edit from "./edit.png";
-import profile from "./profile.png";
-import biggerprofile from "./biggerprofile.png";
-import profilechoose from "./profilechoose.png";
-import fav from "./fav.png";
-import cart from "./cart.png";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components/macro';
+import { Link } from 'react-router-dom';
+import edit from './edit.png';
+import profile from './profile.png';
+import biggerprofile from './biggerprofile.png';
+import profilechoose from './profilechoose.png';
+import fav from './fav.png';
+import cart from './cart.png';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // import { useContext } from 'react';
 // import ReactLoading from 'react-loading';
 // import { AuthContext } from '../../context/authContext';
@@ -239,7 +239,7 @@ const ProfileWrapper = styled.div`
 const ProfileImgWrapper = styled.form`
   display: flex;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
   align-items: center;
   input {
     color: transparent;
@@ -248,30 +248,31 @@ const ProfileImgWrapper = styled.form`
   }
 
   @media screen and (max-width: 1279px) {
-    justify-content:center;
+    justify-content: center;
     flex-direction: column;
     align-self: center;
-    gap:10px;
+    gap: 10px;
     input {
-    color: transparent;
-    margin-left: 172px;
-    margin-top: 10px;
-  }
+      color: transparent;
+      margin-left: 172px;
+      margin-top: 10px;
+    }
   }
 `;
 
 const ProfileImg = styled.div`
   width: 150px;
   height: 150px;
-  background-image: url(${(props) => props.selectedFileUrl ? props.selectedFileUrl : biggerprofile});
+  background-image: url(${(props) =>
+    props.selectedFileUrl ? props.selectedFileUrl : biggerprofile});
   background-size: cover;
   background-position: center;
   border-radius: 100px;
   @media screen and (max-width: 1279px) {
-  width: 100px;
-  height: 100px;
+    width: 100px;
+    height: 100px;
   }
-`
+`;
 
 const AccountWrapper = styled.div`
   display: flex;
@@ -308,7 +309,7 @@ const SubWrapper = styled.div`
 
 const Cancel = styled.button`
   margin-left: 10px;
-`
+`;
 
 const SubTitle = styled.p`
   width: 120px;
@@ -358,7 +359,7 @@ const EditBox = styled.div`
     appearance: none;
     border: none;
     font-weight: 700;
-    font-family: "Noto Sans TC";
+    font-family: 'Noto Sans TC';
     font-size: 16px;
     color: #3f3a3a;
     background: transparent;
@@ -475,31 +476,31 @@ export default function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append('file', selectedFile);
     // add additional form data, such as user ID or file name
     // send the form data to the server using an HTTP request, such as fetch()
     console.log(formData);
   };
 
-  const handleCancelClick =(e) => {
+  const handleCancelClick = (e) => {
     setIsSubscribed(false);
-  }
+  };
 
-  const loginToken = localStorage.getItem("loginToken");
+  const loginToken = localStorage.getItem('loginToken');
 
   function getUserData() {
-    fetch("https://www.gotolive.online/api/1.0/user/profile", {
-      method: "GET",
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
       headers: {
         Authorization: `Bearer ${loginToken}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
         if (res.status === 200) {
           return res.json();
         } else {
-          navigate("/login");
+          navigate('/login');
         }
       })
       .then((data) => {
@@ -511,21 +512,17 @@ export default function Profile() {
   }
 
   function logOut() {
-    localStorage.removeItem("loginToken");
-    navigate("/");
+    localStorage.removeItem('loginToken');
+    navigate('/');
   }
 
   useEffect(() => {
     if (loginToken) {
       getUserData();
     } else {
-      navigate("/login");
+      navigate('/login');
     }
   }, []);
-
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
 
   if (!userData) {
     return;
@@ -534,23 +531,23 @@ export default function Profile() {
     <Wrapper>
       <MemberNav>
         <MemberButton2>
-          <Link to="/Profile">會員資料</Link>
+          <Link to='/Profile'>會員資料</Link>
         </MemberButton2>
         <MemberButton3>
-          <Link to="/FavProducts">收藏商品</Link>
+          <Link to='/FavProducts'>收藏商品</Link>
         </MemberButton3>
         <MemberButton1>
-          <Link to="/OrderStatus">訂單狀態</Link>
+          <Link to='/OrderStatus'>訂單狀態</Link>
         </MemberButton1>
       </MemberNav>
       <MemberNavMobile>
-        <Link to="/Profile">
+        <Link to='/Profile'>
           <MemberButton></MemberButton>
         </Link>
-        <Link to="/FavProducts">
+        <Link to='/FavProducts'>
           <FavButton></FavButton>
         </Link>
-        <Link to="/OrderStatus">
+        <Link to='/OrderStatus'>
           <CartButton></CartButton>
         </Link>
       </MemberNavMobile>
@@ -560,9 +557,15 @@ export default function Profile() {
       </Title>
       <Splict></Splict>
       <ProfileWrapper>
-        <ProfileImgWrapper >
+        <ProfileImgWrapper>
           <ProfileImg selectedFileUrl={selectedFileUrl}></ProfileImg>
-          <input type="file" accept="image/*" onChange={handleFileSelect} name="上傳" id="uploadImage" />
+          <input
+            type='file'
+            accept='image/*'
+            onChange={handleFileSelect}
+            name='上傳'
+            id='uploadImage'
+          />
           {/* <button type="submit" onSubmit={handleSubmit}>確認送出</button> */}
         </ProfileImgWrapper>
         <AccountWrapper>
@@ -573,23 +576,19 @@ export default function Profile() {
           <SubTitle>方案</SubTitle>
           <SubStatus>
             <BoldText>
-              {userData.plan === ""
-                ? "非升級會員"
-                : userData.plan}
+              {userData.plan === '' ? '非升級會員' : userData.plan}
             </BoldText>
-            {userData.expire === true ? null : (
-              <span>{userData.expire}</span>
-            )}
+            {userData.expire === true ? null : <span>{userData.expire}</span>}
             <Cancel onClick={handleCancelClick}>取消訂閱</Cancel>
           </SubStatus>
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
-          <NameInput type="text">{userData.name}</NameInput>
+          <NameInput type='text'>{userData.name}</NameInput>
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type="text" defaultValue={userData.name} />
+              <textarea type='text' defaultValue={userData.name} />
             </EditBox>
           )}
         </NameWrapper>
@@ -599,7 +598,7 @@ export default function Profile() {
           <Edit onClick={handleEditClick}></Edit>
           {isEditing && (
             <EditBox>
-              <textarea type="text" defaultValue={userData.email} />
+              <textarea type='text' defaultValue={userData.email} />
             </EditBox>
           )}
         </EmailWrapper>

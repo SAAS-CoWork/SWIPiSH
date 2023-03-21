@@ -345,9 +345,11 @@ export default function Subscription() {
       .then((res) => {
         if (res.status === 200) {
           window.alert('付款成功');
+          localStorage.removeItem('prime');
           window.location.href = './swipe';
         } else {
-          console.log('付款失敗！請再試一次');
+          localStorage.removeItem('prime');
+          alert('付款失敗！請再試一次');
         }
       })
       .catch((err) => console.log(err));
