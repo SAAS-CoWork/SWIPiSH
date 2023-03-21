@@ -141,9 +141,10 @@ const MemberNavMobile = styled.div`
     display: flex;
     flex-direction: row;
     width: 60%;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     align-self: center;
+    gap: 80px;
   }
 `;
 
@@ -233,6 +234,44 @@ const ProfileWrapper = styled.div`
     gap: 30px;
   }
 `;
+
+const ProfileImgWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+  align-items: center;
+  
+  & > *:nth-child(2),
+  & > *:nth-child(3) {
+    display: inline-block;
+  }
+  ${'' /* input {
+    color: transparent;
+  } */}
+
+  @media screen and (max-width: 1279px) {
+    justify-content:center;
+    flex-direction: column;
+    align-self: center;
+    gap:10px;
+    & > *:first-child {
+    margin-right: 0px;
+  }
+  input {
+    align-self: center;
+    margin-right:0;
+    margin-left:0;
+    color: transparent;
+  }
+  }
+`;
+
+const ProfileImg = styled.div`
+  width: 35px;
+  height: 35px;
+  background-image: url(${profile});
+  background-image: no-repeat;
+`
 
 const AccountWrapper = styled.div`
   display: flex;
@@ -412,12 +451,28 @@ export default function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
+
+  const handleFileSelect = (e) => {
+    setSelectedFile(e.target.files[0]);
+    setSelectedFileUrl(URL.createObjectURL());
+  };
 
   const handleEditClick = () => {
     setIsEditing(true);
   };
+
   const handleSaveClick = () => {
     setIsEditing(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    // add additional form data, such as user ID or file name
+    // send the form data to the server using an HTTP request, such as fetch()
   };
 
   const loginToken = localStorage.getItem("loginToken");
@@ -495,6 +550,13 @@ export default function Profile() {
       </Title>
       <Splict></Splict>
       <ProfileWrapper>
+        <ProfileImgWrapper onSubmit={handleSubmit}>
+          <ProfileImg></ProfileImg>
+          {/* <label for="uploadImage" class="uploadImage">點我上傳</label> */}
+          <input type="file" accept="image/*" onChange={handleFileSelect} value="" id="uploadImage" />
+          {selectedFileUrl && <img src={selectedFileUrl} alt="Selected file" />}
+          <button type="submit">確認送出</button>
+        </ProfileImgWrapper>
         <AccountWrapper>
           <AccountTitle>帳號</AccountTitle>
           <Account>{userData.email}</Account>

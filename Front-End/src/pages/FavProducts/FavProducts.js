@@ -158,9 +158,10 @@ const MemberNavMobile = styled.div`
     display: flex;
     flex-direction: row;
     width: 60%;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     align-self: center;
+    gap:80px;
   }
 `;
 

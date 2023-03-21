@@ -287,7 +287,7 @@ const RemoveIcon = styled.div`
 `;
 
 function Swipe() {
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1);
+  const [currentIndex, setCurrentIndex] = useState(db.length - 2);
   const [lastDirection, setLastDirection] = useState();
   const [collection, setCollection] = useState([]);
   const navigate = useNavigate();
