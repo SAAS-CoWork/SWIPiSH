@@ -101,7 +101,7 @@ const subscriptionPayment = async (req, res) => {
   let roleId = await User.getRoleId(userId)
 
   // role_id = 3 redirect to index
-  if (roleId == 4) {
+  if (roleId == 3) {
     return res.status(307).json({ message: 'Already paid, redirect to index' })
   }
 
@@ -200,10 +200,29 @@ const subscriptionPayment = async (req, res) => {
   }
 };
 
+const cancelSub = async (req, res) => {
+  // cancel = false
+  const cancel = req.body
+  if (!cancel) {
+    next()
+  }
+
+  // cancel = true, role = 3
+  const userId = req.user.id
+  let roleId = await User.getRoleId(userId)
+  if (cancel && roleId == 3) {
+    const canceled = await Order.updateCancel(userId)
+    if (canceled == true) {
+      return res.status(200).json({ message: 'canceled success' })
+    }
+  }
+};
+
 module.exports = {
   checkout,
   getUserPayments,
   getUserPaymentsGroupByDB,
   getSubscription,
-  subscriptionPayment
+  subscriptionPayment,
+  cancelSub
 };

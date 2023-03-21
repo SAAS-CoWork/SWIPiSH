@@ -98,6 +98,19 @@ const updateAfterPaid = async (period, paidAt, card, subId, userId) => {
   }
 };
 
+const updateCancel = async (userId) => {
+  try {
+    await pool.query(`
+    UPDATE subscription
+    SET card_secret="",
+    cancel=true
+    WHERE user_id = ?
+    `, [userId])
+    return true
+  } catch (e) {
+    console.log(e)
+  }
+}
 
 module.exports = {
   createOrder,
@@ -106,5 +119,6 @@ module.exports = {
   getUserPayments,
   getUserPaymentsGroupByDB,
   createSubDetail,
-  updateAfterPaid
+  updateAfterPaid,
+  updateCancel
 };
