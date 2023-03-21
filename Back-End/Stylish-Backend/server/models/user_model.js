@@ -240,7 +240,6 @@ const getSub = async function (userId) {
     const [[result]] = await pool.query(`
     SELECT plan, expire FROM subscription
     WHERE user_id = ?
-    AND cancel is NULL
     `, [userId])
     return result;
   } catch (e) {
