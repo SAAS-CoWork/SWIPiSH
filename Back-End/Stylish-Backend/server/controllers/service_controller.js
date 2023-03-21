@@ -14,29 +14,23 @@ const mg = mailgun.client({
 const mgDomain = process.env.MAILGUN_DOMAIN;
 const logoPath = path.resolve(__dirname, '../../public/images/Swipe_1.png');
 
-
-const getEmailHistory = (req, res) => {
-    // select email history from db
-
-    // organized
-
-    // response
-}
-
 const sendEmail = (req, res) => {
     // organize req data
-    // const { user } = req;
+    const { user } = req;
+    if ( !user ) {
+        return res.status(400).json('Missing request parameters');
+    }
+
+    let message = `
+    <h1>我們已收到您的提問，將會立即指派專人為您協助</h1>
+    <h2 style="display:flex;align-items:center;"><img src="cid:Swipe_1.png" style="margin-right:10px;">SWIPiSH 感謝您的使用</h2>
+    `;
 
     const messageData = {
         from: SENDER,
         to: 'c.s.fangyolk@gmail.com',
-        subject: `Hi 感謝您的提問`,
-        attachment: { data: 'file', filename: 'Swipe_1.png' },
-        html: `
-        <h1>Thank you for using SWIPiSH</h1>
-        <p>We will keep offering you the best experience</p>
-        <img src="cid:Swipe_1.png">
-        `
+        subject: `Hi ${user.name} 感謝您的來信`,
+        html: message
     }
 
     // fetch mailgun api
@@ -48,24 +42,15 @@ const sendEmail = (req, res) => {
             }
 
             messageData.inline = file;
-            return mg.messages.create('sandbox-123.mailgun.org', messageData);
+            return mg.messages.create(mgDomain, messageData);
         })
         .then(response => {
             console.log(response);
         })
 
-    // mg.messages.create(mgDomain, messageData)
-    //     .then(res => console.log)
-    //     .catch(err => console.error)
-
-    // response
+    return res.status(200).json('Successfully send email');
 }
 
-(() => {
-    sendEmail();
-})();
-
 module.exports = {
-    getEmailHistory,
     sendEmail
 }
