@@ -120,7 +120,6 @@ const getTodayExpire = async () => {
     const [result] = await pool.query(`
     SELECT user_id, card_secret, cancel FROM subscription
     WHERE DATE(expire) = DATE(now())
-    AND cancel IS NULL
     `)
     return result
   } catch (e) {
@@ -147,19 +146,13 @@ const updateTodayRole = async (userId) => {
     const [result] = await pool.query(`
     UPDATE user
     SET role_id = 2
-    where user_id = ?
+    where id = ?
     `, [userId])
     return true
   } catch (e) {
     console.log(e)
   }
 }
-
-// async function test() {
-//   const seeTest = await getTodayExpire()
-//   console.log(`seeTest`, seeTest)
-// }
-// test()
 
 const resetRole = async (userId) => {
   try {
