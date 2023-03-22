@@ -363,7 +363,7 @@ function Header() {
         </PageLink>
       </PageLinks>
       {!upgradeClicked && (
-        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription'} />
+        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription/ad'} />
       )}
     </Wrapper>
   );

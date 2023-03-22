@@ -475,7 +475,7 @@ function Swipe() {
         <Title>
           <TitleText>收藏商品</TitleText>
           <TitleIcon />
-          <RemoveAll onClick={removeCollection}>清空收藏</RemoveAll>
+          <RemoveAll onClick={removeCollection}>一鍵清空</RemoveAll>
         </Title>
         <SplitLine />
         <AdContainer

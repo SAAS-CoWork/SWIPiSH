@@ -412,7 +412,7 @@ function Checkout() {
             <FormGroup key={input.key}>
               <FormLabel>{input.label}</FormLabel>
               <FormControl
-                value={recipient[input.key] || input.defaultText}
+                value={recipient[input.key]}
                 onChange={(e) =>
                   setRecipient({ ...recipient, [input.key]: e.target.value })
                 }
