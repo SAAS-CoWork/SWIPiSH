@@ -397,7 +397,7 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState();
   const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
@@ -431,7 +431,7 @@ function SingleOrderStatus() {
     }
   }, []);
 
-  if (order.length !== 0) {
+  if (order) {
     return (
       <OrderStatusWrapper>
         <OrderNum>{order.number}</OrderNum>

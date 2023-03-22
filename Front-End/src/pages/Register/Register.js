@@ -6,7 +6,7 @@ const questions = [
   { value: 'name', label: '姓名' },
   { value: 'phone', label: '手機' },
   { value: 'email', label: '信箱' },
-  { value: 'password', label: '密碼' },
+  { value: 'password', label: '密碼', placeholder: '請輸入至少八碼英文或數字' },
 ];
 
 const Wrapper = styled.div`
@@ -151,6 +151,8 @@ export default function Register() {
           ? res.json()
           : res.status === 403
           ? alert('The email address has already been registered')
+          : res.status === 400
+          ? alert('Password should have at least 8 characters')
           : console.log('error!')
       )
       .then((data) => {
@@ -182,7 +184,10 @@ export default function Register() {
           {questions.map((question, index) => (
             <InfoRow key={index}>
               <QuestionTitle>{question.label}</QuestionTitle>
-              <QuestionInput onChange={(e) => saveUserInput(e, question)} />
+              <QuestionInput
+                onChange={(e) => saveUserInput(e, question)}
+                placeholder={question.placeholder}
+              />
             </InfoRow>
           ))}
         </InfoContainer>
