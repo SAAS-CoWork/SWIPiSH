@@ -9,7 +9,7 @@ const questions = [
   {
     value: 'password',
     label: '密碼',
-    placeholder: '請輸入至少八碼英文或數字',
+    placeholder: '請輸入8 ~ 16碼英文或數字',
     type: 'password',
   },
 ];
@@ -157,7 +157,7 @@ export default function Register() {
           : res.status === 403
           ? alert('The email address has already been registered')
           : res.status === 400
-          ? alert('Password should have at least 8 characters')
+          ? alert('Wrong email or password format')
           : console.log('error!')
       )
       .then((data) => {
