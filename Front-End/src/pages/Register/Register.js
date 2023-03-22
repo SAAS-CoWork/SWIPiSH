@@ -170,10 +170,6 @@ export default function Register() {
     SendUserData();
   }
 
-  useEffect(() => {
-    console.log(Object.values(userData));
-  }, [userData]);
-
   return (
     <Wrapper>
       <ContentContainer onSubmit={(e) => handleSubmit(e)}>
