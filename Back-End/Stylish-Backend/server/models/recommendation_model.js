@@ -2,6 +2,15 @@ require('dotenv').config({ path: '../../.env'});
 const { pool } = require('./mysqlcon');
 const Cache = require('../../util/cache');
 
+function addScore( scoresObj, score, tag ) {
+    if ( scoresObj.hasOwnProperty(tag) ) {
+        scoresObj[tag][0] += score;
+        scoresObj[tag][1] += 1;
+        return;
+    }
+    scoresObj[tag] = [score, 1];
+}
+
 const findSimilarProducts = async function (user_id) {
     const [ likedProducts ] = await pool.query(`
     SELECT score, tags FROM
@@ -24,9 +33,16 @@ const findSimilarProducts = async function (user_id) {
     })
 
     const arr = [ catScores, titleScores, priceScores ];
-
     return arr.map((obj) => {
-        return Object.entries(obj).sort((a, b) => {
+        const scoreArray = Object.entries(obj).reduce( (acc, cur) => {
+            const temp = [];
+            temp.push(cur[0]);
+            temp.push( Math.floor( cur[1][0] / cur[1][1] ) );
+            acc.push(temp);
+            return acc;
+        }, []);
+        console.log('scoreArray', scoreArray);
+        return scoreArray.sort((a, b) => {
             return b[1] - a[1];
         })
     });
@@ -42,6 +58,7 @@ const generateRecommendations = async function ( user_id, isFirst ) {
 
     console.log('old user, generate recommendation through history');
     const productsScore = await findSimilarProducts(user_id);
+    console.log(productsScore);
 
     // find 10 recommendations
     const subsets = findAllSubsets(productsScore);
@@ -114,14 +131,6 @@ async function quizRecommendations( user_id ) {
     return result[0].slice(0, 10);
 }
 
-function addScore( scoresObj, score, tag ) {
-    if ( scoresObj.hasOwnProperty(tag) ) {
-        scoresObj[tag] += score;
-        return;
-    }
-    scoresObj[tag] = score;
-}
-
 async function getPossibleProducts( pattern ) {
     const [ products ] = await pool.query(`
     SELECT id, category, title, story, price, main_image
@@ -139,8 +148,8 @@ async function doRecommendation( user_id, subsets ) {
 
     // pass through numbers
     let pass =  await Cache.HGET('recommendations', user_id);
-    if ( pass > 30 ) {
-        pass -= 30;
+    if ( pass > 37 ) {
+        pass -= 37;
         await Cache.HSET('recommendations', user_id, pass);
     }
 
