@@ -232,8 +232,18 @@ const AdContainer = styled.div`
   left: 20%;
   top: 20%;
   background-image: url(${(props) => props.url});
+  background-size: contain;
+  background-repeat: no-repeat;
   display: ${(props) => props.display};
   z-index: 100;
+
+  cursor: pointer;
+  @media screen and (max-width: 1280px) {
+    width: 50%;
+    height: 50%;
+    top: 30%;
+    left: 30%;
+  }
 `;
 
 function Swipe() {
@@ -407,8 +417,7 @@ function Swipe() {
         alert(
           '🎊🎊🎊\n恭喜你Google用户！\n我们已经选中你成为赢取最新Iphone 14 的首批少数用户之一\n\n此礼品专门售予台湾的忠实用户\n点击「确定」以确认'
         );
-        // navigate('/');
-        window.location.reload();
+        window.location.href = 'https://www.rt019.tk/';
         window.removeEventListener('click', handleClick);
       }
     };
