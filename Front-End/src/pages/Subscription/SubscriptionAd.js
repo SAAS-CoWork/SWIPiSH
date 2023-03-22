@@ -1,8 +1,9 @@
-import React from 'react';
-import styled from 'styled-components/macro';
-import medal from './medal.png';
+import React from "react";
+import styled from "styled-components/macro";
+import medal from "./medal.png";
+import { Link } from "react-router-dom";
 
-const planDescription = ['懶人購物首選', '客製專屬推薦', '會員優惠價格'];
+const planDescription = ["懶人購物首選", "客製專屬推薦", "會員優惠價格"];
 
 const Wrapper = styled.div`
   margin: 50px auto 50px;
@@ -20,7 +21,7 @@ const Title = styled.h1`
   font-weight: 400;
   letter-spacing: 6.4px;
   @media screen and (max-width: 1279px) {
-  display:none;
+    display: none;
   }
 `;
 
@@ -44,7 +45,7 @@ const PlanContainer = styled.div`
   width: 455px;
   height: 506px;
   border: 1px solid black;
-  ${'' /* border-radius: 25px; */}
+  ${"" /* border-radius: 25px; */}
   @media screen and (max-width: 1279px) {
     width: 85%;
     height: 30%;
@@ -167,11 +168,20 @@ const LearnMoreBtn = styled.button`
   color: white;
   text-align: center;
   border: 0;
+  cursor: pointer;
+  a {
+    text-decoration: none;
+    color: white;
+    &:hover,
+    &:link,
+    &:active {
+    text-decoration: none;
+    }
+  }
   @media screen and (max-width: 1279px) {
     height: 44px;
   }
 `;
-
 
 export default function SubscriptionAd() {
   return (
@@ -207,15 +217,15 @@ export default function SubscriptionAd() {
               <PriceDescription>Per Year</PriceDescription>
             </PriceContainer>
             <PlanDescriptionContainer>
-              <PlanDescriptionText>
-                更尊榮的體驗
-              </PlanDescriptionText>
+              <PlanDescriptionText>更尊榮的體驗</PlanDescriptionText>
               <MedalImg></MedalImg>
             </PlanDescriptionContainer>
           </PlanContent>
         </PlanContainer>
       </ContentContainer>
-      <LearnMoreBtn>LEARN MORE</LearnMoreBtn>
+      <LearnMoreBtn>
+        <Link to="/subscription"> LEARN MORE</Link>
+      </LearnMoreBtn>
     </Wrapper>
   );
 }
