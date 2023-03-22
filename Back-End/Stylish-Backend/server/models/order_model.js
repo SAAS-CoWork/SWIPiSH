@@ -118,13 +118,38 @@ const updateCancel = async (userId) => {
 const getTodayExpire = async () => {
   try {
     const [result] = await pool.query(`
-    SELECT user_id FROM subscription
-    WHERE DATE(expire) = DATE(now()) && 
-    cancel is NULL
+    SELECT user_id, card_secret, cancel FROM subscription
+    WHERE DATE(expire) = DATE(now())
+    AND cancel IS NULL
     `)
+    return result
+  } catch (e) {
+    console.log(e)
+  }
+}
 
-    const userId = result.map(item => item.user_id)
-    return userId
+const updateTodayExpire = async (userId) => {
+  try {
+    const [result] = await pool.query(`
+    UPDATE subscription 
+    SET expire = DATE_ADD(NOW(), INTERVAL 30 DAY)
+    where user_id = ?
+    `, [userId])
+    return true
+  } catch (e) {
+    console.log("我錯了")
+    console.log(e)
+  }
+}
+
+const updateTodayRole = async (userId) => {
+  try {
+    const [result] = await pool.query(`
+    UPDATE user
+    SET role_id = 2
+    where user_id = ?
+    `, [userId])
+    return true
   } catch (e) {
     console.log(e)
   }
@@ -159,5 +184,7 @@ module.exports = {
   updateAfterPaid,
   updateCancel,
   getTodayExpire,
-  resetRole
+  resetRole,
+  updateTodayExpire,
+  updateTodayRole
 };
