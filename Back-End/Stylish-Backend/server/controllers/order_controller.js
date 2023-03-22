@@ -107,6 +107,7 @@ const subscriptionPayment = async (req, res) => {
 
   // proceeed to payment
   const { data } = req.body;
+
   if (!data || !data.prime || !data.plan || !data.price) {
     return res.status(400).json({ error: 'Subscription Error: Wrong Data Format' });
   }
@@ -136,7 +137,7 @@ const subscriptionPayment = async (req, res) => {
     const tapPayData = {
       partner_key: TAPPAY_PARTNER_KEY,
       prime: `${data.prime}`,
-      amount: 5,
+      amount: 50,
       merchant_id: TAPPAY_MERCHANT_ID,
       details: "Some item",
       cardholder: {
@@ -188,10 +189,11 @@ const subscriptionPayment = async (req, res) => {
     });
   };
 
-  if (data.paln == "platinum") {
+  if (data.plan == "platinum") {
     const period = 365
     let expireObj = await Order.updateAfterPaid(period, paidAt, card, subId, userId)
     const expire = expireObj.toLocaleString();
+    console.log('expire', expire)
 
     return res.status(200).json({
       plan: data.plan,
