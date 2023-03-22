@@ -250,6 +250,18 @@ const AdContainer = styled.div`
   }
 `;
 
+const RemoveAll = styled.button`
+  width: 120px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: #3f3f3a;
+  color: white;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+`;
+
 function Swipe() {
   const jwt = localStorage.getItem('loginToken');
   const [db, setDb] = useState();
@@ -383,6 +395,11 @@ function Swipe() {
       .catch((err) => console.log(err));
   }
 
+  function removeCollection() {
+    setCollection([]);
+    localStorage.removeItem('collection');
+  }
+
   useEffect(() => {
     const handlePageShow = (event) => {
       const historyTraversal =
@@ -458,6 +475,7 @@ function Swipe() {
         <Title>
           <TitleText>收藏商品</TitleText>
           <TitleIcon />
+          <RemoveAll onClick={removeCollection}>清空收藏</RemoveAll>
         </Title>
         <SplitLine />
         <AdContainer
