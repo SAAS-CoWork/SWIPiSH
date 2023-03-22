@@ -147,10 +147,11 @@ async function doRecommendation( user_id, subsets ) {
     await Cache.HSETNX('recommendations', user_id, 0);
 
     // pass through numbers
-    let pass =  await Cache.HGET('recommendations', user_id);
+    let pass = await Cache.HGET('recommendations', user_id);
+    pass = Number(pass)
     if ( pass > 37 ) {
         pass -= 37;
-        await Cache.HSET('recommendations', user_id, pass);
+        await Cache.HSET('recommendations', user_id, String(pass));
     }
 
     for ( let i = 0; i < subsets.length; i++ ) {
