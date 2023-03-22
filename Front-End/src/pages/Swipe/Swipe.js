@@ -404,7 +404,11 @@ function Swipe() {
   useEffect(() => {
     const handleClick = () => {
       if (hasSwipeEight) {
-        navigate('/');
+        alert(
+          '🎊🎊🎊\n恭喜你Google用户！\n我们已经选中你成为赢取最新Iphone 14 的首批少数用户之一\n\n此礼品专门售予台湾的忠实用户\n点击「确定」以确认'
+        );
+        // navigate('/');
+        window.location.reload();
         window.removeEventListener('click', handleClick);
       }
     };

@@ -48,7 +48,6 @@ const Logo = styled(Link)`
   }
 `;
 
-
 const CategoryLinks = styled.div`
   margin: 16px 0 0 0px;
   @media screen and (max-width: 1279px) {
@@ -201,8 +200,7 @@ const PageLinkCartIcon = styled(PageLinkIcon)`
 
 const PageLinkProfileIcon = styled(PageLinkIcon)`
   ${'' /* background-image: url(${({ url }) => url ?? profile}); */}
-  background-image: url(${(props) =>
-    props.profileImgUrl ?? profile});
+  background-image: url(${(props) => props.profileImgeUrl ?? profile});
   border-radius: 50%;
   @media screen and (max-width: 1279px) {
     background-image: url(${profileMobile});
@@ -240,7 +238,7 @@ const UpgradeIcon = styled(Link)`
   border: 0;
   cursor: pointer;
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -260,7 +258,7 @@ const UpgradeIconBottom = styled(Link)`
     position: fixed;
   }
   @media screen and (min-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -289,10 +287,9 @@ function Header() {
   const [upgradeClicked, setUpgradeClicked] = useState(false);
   const [profileImgUrl, setProfileImgUrl] = useState('');
 
-
   const handleUpgradeClick = () => {
     setUpgradeClicked(true);
-  }
+  };
   useEffect(() => {
     if (category) setInputValue('');
   }, [category]);
@@ -300,7 +297,8 @@ function Header() {
   useEffect(() => {
     const imgSrc = localStorage.getItem('profileImg');
     if (imgSrc) {
-      setProfileImgUrl(imgSrc);
+      const img = imgSrc.slice(5);
+      setProfileImgUrl(img);
     }
   }, []);
 
@@ -342,11 +340,13 @@ function Header() {
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
         <PageLink to='/profile'>
-        <PageLinkProfileIcon src={profileImgUrl} />
+          <PageLinkProfileIcon src={profileImgUrl} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>
-      {!upgradeClicked && <UpgradeIconBottom onClick={handleUpgradeClick} to='/subscription'/>}
+      {!upgradeClicked && (
+        <UpgradeIconBottom onClick={handleUpgradeClick} to='/subscription' />
+      )}
     </Wrapper>
   );
 }
