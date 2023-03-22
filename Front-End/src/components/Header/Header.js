@@ -48,7 +48,6 @@ const Logo = styled(Link)`
   }
 `;
 
-
 const CategoryLinks = styled.div`
   margin: 16px 0 0 0px;
   @media screen and (max-width: 1279px) {
@@ -201,8 +200,7 @@ const PageLinkCartIcon = styled(PageLinkIcon)`
 
 const PageLinkProfileIcon = styled(PageLinkIcon)`
   ${'' /* background-image: url(${({ url }) => url ?? profile}); */}
-  background-image: url(${(props) =>
-    props.profileImgUrl ?? profile});
+  background-image: url(${(props) => props.profileImgeUrl ?? profile});
   border-radius: 50%;
   @media screen and (max-width: 1279px) {
     background-image: url(${profileMobile});
@@ -239,12 +237,12 @@ const UpgradeIcon = styled(Link)`
   margin-left: auto;
   border: 0;
   cursor: pointer;
-  :hover{
-    transition: all .5s;
-    transform : translateX(10px);
-}
+  :hover {
+    transition: all 0.5s;
+    transform: translateX(10px);
+  }
   @media screen and (max-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -264,7 +262,7 @@ const UpgradeIconBottom = styled(Link)`
     position: fixed;
   }
   @media screen and (min-width: 1279px) {
-    display:none;
+    display: none;
   }
 `;
 
@@ -292,11 +290,24 @@ function Header() {
   const category = searchParams.get('category');
   const [upgradeClicked, setUpgradeClicked] = useState(false);
   const [profileImgUrl, setProfileImgUrl] = useState('');
-
-
-  const handleUpgradeClick = () => {
-    setUpgradeClicked(true);
+  const [hasSubscribed, setHasSubscribed] = useState(false);
+  const jwt = localStorage.getItem('loginToken');
+  function getMembershipStatus() {
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.data.subscription && setHasSubscribed(true);
+      });
   }
+
+  useEffect(getMembershipStatus, []);
+
   useEffect(() => {
     if (category) setInputValue('');
   }, [category]);
@@ -304,9 +315,12 @@ function Header() {
   useEffect(() => {
     const imgSrc = localStorage.getItem('profileImg');
     if (imgSrc) {
-      setProfileImgUrl(imgSrc);
+      const img = imgSrc.slice(5);
+      setProfileImgUrl(img);
     }
   }, []);
+
+  useEffect(() => console.log(hasSubscribed), [hasSubscribed]);
 
   return (
     <Wrapper>
@@ -328,7 +342,7 @@ function Header() {
           </CategoryLink>
         ))}
       </CategoryLinks>
-      <UpgradeIcon to='/subscription/ad' />
+      <UpgradeIcon to={hasSubscribed ? '/swipe' : '/subscription/ad'} />
       <SearchInput
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
@@ -346,11 +360,13 @@ function Header() {
           <PageLinkText>購物車</PageLinkText>
         </PageLink>
         <PageLink to='/profile'>
-        <PageLinkProfileIcon src={profileImgUrl} />
+          <PageLinkProfileIcon src={profileImgUrl} />
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>
-      {!upgradeClicked && <UpgradeIconBottom onClick={handleUpgradeClick} to='/subscription'/>}
+      {!upgradeClicked && (
+        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription'} />
+      )}
     </Wrapper>
   );
 }

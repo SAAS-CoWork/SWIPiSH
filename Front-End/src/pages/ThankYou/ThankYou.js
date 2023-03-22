@@ -28,7 +28,8 @@ function ThankYou() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
-  if (!state) return <Navigate to="/" replace />;
+  if (!state) return <Navigate to='/' replace />;
+  localStorage.setItem('orderNumber', state.orderNumber);
 
   return (
     <Wrapper>

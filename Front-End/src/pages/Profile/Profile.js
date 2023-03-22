@@ -263,8 +263,7 @@ const ProfileImgWrapper = styled.form`
 const ProfileImg = styled.div`
   width: 150px;
   height: 150px;
-  background-image: url(${(props) =>
-    props.selectedFileUrl ?? biggerprofile});
+  background-image: url(${(props) => props.selectedFileUrl ?? biggerprofile});
   background-size: cover;
   background-position: center;
   border-radius: 100px;
@@ -315,7 +314,6 @@ const Cancel = styled.button`
     width: 74px;
   }
 `;
-
 
 const SubTitle = styled.p`
   width: 120px;
@@ -468,11 +466,10 @@ export default function Profile() {
   );
   const loginToken = localStorage.getItem('loginToken');
 
-  
   const saveImageToLocalStorage = (url) => {
     localStorage.setItem('profileImg', url);
   };
-  
+
   const handleFileSelect = (e) => {
     setSelectedFile(e.target.files[0]);
     const url = URL.createObjectURL(e.target.files[0]);
@@ -487,7 +484,6 @@ export default function Profile() {
   const handleSaveClick = () => {
     setIsEditing(false);
   };
-
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
