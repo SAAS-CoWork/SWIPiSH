@@ -237,10 +237,10 @@ const UpgradeIcon = styled(Link)`
   margin-left: auto;
   border: 0;
   cursor: pointer;
-  :hover{
-    transition: all .5s;
-    transform : translateX(10px);
-}
+  :hover {
+    transition: all 0.5s;
+    transform: translateX(10px);
+  }
   @media screen and (max-width: 1279px) {
     display: none;
   }
@@ -290,10 +290,24 @@ function Header() {
   const category = searchParams.get('category');
   const [upgradeClicked, setUpgradeClicked] = useState(false);
   const [profileImgUrl, setProfileImgUrl] = useState('');
+  const [hasSubscribed, setHasSubscribed] = useState(false);
+  const jwt = localStorage.getItem('loginToken');
+  function getMembershipStatus() {
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.data.subscription && setHasSubscribed(true);
+      });
+  }
 
-  const handleUpgradeClick = () => {
-    setUpgradeClicked(true);
-  };
+  useEffect(getMembershipStatus, []);
+
   useEffect(() => {
     if (category) setInputValue('');
   }, [category]);
@@ -305,6 +319,8 @@ function Header() {
       setProfileImgUrl(img);
     }
   }, []);
+
+  useEffect(() => console.log(hasSubscribed), [hasSubscribed]);
 
   return (
     <Wrapper>
@@ -326,7 +342,7 @@ function Header() {
           </CategoryLink>
         ))}
       </CategoryLinks>
-      <UpgradeIcon to='/subscription/ad' />
+      <UpgradeIcon to={hasSubscribed ? '/swipe' : '/subscription/ad'} />
       <SearchInput
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
@@ -349,7 +365,7 @@ function Header() {
         </PageLink>
       </PageLinks>
       {!upgradeClicked && (
-        <UpgradeIconBottom onClick={handleUpgradeClick} to='/subscription' />
+        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription'} />
       )}
     </Wrapper>
   );

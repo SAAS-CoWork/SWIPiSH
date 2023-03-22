@@ -185,23 +185,23 @@ const LearnMoreBtn = styled.button`
 `;
 
 export default function SubscriptionAd() {
-  const navigate = useNavigate();
-  const jwt = localStorage.getItem('loginToken');
-  function getMembershipStatus() {
-    fetch('https://www.gotolive.online/api/1.0/user/profile', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        data.data.subscription && navigate('/swipe');
-      });
-  }
+  // const navigate = useNavigate();
+  // const jwt = localStorage.getItem('loginToken');
+  // function getMembershipStatus() {
+  //   fetch('https://www.gotolive.online/api/1.0/user/profile', {
+  //     method: 'GET',
+  //     headers: {
+  //       Authorization: `Bearer ${jwt}`,
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       data.data.subscription && navigate('/swipe');
+  //     });
+  // }
 
-  useEffect(getMembershipStatus, []);
+  // useEffect(getMembershipStatus, []);
 
   return (
     <Wrapper>
@@ -216,9 +216,9 @@ export default function SubscriptionAd() {
               <PriceDescription>Per Month</PriceDescription>
             </PriceContainer>
             <PlanDescriptionContainer>
-              {planDescription.map((item) => {
+              {planDescription.map((item, index) => {
                 return (
-                  <PlanDescriptionRow>
+                  <PlanDescriptionRow key={index}>
                     <PointIcon>➜</PointIcon>
                     <PlanDescriptionText>{item}</PlanDescriptionText>
                   </PlanDescriptionRow>

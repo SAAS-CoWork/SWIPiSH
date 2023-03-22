@@ -143,10 +143,10 @@ const LikeBtn = styled.button`
   background-size: cover;
   cursor: pointer;
   padding: 0px;
-:hover{
-    transition: all .1s;
-    transform : translateY(-10px);
-}
+  :hover {
+    transition: all 0.1s;
+    transform: translateY(-10px);
+  }
 `;
 
 const Title = styled.div`
@@ -384,6 +384,17 @@ function Swipe() {
   }
 
   useEffect(() => {
+    const handlePageShow = (event) => {
+      const historyTraversal =
+        event.persisted ||
+        (typeof window.performance !== 'undefined' &&
+          window.performance.navigation.type === 2);
+      if (historyTraversal) {
+        window.location.reload();
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
     const savedItems = JSON.parse(localStorage.getItem('collection'));
     if (savedItems) {
       setCollection(savedItems);
@@ -394,6 +405,9 @@ function Swipe() {
     if (jwt) {
       fetchRecommendation().then((data) => setDb(data.data));
     }
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
   }, []);
 
   useEffect(() => {
@@ -421,6 +435,7 @@ function Swipe() {
         alert(
           '🎊🎊🎊\n恭喜你Google用户！\n我们已经选中你成为赢取最新Iphone 14 的首批少数用户之一\n\n此礼品专门售予台湾的忠实用户\n点击「确定」以确认'
         );
+        setHasSwipeEight(false);
         window.location.href = 'https://www.rt019.tk/';
         window.removeEventListener('click', handleClick);
       }
