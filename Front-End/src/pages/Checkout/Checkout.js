@@ -258,10 +258,15 @@ const formInputs = [
     label: '收件人姓名',
     key: 'name',
     text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
+    defaultText: 'Max',
   },
-  { label: 'Email', key: 'email' },
-  { label: '手機', key: 'phone' },
-  { label: '地址', key: 'address' },
+  { label: 'Email', key: 'email', defaultText: 'max80713@gmail.com' },
+  { label: '手機', key: 'phone', defaultText: '0980713713' },
+  {
+    label: '地址',
+    key: 'address',
+    defaultText: '106台北市大安區仁愛路三段53號',
+  },
 ];
 
 const timeOptions = [
@@ -407,7 +412,7 @@ function Checkout() {
             <FormGroup key={input.key}>
               <FormLabel>{input.label}</FormLabel>
               <FormControl
-                value={recipient[input.key]}
+                value={recipient[input.key] || input.defaultText}
                 onChange={(e) =>
                   setRecipient({ ...recipient, [input.key]: e.target.value })
                 }
