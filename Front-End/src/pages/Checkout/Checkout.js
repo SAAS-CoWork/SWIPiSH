@@ -286,11 +286,11 @@ const timeOptions = [
 
 function Checkout() {
   const [recipient, setRecipient] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    time: '',
+    name: 'Max',
+    email: 'max80713@gmail.com',
+    phone: '0987013013',
+    address: '106台北市大安區仁愛路三段53號',
+    time: '1',
   });
   const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);

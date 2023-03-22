@@ -4,7 +4,7 @@ import profile from './profile.png';
 
 const questions = [
   { value: 'email', label: '信箱' },
-  { value: 'password', label: '密碼' },
+  { value: 'password', label: '密碼', type: 'password' },
 ];
 
 const Wrapper = styled.div`
@@ -180,6 +180,7 @@ export default function Login() {
                 onChange={(e) => {
                   handleInput(e, question);
                 }}
+                type={question.type}
               ></LoginInput>
             </LoginRow>
           ))}

@@ -6,7 +6,12 @@ const questions = [
   { value: 'name', label: '姓名' },
   { value: 'phone', label: '手機' },
   { value: 'email', label: '信箱' },
-  { value: 'password', label: '密碼', placeholder: '請輸入至少八碼英文或數字' },
+  {
+    value: 'password',
+    label: '密碼',
+    placeholder: '請輸入至少八碼英文或數字',
+    type: 'password',
+  },
 ];
 
 const Wrapper = styled.div`
@@ -187,6 +192,7 @@ export default function Register() {
               <QuestionInput
                 onChange={(e) => saveUserInput(e, question)}
                 placeholder={question.placeholder}
+                type={question.type}
               />
             </InfoRow>
           ))}
