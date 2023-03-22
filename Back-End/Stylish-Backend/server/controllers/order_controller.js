@@ -49,7 +49,7 @@ const checkout = async (req, res) => {
     details: validator.blacklist(JSON.stringify(paymentResult), '<>'),
   };
   await Order.createPayment(orderId, payment);
-  res.send({ data: { number } });
+  res.send({ data: { number, total: data.order.total, list: data.order.list } });
 };
 
 // For Load Testing
