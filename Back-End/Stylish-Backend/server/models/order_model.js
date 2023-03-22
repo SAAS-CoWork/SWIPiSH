@@ -137,7 +137,6 @@ const updateTodayExpire = async (userId) => {
     `, [userId])
     return true
   } catch (e) {
-    console.log("我錯了")
     console.log(e)
   }
 }
