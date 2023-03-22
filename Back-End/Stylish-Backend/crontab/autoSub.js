@@ -5,7 +5,7 @@ const TAPPAY_PARTNER_KEY = 'partner_PHgswvYEk4QY6oy3n8X3CwiQCVQmv91ZcFoD5VrkGFXo
 const TAPPAY_MERCHANT_ID = 'AppWorksSchool_CTBC'
 
 const autoSub = async () => {
-    const res = await axios.get('http://localhost:3000/api/1.0/order/autosub')
+    const res = await axios.get('https://gotolive.online/api/1.0/order/autosub')
     const autoSubList = res.data
     console.log(autoSubList)
 
@@ -23,7 +23,7 @@ const autoSub = async () => {
         if (cancel) {
             // auto set role = 2
             try {
-                await axios.post('http://localhost:3000/api/1.0/order/autoexpire', { userId }, conf)
+                await axios.post('https://gotolive.online/api/1.0/order/autoexpire', { userId }, conf)
                 console.log("set role=2 done")
             } catch (e) {
                 console.error(e)
