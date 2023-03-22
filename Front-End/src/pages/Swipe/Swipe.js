@@ -225,6 +225,7 @@ const AdContainer = styled.div`
   top: 20%;
   background-image: url(${(props) => props.url});
   display: ${(props) => props.display};
+  z-index: 100;
 `;
 
 function Swipe() {
