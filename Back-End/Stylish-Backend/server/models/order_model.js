@@ -73,14 +73,15 @@ const createSubDetail = async (id, plan, price) => {
 
 // update subscription table after paid success
 // update user role_id
-const updateAfterPaid = async (period, paidAt, subId, userId) => {
+const updateAfterPaid = async (period, paidAt, card, subId, userId) => {
   try {
     await pool.query(`
     UPDATE subscription 
     SET expire = DATE_ADD(NOW(), INTERVAL ? DAY),
-    paid_at = ?
+    paid_at = ?,
+    card_secret = ?
     WHERE id = ?
-    `, [period, paidAt, subId])
+    `, [period, paidAt, card, subId])
 
     await pool.query(`
     UPDATE user
@@ -97,6 +98,57 @@ const updateAfterPaid = async (period, paidAt, subId, userId) => {
   }
 };
 
+const updateCancel = async (userId) => {
+  try {
+    await pool.query(`
+    UPDATE subscription
+    SET \`card_secret\` = JSON_SET(
+       \`card_secret\`,
+      '$.card_key',
+      ''),
+    cancel=true
+    WHERE user_id = ?
+    `, [userId])
+    return true
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+const getTodayExpire = async () => {
+  try {
+    const [result] = await pool.query(`
+    SELECT user_id FROM subscription
+    WHERE DATE(expire) = DATE(now()) && 
+    cancel is NULL
+    `)
+
+    const userId = result.map(item => item.user_id)
+    return userId
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+// async function test() {
+//   const seeTest = await getTodayExpire()
+//   console.log(`seeTest`, seeTest)
+// }
+// test()
+
+const resetRole = async (userId) => {
+  try {
+    const reset = await pool.query(`
+    UPDATE user 
+    SET role_id = 2
+    WHERE id = ? 
+    `, [userId])
+    return true
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 module.exports = {
   createOrder,
   createPayment,
@@ -104,5 +156,8 @@ module.exports = {
   getUserPayments,
   getUserPaymentsGroupByDB,
   createSubDetail,
-  updateAfterPaid
+  updateAfterPaid,
+  updateCancel,
+  getTodayExpire,
+  resetRole
 };
