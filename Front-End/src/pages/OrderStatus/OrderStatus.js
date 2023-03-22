@@ -315,7 +315,7 @@ const OrderNum = styled.p`
   height: 38px;
   font-size: 16px;
   line-height: 38px;
-  letter-spacing: 6.4px;
+  letter-spacing: 3px;
   color: #3f3a3a;
   white-space: nowrap;
   font-weight: 700;
@@ -397,6 +397,11 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
+  const db = [
+    { id: 123456789123, price: 1200 },
+    { id: 123456789123, price: 1200 },
+    { id: 123456789123, price: 1200 },
+  ];
   const orderNumber = localStorage.getItem('orderNumber');
   const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
@@ -423,11 +428,11 @@ function SingleOrderStatus() {
     setStars(updatedStars);
   }
 
-  return (
+  return db.map((item) => (
     <OrderStatusWrapper>
-      <OrderNum>{orderNumber}</OrderNum>
+      <OrderNum>{item.id}</OrderNum>
       <ShipStatus>出貨處理</ShipStatus>
-      <OrderPrize>NT.1200</OrderPrize>
+      <OrderPrize>{item.price}</OrderPrize>
       <OrderRequest>尚未申請</OrderRequest>
       <CustomerService
         bgImage={conversationBgImage}
@@ -443,7 +448,7 @@ function SingleOrderStatus() {
         ))}
       </ReviewContainer>
     </OrderStatusWrapper>
-  );
+  ));
 }
 
 export default function OrderStatus() {

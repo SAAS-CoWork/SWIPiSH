@@ -29,14 +29,14 @@ function ThankYou() {
   const navigate = useNavigate();
 
   if (!state) return <Navigate to='/' replace />;
-  localStorage.setItem('orderNumber', state.orderNumber);
+  localStorage.setItem('order', JSON.stringify(state));
 
   return (
     <Wrapper>
       <Title>感謝您的購買，我們會盡快將商品送達！</Title>
       <Content>請記住以下訂單編號，以便查詢</Content>
       <Content>{state.orderNumber}</Content>
-      <BackButton onClick={() => navigate('/')}>繼續購物</BackButton>
+      <BackButton onClick={() => navigate('/orderStatus')}>查看訂單</BackButton>
     </Wrapper>
   );
 }
