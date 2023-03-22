@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // API routes
-app.use('/api/' + API_VERSION, /*rateLimiterRoute*/[
+app.use('/api/' + API_VERSION, rateLimiterRoute, [
   require('./server/routes/admin_route'),
   require('./server/routes/product_route'),
   require('./server/routes/marketing_route'),

@@ -244,7 +244,6 @@ const goDBupdateExpire = async (req, res) => {
 
 const goDBupdateRole = async (req, res) => {
   try {
-    const { userId } = req.body
     const goDB = await Order.updateTodayRole(userId)
     return res.json("DONE")
   } catch (e) {
@@ -252,6 +251,12 @@ const goDBupdateRole = async (req, res) => {
     return res.json(e)
   }
 }
+
+// // cancel is true set role_id =2 
+// if (cancel == true) {
+//   const reset = await resetRole(userId);
+//   return
+// }
 
 module.exports = {
   checkout,
