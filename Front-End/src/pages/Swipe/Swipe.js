@@ -9,7 +9,7 @@ import superLike from './superLike.png';
 import goback from './goback.png';
 import trash from './trash.png';
 import likeMsg from './likeMsg.png';
-import notlikeMsg from './notLikeMsg.png';
+import notLikeMsg from './notLikeMsg.png';
 import soso from './soso.png';
 
 const Wrapper = styled.div`
@@ -221,15 +221,10 @@ const AdContainer = styled.div`
   width: 800px;
   height: 600px;
   position: fixed;
-  top: 20%;
   left: 20%;
-  background-image: url(${notlikeMsg});
+  top: 20%;
+  background-image: url(${(props) => props.url});
   display: ${(props) => props.display};
-
-  @media screen and (max-width: 1280px) {
-    width: 360px;
-    height: 200px;
-  }
 `;
 
 function Swipe() {
@@ -238,8 +233,10 @@ function Swipe() {
   const [currentIndex, setCurrentIndex] = useState(9);
   const [swipeCount, setSwipeCount] = useState(0);
   const [collection, setCollection] = useState([]);
+  const [hasSwipeEight, setHasSwipeEight] = useState(false);
+  const [swipeRecord, setSwipeRecord] = useState([]);
+  const [swipeStatus, setSwipeStatus] = useState('');
   const navigate = useNavigate();
-  const [hasSwipeSeven, setHasSwipeSeven] = useState(false);
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex);
 
@@ -335,13 +332,15 @@ function Swipe() {
       swipe('right');
       addToCollection();
       storeLike(data, true, false);
+      setSwipeRecord([...swipeRecord, 'like']);
     }
   }
 
-  function handleUnlike(data) {
+  function handleDislike(data) {
     if (canSwipe) {
       swipe('left');
       storeLike(data, false, false);
+      setSwipeRecord([...swipeRecord, 'dislike']);
     }
   }
 
@@ -380,6 +379,34 @@ function Swipe() {
     }
   }, [collection]);
 
+  useEffect(() => {
+    if (swipeCount === 8) {
+      const likes = swipeRecord.filter((item) => item === 'like');
+      const dislikes = swipeRecord.filter((item) => item === 'dislike');
+      likes.length > dislikes.length
+        ? setSwipeStatus('like')
+        : likes.length < dislikes.length
+        ? setSwipeStatus('dislike')
+        : setSwipeStatus('neutral');
+      setHasSwipeEight(true);
+    }
+  }, [swipeCount, swipeRecord]);
+
+  useEffect(() => {
+    const handleClick = () => {
+      if (hasSwipeEight) {
+        navigate('/');
+        window.removeEventListener('click', handleClick);
+      }
+    };
+
+    window.addEventListener('click', handleClick);
+
+    return () => {
+      window.removeEventListener('click', handleClick);
+    };
+  }, [hasSwipeEight]);
+
   if (!db) {
     return;
   }
@@ -392,7 +419,16 @@ function Swipe() {
           <TitleIcon />
         </Title>
         <SplitLine />
-        <AdContainer display={hasSwipeSeven ? 'block' : 'none'} />
+        <AdContainer
+          display={hasSwipeEight ? 'block' : 'none'}
+          url={
+            swipeStatus === 'like'
+              ? likeMsg
+              : swipeStatus === 'dislike'
+              ? notLikeMsg
+              : soso
+          }
+        />
         {!collection || collection.length === 0 ? null : (
           <Products>
             {collection.map((item, index) => (
@@ -459,7 +495,7 @@ function Swipe() {
             <LikeBtn imgUrl={goback} onClick={() => goBack()}></LikeBtn>
             <LikeBtn
               imgUrl={notLike}
-              onClick={() => handleUnlike(db[currentIndex])}
+              onClick={() => handleDislike(db[currentIndex])}
             ></LikeBtn>
             <LikeBtn
               imgUrl={like}
