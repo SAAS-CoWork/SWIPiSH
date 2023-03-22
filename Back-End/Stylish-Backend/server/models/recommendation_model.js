@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '../../.env'});
 const { pool } = require('./mysqlcon');
 const Cache = require('../../util/cache');
+const { use } = require('chai');
 
 function addScore( scoresObj, score, tag ) {
     if ( scoresObj.hasOwnProperty(tag) ) {
@@ -144,16 +145,17 @@ async function doRecommendation( user_id, subsets ) {
     let result = [];
 
     // create user_id field if not exitst
-    await Cache.HSETNX('recommendations', user_id, 0);
+    await Cache.hSetNX('recommendations', user_id, 0);
 
     // pass through numbers
-    let pass = await Cache.HGET('recommendations', user_id);
+    let pass = await Cache.hGet('recommendations', user_id);
     pass = Number(pass)
+    console.log('pass', pass);
     if ( pass > 37 ) {
         pass -= 37;
-        await Cache.HSET('recommendations', user_id, String(pass));
+        await Cache.hSet('recommendations', user_id, pass);
     }
-
+    
     for ( let i = 0; i < subsets.length; i++ ) {
         const tagsPattern = JSON.stringify(subsets[i]);
         const possibleProducts = await getPossibleProducts( tagsPattern );
@@ -161,8 +163,8 @@ async function doRecommendation( user_id, subsets ) {
             pass -= possibleProducts.length;
             continue;
         }
-        const newPossibleProducts = possibleProducts.slice(pass);
-        await Cache.HINCRBY('recommendations', user_id, newPossibleProducts.length);
+        const newPossibleProducts = possibleProducts.slice(0, pass);
+        await Cache.hIncrBy('recommendations', user_id, newPossibleProducts.length);
         result = [...result, ...newPossibleProducts];
         if ( result.length >= 10 ) {
             return result.slice(0, 10);
