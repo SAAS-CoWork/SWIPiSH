@@ -461,6 +461,7 @@ const Submit = styled.button`
 
 const CancelText = styled.div`
   display: ${(props) => props.display};
+  color: #d0d0d0;
 `;
 
 export default function Profile() {
@@ -622,7 +623,9 @@ export default function Profile() {
             <BoldText>
               {userData.plan === '' ? '非升級會員' : userData.plan}
             </BoldText>
-            {userData.expire === true ? null : <span>{userData.expire}</span>}
+            {userData.expire === true ? null : hasCancelled ? null : (
+              <span>{userData.expire}</span>
+            )}
           </SubStatus>
           <Cancel
             onClick={handleCancelClick}
