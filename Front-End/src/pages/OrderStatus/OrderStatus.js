@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
@@ -397,12 +397,7 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
-  const db = [
-    { id: 123456789123, price: 1200 },
-    { id: 123456789123, price: 1200 },
-    { id: 123456789123, price: 1200 },
-  ];
-  const orderNumber = localStorage.getItem('orderNumber');
+  const [order, setOrder] = useState({});
   const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
@@ -428,27 +423,36 @@ function SingleOrderStatus() {
     setStars(updatedStars);
   }
 
-  return db.map((item) => (
-    <OrderStatusWrapper>
-      <OrderNum>{item.id}</OrderNum>
-      <ShipStatus>出貨處理</ShipStatus>
-      <OrderPrize>{item.price}</OrderPrize>
-      <OrderRequest>尚未申請</OrderRequest>
-      <CustomerService
-        bgImage={conversationBgImage}
-        onClick={handleConversationClick}
-      ></CustomerService>
-      <ReviewContainer>
-        {stars.map((item) => (
-          <Review
-            key={item.id}
-            backgroundImage={item.isFilled ? goldstar : star}
-            onClick={() => handleClick(item.id)}
-          />
-        ))}
-      </ReviewContainer>
-    </OrderStatusWrapper>
-  ));
+  useEffect(() => {
+    const order = localStorage.getItem('order');
+    const jsonOrder = JSON.parse(order);
+    setOrder(jsonOrder.order);
+  }, []);
+
+  if (order) {
+    return (
+      <OrderStatusWrapper>
+        <OrderNum>{order.number}</OrderNum>
+        <ShipStatus>出貨處理</ShipStatus>
+        <OrderPrize>{order.total}</OrderPrize>
+        <OrderRequest>尚未申請</OrderRequest>
+        <CustomerService
+          bgImage={conversationBgImage}
+          onClick={handleConversationClick}
+        ></CustomerService>
+        <ReviewContainer>
+          {stars.map((item) => (
+            <Review
+              key={item.id}
+              backgroundImage={item.isFilled ? goldstar : star}
+              onClick={() => handleClick(item.id)}
+            />
+          ))}
+        </ReviewContainer>
+      </OrderStatusWrapper>
+    );
+  }
+  return;
 }
 
 export default function OrderStatus() {
