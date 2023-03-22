@@ -258,10 +258,15 @@ const formInputs = [
     label: '收件人姓名',
     key: 'name',
     text: '務必填寫完整收件人姓名，避免包裹無法順利簽收',
+    defaultText: 'Max',
   },
-  { label: 'Email', key: 'email' },
-  { label: '手機', key: 'phone' },
-  { label: '地址', key: 'address' },
+  { label: 'Email', key: 'email', defaultText: 'max80713@gmail.com' },
+  { label: '手機', key: 'phone', defaultText: '0980713713' },
+  {
+    label: '地址',
+    key: 'address',
+    defaultText: '106台北市大安區仁愛路三段53號',
+  },
 ];
 
 const timeOptions = [
@@ -281,11 +286,11 @@ const timeOptions = [
 
 function Checkout() {
   const [recipient, setRecipient] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    time: '',
+    name: 'Max',
+    email: 'max80713@gmail.com',
+    phone: '0987013013',
+    address: '106台北市大安區仁愛路三段53號',
+    time: '1',
   });
   const [invalidFields, setInvalidFields] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -371,9 +376,10 @@ function Checkout() {
         },
         token
       );
+      console.log(data);
       window.alert('付款成功');
       setCartItems([]);
-      navigate('/thankyou', { state: { orderNumber: data.number } });
+      navigate('/thankyou', { state: { order: data } });
     } catch (err) {
       console.log(err);
     } finally {

@@ -256,7 +256,7 @@ const UpgradeIconBottom = styled(Link)`
     border: 0;
     cursor: pointer;
     position: absolute;
-    top: 83vh;
+    top: 70vh;
     z-index: 100;
     right: 5vw;
     position: fixed;
@@ -320,8 +320,6 @@ function Header() {
     }
   }, []);
 
-  useEffect(() => console.log(hasSubscribed), [hasSubscribed]);
-
   return (
     <Wrapper>
       <Logo to='/' />
@@ -365,7 +363,7 @@ function Header() {
         </PageLink>
       </PageLinks>
       {!upgradeClicked && (
-        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription'} />
+        <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription/ad'} />
       )}
     </Wrapper>
   );

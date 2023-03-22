@@ -263,7 +263,9 @@ const ProfileImgWrapper = styled.form`
 const ProfileImg = styled.div`
   width: 150px;
   height: 150px;
-  background-image: url(${(props) => props.selectedFileUrl ?? biggerprofile});
+  /* background-image: url(${(props) =>
+    props.selectedFileUrl ?? biggerprofile}); */
+  background-image: url(${biggerprofile});
   background-size: cover;
   background-position: center;
   border-radius: 100px;
@@ -545,7 +547,7 @@ export default function Profile() {
 
   function logOut() {
     localStorage.removeItem('loginToken');
-    navigate('/');
+    window.location.href = '/';
   }
 
   useEffect(() => {
@@ -591,14 +593,14 @@ export default function Profile() {
       <ProfileWrapper>
         <ProfileImgWrapper>
           <ProfileImg selectedFileUrl={selectedFileUrl}></ProfileImg>
-          <input
+          {/* <input
             type='file'
             accept='image/*'
             onChange={handleFileSelect}
             name='上傳'
             id='uploadImage'
             cursor='pointer'
-          />
+          /> */}
           {/* <button type="submit" onSubmit={handleSubmit}>確認送出</button> */}
         </ProfileImgWrapper>
         <AccountWrapper>

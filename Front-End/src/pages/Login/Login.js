@@ -3,8 +3,13 @@ import styled from 'styled-components/macro';
 import profile from './profile.png';
 
 const questions = [
-  { value: 'email', label: '信箱' },
-  { value: 'password', label: '密碼' },
+  { value: 'email', label: '信箱', placehoder: 'xxx@gmail.com' },
+  {
+    value: 'password',
+    label: '密碼',
+    type: 'password',
+    placehoder: '8 - 16 characters or numbers',
+  },
 ];
 
 const Wrapper = styled.div`
@@ -94,6 +99,7 @@ const LoginInput = styled.input`
   height: 32px;
   border: 1px solid #979797;
   border-radius: 8px;
+  padding-left: 10px;
 `;
 
 const BtnContainer = styled.div`
@@ -120,7 +126,10 @@ const LoginBtn = styled.button`
 `;
 
 export default function Login() {
-  const [userInput, setUserInput] = useState({});
+  const [userInput, setUserInput] = useState({
+    email: 'max80713@gmail.com',
+    password: 'max80713',
+  });
 
   function handleInput(e, data) {
     const inputData = { ...userInput, [data.value]: e.target.value };
@@ -180,6 +189,9 @@ export default function Login() {
                 onChange={(e) => {
                   handleInput(e, question);
                 }}
+                type={question.type}
+                placeholder={question.placehoder}
+                value={userInput[question.value]}
               ></LoginInput>
             </LoginRow>
           ))}

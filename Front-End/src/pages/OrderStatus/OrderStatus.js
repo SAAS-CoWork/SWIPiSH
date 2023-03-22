@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
@@ -315,7 +315,7 @@ const OrderNum = styled.p`
   height: 38px;
   font-size: 16px;
   line-height: 38px;
-  letter-spacing: 6.4px;
+  letter-spacing: 3px;
   color: #3f3a3a;
   white-space: nowrap;
   font-weight: 700;
@@ -397,7 +397,7 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
-  const orderNumber = localStorage.getItem('orderNumber');
+  const [order, setOrder] = useState();
   const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
@@ -423,27 +423,38 @@ function SingleOrderStatus() {
     setStars(updatedStars);
   }
 
-  return (
-    <OrderStatusWrapper>
-      <OrderNum>{orderNumber}</OrderNum>
-      <ShipStatus>出貨處理</ShipStatus>
-      <OrderPrize>NT.1200</OrderPrize>
-      <OrderRequest>尚未申請</OrderRequest>
-      <CustomerService
-        bgImage={conversationBgImage}
-        onClick={handleConversationClick}
-      ></CustomerService>
-      <ReviewContainer>
-        {stars.map((item) => (
-          <Review
-            key={item.id}
-            backgroundImage={item.isFilled ? goldstar : star}
-            onClick={() => handleClick(item.id)}
-          />
-        ))}
-      </ReviewContainer>
-    </OrderStatusWrapper>
-  );
+  useEffect(() => {
+    const order = localStorage.getItem('order');
+    if (order) {
+      const jsonOrder = JSON.parse(order);
+      setOrder(jsonOrder.order);
+    }
+  }, []);
+
+  if (order) {
+    return (
+      <OrderStatusWrapper>
+        <OrderNum>{order.number}</OrderNum>
+        <ShipStatus>出貨處理</ShipStatus>
+        <OrderPrize>{order.total}</OrderPrize>
+        <OrderRequest>尚未申請</OrderRequest>
+        <CustomerService
+          bgImage={conversationBgImage}
+          onClick={handleConversationClick}
+        ></CustomerService>
+        <ReviewContainer>
+          {stars.map((item) => (
+            <Review
+              key={item.id}
+              backgroundImage={item.isFilled ? goldstar : star}
+              onClick={() => handleClick(item.id)}
+            />
+          ))}
+        </ReviewContainer>
+      </OrderStatusWrapper>
+    );
+  }
+  return;
 }
 
 export default function OrderStatus() {
