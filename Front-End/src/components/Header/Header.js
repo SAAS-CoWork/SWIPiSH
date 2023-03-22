@@ -239,6 +239,10 @@ const UpgradeIcon = styled(Link)`
   margin-left: auto;
   border: 0;
   cursor: pointer;
+  :hover{
+    transition: all .5s;
+    transform : translateX(10px);
+}
   @media screen and (max-width: 1279px) {
     display:none;
   }
@@ -324,7 +328,7 @@ function Header() {
           </CategoryLink>
         ))}
       </CategoryLinks>
-      <UpgradeIcon to='/subscription' />
+      <UpgradeIcon to='/subscription/ad' />
       <SearchInput
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
