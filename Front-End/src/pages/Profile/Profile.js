@@ -461,7 +461,8 @@ const Submit = styled.button`
 
 const CancelText = styled.div`
   display: ${(props) => props.display};
-  color: #d0d0d0;
+  color: #ff5151;
+  font-weight: 700;
 `;
 
 export default function Profile() {
