@@ -417,7 +417,7 @@ function Swipe() {
   }, [collection]);
 
   useEffect(() => {
-    if (swipeCount === 8) {
+    if (swipeCount === 8 || currentIndex === 2) {
       const likes = swipeRecord.filter((item) => item === 'like');
       const dislikes = swipeRecord.filter((item) => item === 'dislike');
       likes.length > dislikes.length
@@ -427,7 +427,7 @@ function Swipe() {
         : setSwipeStatus('neutral');
       setHasSwipeEight(true);
     }
-  }, [swipeCount, swipeRecord]);
+  }, [swipeCount, swipeRecord, currentIndex]);
 
   useEffect(() => {
     const handleClick = () => {
