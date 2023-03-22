@@ -1,9 +1,10 @@
-import React from "react";
-import styled from "styled-components/macro";
-import medal from "./medal.png";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components/macro';
+import medal from './medal.png';
+import { Link } from 'react-router-dom';
 
-const planDescription = ["懶人購物首選", "客製專屬推薦", "會員優惠價格"];
+const planDescription = ['懶人購物首選', '客製專屬推薦', '會員優惠價格'];
 
 const Wrapper = styled.div`
   margin: 50px auto 50px;
@@ -45,7 +46,7 @@ const PlanContainer = styled.div`
   width: 455px;
   height: 506px;
   border: 1px solid black;
-  ${"" /* border-radius: 25px; */}
+  ${'' /* border-radius: 25px; */}
   @media screen and (max-width: 1279px) {
     width: 85%;
     height: 30%;
@@ -175,7 +176,7 @@ const LearnMoreBtn = styled.button`
     &:hover,
     &:link,
     &:active {
-    text-decoration: none;
+      text-decoration: none;
     }
   }
   @media screen and (max-width: 1279px) {
@@ -184,6 +185,24 @@ const LearnMoreBtn = styled.button`
 `;
 
 export default function SubscriptionAd() {
+  const navigate = useNavigate();
+  const jwt = localStorage.getItem('loginToken');
+  function getMembershipStatus() {
+    fetch('https://www.gotolive.online/api/1.0/user/profile', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        data.data.subscription && navigate('/swipe');
+      });
+  }
+
+  useEffect(getMembershipStatus, []);
+
   return (
     <Wrapper>
       <Title>Revolutionize Your Shopping Experience!</Title>
@@ -224,7 +243,7 @@ export default function SubscriptionAd() {
         </PlanContainer>
       </ContentContainer>
       <LearnMoreBtn>
-        <Link to="/subscription"> LEARN MORE</Link>
+        <Link to='/subscription'> SUBSCRIBE NOW!</Link>
       </LearnMoreBtn>
     </Wrapper>
   );
