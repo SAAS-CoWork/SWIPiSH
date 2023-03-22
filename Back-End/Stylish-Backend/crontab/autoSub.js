@@ -63,3 +63,4 @@ const autoSub = async () => {
     // const tapPayRes = await Promise.allSettled(tapPayReq)
     const paidStatusArr = response.map(res => res.data.status)
     console.log('@@', paidStatusArr)
+}
