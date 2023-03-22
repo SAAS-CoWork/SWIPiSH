@@ -397,6 +397,7 @@ const Review = styled.div`
 `;
 
 function SingleOrderStatus() {
+  const orderNumber = localStorage.getItem('orderNumber');
   const navigate = useNavigate();
   const [conversationBgImage, setConversationBgImage] = useState(conversation);
   const handleConversationClick = () => {
@@ -424,7 +425,7 @@ function SingleOrderStatus() {
 
   return (
     <OrderStatusWrapper>
-      <OrderNum>0012123</OrderNum>
+      <OrderNum>{orderNumber}</OrderNum>
       <ShipStatus>出貨處理</ShipStatus>
       <OrderPrize>NT.1200</OrderPrize>
       <OrderRequest>尚未申請</OrderRequest>
