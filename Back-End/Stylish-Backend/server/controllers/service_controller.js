@@ -37,9 +37,15 @@ const sendEmail = async (req, res) => {
             }
 
             messageData.inline = file;
-            return mg.messages.create('sandbox-123.mailgun.org', messageData);
+            return mgClient.messages.create(mgDomain, messageData);
         })
         .then(response => {
             console.log(response);
         })
+
+    return res.status(200).json('Successfully send email');
+}
+
+module.exports = {
+    sendEmail
 }
