@@ -143,6 +143,10 @@ const LikeBtn = styled.button`
   background-size: cover;
   cursor: pointer;
   padding: 0px;
+:hover{
+    transition: all .1s;
+    transform : translateY(-10px);
+}
 `;
 
 const Title = styled.div`
