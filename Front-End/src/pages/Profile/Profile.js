@@ -308,6 +308,11 @@ const SubWrapper = styled.div`
 
 const Cancel = styled.button`
   margin-left: 10px;
+  cursor: pointer;
+  @media screen and (max-width: 1279px) {
+    margin-left: 0px;
+    width: 74px;
+  }
 `;
 
 const SubTitle = styled.p`
@@ -456,12 +461,20 @@ export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState();
   const [selectedFile, setSelectedFile] = useState(null);
-  const [selectedFileUrl, setSelectedFileUrl] = useState(null);
-  const [isSubscribed, setIsSubscribed] = useState(true);
+  const [selectedFileUrl, setSelectedFileUrl] = useState(
+    localStorage.getItem('profileImg') || null
+  );
+  const loginToken = localStorage.getItem('loginToken');
+
+  const saveImageToLocalStorage = (url) => {
+    localStorage.setItem('profileImg', url);
+  };
 
   const handleFileSelect = (e) => {
     setSelectedFile(e.target.files[0]);
-    setSelectedFileUrl(URL.createObjectURL(e.target.files[0]));
+    const url = URL.createObjectURL(e.target.files[0]);
+    setSelectedFileUrl(url);
+    saveImageToLocalStorage(url);
   };
 
   const handleEditClick = () => {
@@ -472,14 +485,14 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    // add additional form data, such as user ID or file name
-    // send the form data to the server using an HTTP request, such as fetch()
-    console.log(formData);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append('file', selectedFile);
+  //   // add additional form data, such as user ID or file name
+  //   // send the form data to the server using an HTTP request, such as fetch()
+  //   console.log(formData);
+  // };
 
   const handleCancelClick = (e) => {
     const body = {
@@ -503,7 +516,9 @@ export default function Profile() {
       .catch((err) => console.log(err));
   };
 
-  const loginToken = localStorage.getItem('loginToken');
+  useEffect(() => {
+    saveImageToLocalStorage(selectedFileUrl);
+  }, [selectedFileUrl]);
 
   function getUserData() {
     fetch('https://www.gotolive.online/api/1.0/user/profile', {
@@ -582,6 +597,7 @@ export default function Profile() {
             onChange={handleFileSelect}
             name='上傳'
             id='uploadImage'
+            cursor='pointer'
           />
           {/* <button type="submit" onSubmit={handleSubmit}>確認送出</button> */}
         </ProfileImgWrapper>
@@ -596,8 +612,8 @@ export default function Profile() {
               {userData.plan === '' ? '非升級會員' : userData.plan}
             </BoldText>
             {userData.expire === true ? null : <span>{userData.expire}</span>}
-            <Cancel onClick={handleCancelClick}>取消訂閱</Cancel>
           </SubStatus>
+          <Cancel onClick={handleCancelClick}>取消訂閱</Cancel>
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>

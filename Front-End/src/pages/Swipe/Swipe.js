@@ -8,6 +8,7 @@ import notLike from './notLike.png';
 import superLike from './superLike.png';
 import goback from './goback.png';
 import trash from './trash.png';
+import { Link } from 'react-router-dom';
 import likeMsg from './likeMsg.png';
 import notLikeMsg from './notLikeMsg.png';
 import soso from './soso.png';
@@ -57,6 +58,9 @@ const SwipeBottomContainer = styled.div`
   bottom: -545px;
   left: 100px;
   z-index: 100;
+  text-align: center;
+  flex-wrap: wrap;
+  width: 224px;
   @media screen and (max-width: 1279px) {
     left: 57px;
     bottom: -483px;
@@ -173,15 +177,18 @@ const Products = styled.div`
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 15px;
+  margin-left: 90px;
   @media screen and (max-width: 1279px) {
+    margin-left: 0px;
   }
 `;
 
 const ProductContainer = styled.div`
   display: flex;
   flex-direction: column;
+  width: 230px;
 `;
 
 const ProductInfoContainer = styled.div`
@@ -208,6 +215,7 @@ const InfoText = styled.p`
   font-size: 12px;
   line-height: 14px;
   letter-spacing: 2.4px;
+  width: 158px;
 `;
 
 const RemoveIcon = styled.div`
@@ -434,7 +442,9 @@ function Swipe() {
           <Products>
             {collection.map((item, index) => (
               <ProductContainer key={index}>
-                <ProductImg imgUrl={item.main_image} />
+                <Link to={`/products/${item.id}`}>
+                  <ProductImg imgUrl={item.main_image} />
+                </Link>
                 <ProductInfoContainer>
                   <ProductInfo>
                     <InfoText>{item.title}</InfoText>

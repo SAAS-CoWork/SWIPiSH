@@ -1,8 +1,8 @@
 // import React, { useState, useEffect } from 'react';
-import styled from 'styled-components/macro';
-import conversation from './conversation.png';
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import styled from "styled-components/macro";
+import conversation from "./conversation.png";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.form`
   height: 100%;
@@ -120,7 +120,7 @@ export default function CustomerService() {
   const textRef = useRef(undefined);
   const questions = useRef([titleRef, textRef]);
   const [userInput, setUserInput] = useState({});
-  const jwt = localStorage.getItem('loginToken');
+  const jwt = localStorage.getItem("loginToken");
 
   const navigate = useNavigate();
 
@@ -135,24 +135,24 @@ export default function CustomerService() {
   }
 
   function saveInput() {
-    fetch('https://www.gotolive.online/api/1.0/service/email', {
-      method: 'POST',
+    fetch("https://www.gotolive.online/api/1.0/service/email", {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${jwt}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(userInput),
     })
       .then((res) =>
         res.status === 200
-          ? alert('Successfully Submitted!')
-          : alert('Please try again')
+          ? (alert("Successfully Submitted!"), setUserInput({}))
+          : alert("Please try again")
       )
       .catch((err) => console.log(err));
   }
 
   if (!jwt) {
-    navigate('/login');
+    navigate("/login");
   }
 
   return (
@@ -166,6 +166,7 @@ export default function CustomerService() {
         <FavIcon></FavIcon>
       </Title>
       <Splict></Splict>
+      {/* <greetings>您好，有什麼想與我們分享的嗎😍</greetings> */}
       <ConversationContainer>
         <ConversationTitle>主旨</ConversationTitle>
         <ConversationInput ref={titleRef}></ConversationInput>
