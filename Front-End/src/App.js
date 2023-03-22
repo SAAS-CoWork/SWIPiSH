@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #root {
-    ${'' /* min-height: 100vh; */}
+    min-height: 100vh;
     padding: 140px 0 115px;
     position: relative;
 

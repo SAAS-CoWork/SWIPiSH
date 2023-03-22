@@ -256,7 +256,7 @@ const UpgradeIconBottom = styled(Link)`
     border: 0;
     cursor: pointer;
     position: absolute;
-    top: 83vh;
+    top: 70vh;
     z-index: 100;
     right: 5vw;
     position: fixed;

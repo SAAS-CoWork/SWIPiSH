@@ -417,7 +417,7 @@ function Swipe() {
   }, [collection]);
 
   useEffect(() => {
-    if (swipeCount === 8 || currentIndex === 2) {
+    if (currentIndex === 1) {
       const likes = swipeRecord.filter((item) => item === 'like');
       const dislikes = swipeRecord.filter((item) => item === 'dislike');
       likes.length > dislikes.length
