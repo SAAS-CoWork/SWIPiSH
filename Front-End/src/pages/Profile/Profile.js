@@ -311,6 +311,7 @@ const SubWrapper = styled.div`
 const Cancel = styled.button`
   margin-left: 10px;
   cursor: pointer;
+  display: ${(props) => props.display};
   @media screen and (max-width: 1279px) {
     margin-left: 0px;
     width: 74px;
@@ -458,6 +459,12 @@ const Submit = styled.button`
   }
 `;
 
+const CancelText = styled.div`
+  display: ${(props) => props.display};
+  color: #ff5151;
+  font-weight: 700;
+`;
+
 export default function Profile() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -466,6 +473,7 @@ export default function Profile() {
   const [selectedFileUrl, setSelectedFileUrl] = useState(
     localStorage.getItem('profileImg') || null
   );
+  const [hasCancelled, setHasCancelled] = useState(false);
   const loginToken = localStorage.getItem('loginToken');
 
   const saveImageToLocalStorage = (url) => {
@@ -512,7 +520,10 @@ export default function Profile() {
     })
       .then((res) => {
         if (res.status === 200) {
+          setHasCancelled(true);
           alert('恭喜你做了人生中最錯誤的選擇');
+        } else {
+          alert('取消失敗');
         }
       })
       .catch((err) => console.log(err));
@@ -613,9 +624,19 @@ export default function Profile() {
             <BoldText>
               {userData.plan === '' ? '非升級會員' : userData.plan}
             </BoldText>
-            {userData.expire === true ? null : <span>{userData.expire}</span>}
+            {userData.expire === true ? null : hasCancelled ? null : (
+              <span>{userData.expire}</span>
+            )}
           </SubStatus>
-          <Cancel onClick={handleCancelClick}>取消訂閱</Cancel>
+          <Cancel
+            onClick={handleCancelClick}
+            display={hasCancelled ? 'none' : 'block'}
+          >
+            取消訂閱
+          </Cancel>
+          <CancelText display={hasCancelled ? 'block' : 'none'}>
+            您的訂閱將於 {userData.expire} 取消
+          </CancelText>
         </SubWrapper>
         <NameWrapper>
           <NameTitle>姓名</NameTitle>
