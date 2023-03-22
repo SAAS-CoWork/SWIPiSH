@@ -172,13 +172,14 @@ const subscriptionPayment = async (req, res) => {
     return res.status(400).json({ error: paidResult.msg })
   }
 
-  // success => update order table(paid_at, paid_status, expiry)
+  // success => update order table(paid_at, paid_status, expiry,card_secret )
   //         => update user's role_id into 3
+  const card = JSON.stringify(paidResult.card_secret)
   const paidAt = paidResult.transaction_time_millis
 
   if (data.plan == "premium") {
     const period = 30
-    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    let expireObj = await Order.updateAfterPaid(period, paidAt, card, subId, userId)
     const expire = expireObj.toLocaleString();
 
     return res.status(200).json({
@@ -189,7 +190,7 @@ const subscriptionPayment = async (req, res) => {
 
   if (data.paln == "platinum") {
     const period = 365
-    let expireObj = await Order.updateAfterPaid(period, paidAt, subId, userId)
+    let expireObj = await Order.updateAfterPaid(period, paidAt, card, subId, userId)
     const expire = expireObj.toLocaleString();
 
     return res.status(200).json({
@@ -199,10 +200,46 @@ const subscriptionPayment = async (req, res) => {
   }
 };
 
+const cancelSub = async (req, res, next) => {
+  // cancel = false
+  const cancel = req.body
+  if (!cancel) {
+    next()
+  }
+
+  // cancel = true, role = 3
+  const userId = req.user.id
+  let roleId = await User.getRoleId(userId)
+  if (cancel && roleId == 3) {
+    const canceled = await Order.updateCancel(userId)
+    if (canceled == true) {
+      return res.status(200).json({ message: 'canceled success' })
+    }
+  }
+  next()
+};
+
+// const doOnExpireDay = async () => {
+//   const userId = await Order.getTodayExpire();
+//   // card_key_API
+
+
+// }
+
+// doOnExpireDay()
+
+// // cancel is true set role_id =2 
+// if (cancel == true) {
+//   const reset = await resetRole(userId);
+//   return
+// }
+
+
 module.exports = {
   checkout,
   getUserPayments,
   getUserPaymentsGroupByDB,
   getSubscription,
-  subscriptionPayment
+  subscriptionPayment,
+  cancelSub,
 };
