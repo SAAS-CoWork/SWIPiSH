@@ -2,18 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import profile from './profile.png';
 
-const questions = [
-  { value: 'name', label: '姓名' },
-  { value: 'phone', label: '手機' },
-  { value: 'email', label: '信箱' },
-  {
-    value: 'password',
-    label: '密碼',
-    placeholder: '請輸入8 ~ 16碼英文或數字',
-    type: 'password',
-  },
-];
-
 const Wrapper = styled.div`
   width: 60%;
   border: 1px solid black;
@@ -120,7 +108,23 @@ const SubmitBtn = styled.button`
 `;
 
 export default function Register() {
-  const [userData, setUserData] = useState({});
+  const questions = [
+    { value: 'name', label: '姓名' },
+    { value: 'phone', label: '手機' },
+    { value: 'email', label: '信箱' },
+    {
+      value: 'password',
+      label: '密碼',
+      placeholder: '請輸入8 ~ 16碼英文或數字',
+    },
+  ];
+
+  const [userData, setUserData] = useState({
+    name: 'Max',
+    phone: '0987013013',
+    email: 'max80713@gmail.com',
+    password: 'max80713',
+  });
 
   function saveUserInput(e, obj) {
     const key = obj.value;
@@ -193,6 +197,7 @@ export default function Register() {
                 onChange={(e) => saveUserInput(e, question)}
                 placeholder={question.placeholder}
                 type={question.type}
+                value={userData[question.value]}
               />
             </InfoRow>
           ))}

@@ -126,7 +126,10 @@ const LoginBtn = styled.button`
 `;
 
 export default function Login() {
-  const [userInput, setUserInput] = useState({});
+  const [userInput, setUserInput] = useState({
+    email: 'max80713@gmail.com',
+    password: 'max80713',
+  });
 
   function handleInput(e, data) {
     const inputData = { ...userInput, [data.value]: e.target.value };
@@ -188,6 +191,7 @@ export default function Login() {
                 }}
                 type={question.type}
                 placeholder={question.placehoder}
+                value={userInput[question.value]}
               ></LoginInput>
             </LoginRow>
           ))}

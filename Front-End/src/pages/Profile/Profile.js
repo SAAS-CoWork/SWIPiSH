@@ -547,7 +547,7 @@ export default function Profile() {
 
   function logOut() {
     localStorage.removeItem('loginToken');
-    navigate('/');
+    window.location.href = '/';
   }
 
   useEffect(() => {
