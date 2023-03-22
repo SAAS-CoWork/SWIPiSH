@@ -125,7 +125,7 @@ function Footer() {
     <Wrapper>
       <Content>
         <SiteLinks>
-          {['關於 Stylish', '服務條款', '隱私政策', '聯絡我們', 'FAQ'].map(
+          {['關於 SWIPIiSH', '服務條款', '隱私政策', '聯絡我們', 'FAQ'].map(
             (text, index) => (
               <SiteLink key={index}>{text}</SiteLink>
             )

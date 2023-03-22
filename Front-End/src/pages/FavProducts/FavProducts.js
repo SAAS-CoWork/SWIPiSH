@@ -235,10 +235,10 @@ const ProductItemContainer = styled.div`
   flex-wrap: wrap;
   gap: 35px;
   margin-bottom: 50px;
-  margin-left: 30px;
-  margin-right: 30px;
-  justify-content: center;
-  @media screen and (max-width: 1279px) {
+  margin-left: 60px;
+  margin-right: 60px;
+  justify-content: flex-start;
+@media screen and (max-width: 1279px) {
     width: 80%;
     align-self: center;
   }
@@ -271,6 +271,7 @@ const ProductTitle = styled.p`
   line-height: 14px;
   font-weight: 400;
   color: #3f3a3a;
+  width: 158px;
 `;
 
 const ProductPrice = styled.p`
@@ -353,7 +354,7 @@ export default function FavProducts() {
             </Link>
             <ProductDetail>
               <ProductTitle>{item.title}</ProductTitle>
-              <ProductPrice>{item.price}</ProductPrice>
+              <ProductPrice>${item.price}</ProductPrice>
               <Delete onClick={() => handleRemove(index)} />
             </ProductDetail>
           </ProductContainer>

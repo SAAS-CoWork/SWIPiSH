@@ -12,6 +12,8 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-tinder-card": "^1.6.2",
+    "rsuite": "^5.28.3",
+    "rsuite-selectpicker": "^3.0.5",
     "styled-components": "^5.3.9",
     "styled-reset": "^4.4.1"
   },
