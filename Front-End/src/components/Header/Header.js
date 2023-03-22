@@ -320,8 +320,6 @@ function Header() {
     }
   }, []);
 
-  useEffect(() => console.log(hasSubscribed), [hasSubscribed]);
-
   return (
     <Wrapper>
       <Logo to='/' />

@@ -58,7 +58,6 @@ const tappay = {
       window.TPDirect.card.getPrime((result) => {
         resolve(result);
         const prime = result.card.prime;
-        console.log(prime);
         localStorage.setItem('prime', JSON.stringify(prime));
       });
     });
