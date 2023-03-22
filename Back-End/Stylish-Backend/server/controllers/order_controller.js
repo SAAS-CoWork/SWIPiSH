@@ -219,21 +219,39 @@ const cancelSub = async (req, res, next) => {
   next()
 };
 
-// const doOnExpireDay = async () => {
-//   const userId = await Order.getTodayExpire();
-//   // card_key_API
+// get auto sub list daily
+const getAutoSubList = async (req, res) => {
+  try {
+    const result = await Order.getTodayExpire();
+    return res.json(result)
+  } catch (e) {
+    console.log(e)
+    return res.json(e)
+  }
+}
 
+// update DB expire for auto-sub
+const goDBupdateExpire = async (req, res) => {
+  try {
+    const { userId } = req.body
+    const goDB = await Order.updateTodayExpire(userId);
+    return res.json("DONE")
+  } catch (e) {
+    console.log(e)
+    return res.json(e)
+  }
+}
 
-// }
-
-// doOnExpireDay()
-
-// // cancel is true set role_id =2 
-// if (cancel == true) {
-//   const reset = await resetRole(userId);
-//   return
-// }
-
+const goDBupdateRole = async (req, res) => {
+  try {
+    const { userId } = req.body
+    const goDB = await Order.updateTodayRole(userId)
+    return res.json("DONE")
+  } catch (e) {
+    console.log(e)
+    return res.json(e)
+  }
+}
 
 module.exports = {
   checkout,
@@ -242,4 +260,7 @@ module.exports = {
   getSubscription,
   subscriptionPayment,
   cancelSub,
+  getAutoSubList,
+  goDBupdateExpire,
+  goDBupdateRole
 };
