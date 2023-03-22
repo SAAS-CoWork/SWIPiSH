@@ -425,11 +425,13 @@ function SingleOrderStatus() {
 
   useEffect(() => {
     const order = localStorage.getItem('order');
-    const jsonOrder = JSON.parse(order);
-    setOrder(jsonOrder.order);
+    if (order) {
+      const jsonOrder = JSON.parse(order);
+      setOrder(jsonOrder.order);
+    }
   }, []);
 
-  if (order) {
+  if (order.length !== 0) {
     return (
       <OrderStatusWrapper>
         <OrderNum>{order.number}</OrderNum>

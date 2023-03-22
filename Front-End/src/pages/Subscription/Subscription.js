@@ -266,7 +266,7 @@ export default function Subscription() {
       );
     };
     setupTappay();
-  }, []);
+  }, [membershipChecking]);
 
   // useEffect(() => {
   //   if (pricingPlan) {
