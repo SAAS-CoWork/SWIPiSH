@@ -11,6 +11,7 @@ import swipe from './swipe.png';
 import swipemobile from './swipemobile.png';
 import { AuthContext } from '../../context/authContext';
 import { CartContext } from '../../context/cartContext';
+import Draggable from 'react-draggable';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -266,6 +267,23 @@ const UpgradeIconBottom = styled(Link)`
   }
 `;
 
+const bounds = {
+  bottom: 0,
+  right: 0
+}
+
+const getLocalPosition = () => {
+  const position = localStorage.getItem('homeButtonPosition')
+  const positionJSON = (position && JSON.parse(position)) || {}
+  return {
+    x: positionJSON.x || 0,
+    y: positionJSON.y || 0
+  }
+}
+const setLocalPosition = (data) => {
+  localStorage.setItem('homeButtonPosition', JSON.stringify(data))
+}
+
 const categories = [
   {
     name: 'women',
@@ -281,7 +299,7 @@ const categories = [
   },
 ];
 
-function Header() {
+function Header(props) {
   const [inputValue, setInputValue] = useState('');
   const { user } = useContext(AuthContext);
   const { cartCount } = useContext(CartContext);
@@ -319,6 +337,26 @@ function Header() {
       setProfileImgUrl(img);
     }
   }, []);
+
+  const { children, portalDomain } = props
+  const [position, setPosition] = useState(getLocalPosition())
+  const onStop = (e, data) => {
+    e.stopPropagation()
+    const { x: lastX, y: lastY } = getLocalPosition()
+    setPosition({
+      x: data.x,
+      y: data.y
+    })
+    setLocalPosition({
+      x: data.x,
+      y: data.y
+    })
+    // mock onClick event, use lastX compare with this X, and lastY compare with this Y, if them is equal, do click, other do drag
+    if (lastX === data.x && lastY === data.y) {
+      window.location.href = hasSubscribed ? '/swipe' : '/subscription/ad';
+    }
+  }
+  
 
   return (
     <Wrapper>
@@ -362,9 +400,13 @@ function Header() {
           <PageLinkText>會員</PageLinkText>
         </PageLink>
       </PageLinks>
+      <Draggable bounds={bounds}
+        position={position}
+        onStop={onStop}>
       {!upgradeClicked && (
         <UpgradeIconBottom to={hasSubscribed ? '/swipe' : '/subscription/ad'} />
       )}
+      </Draggable>
     </Wrapper>
   );
 }

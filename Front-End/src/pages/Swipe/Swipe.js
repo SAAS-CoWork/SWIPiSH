@@ -183,9 +183,10 @@ const Products = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 15px;
-  margin-left: 90px;
+  ${'' /* margin-left: 90px; */}
   @media screen and (max-width: 1279px) {
     margin-left: 0px;
+    justify-content: center;
   }
 `;
 
